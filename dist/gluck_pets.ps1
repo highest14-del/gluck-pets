@@ -679,8 +679,11 @@ function On-Release($p) {
   if ($p.trail.Count -ge 2) {
     $first = $p.trail[0]; $last = $p.trail[$p.trail.Count - 1]
     $n = $p.trail.Count - 1
-    $p.vx = [Math]::Max(-22, [Math]::Min(22, ($last[0] - $first[0]) / $n))
-    $p.vy = [Math]::Max(-18, [Math]::Min(14, ($last[1] - $first[1]) / $n))
+    # 스프링 추종 지연 보정(×1.6) + 상한 대폭 상향 — 세게 던지면 진짜 빠르고 높게 날아간다
+    $tvx = (($last[0] - $first[0]) / $n) * 1.6
+    $tvy = (($last[1] - $first[1]) / $n) * 1.6
+    $p.vx = [Math]::Max(-45, [Math]::Min(45, $tvx))
+    $p.vy = [Math]::Max(-60, [Math]::Min(24, $tvy))
   } else { $p.vx = 0; $p.vy = 0 }
   $p.state = 'fall'
 }
@@ -997,7 +1000,11 @@ function Update-Pet($p) {
     $prevFeet = Feet $p
     $p.vy = [Math]::Min($MAX_FALL, $p.vy + $GRAVITY)
     $p.x += $p.vx; $p.y += $p.vy
-    $p.x = [Math]::Max($App.plat.workLeft - 8, [Math]::Min($App.plat.workRight - $SPR + 8, $p.x))
+    # 세게 던져 벽에 부딪히면 팅~ 튕겨나옴 (감쇠 0.45), 약하면 그냥 멈춤
+    $lx2 = $App.plat.workLeft - 8; $rx2 = $App.plat.workRight - $SPR + 8
+    if ($p.x -le $lx2 -and $p.vx -lt -6) { $p.x = $lx2; $p.vx = -$p.vx * 0.45; $p.facing = 1 }
+    elseif ($p.x -ge $rx2 -and $p.vx -gt 6) { $p.x = $rx2; $p.vx = -$p.vx * 0.45; $p.facing = -1 }
+    else { $p.x = [Math]::Max($lx2, [Math]::Min($rx2, $p.x)) }
     $hit = Landing (Cx $p) $prevFeet (Feet $p)
     if ($null -ne $hit) { Land-On $p $hit }
     elseif ((Feet $p) -gt $App.plat.workBottom) { Land-On $p 'ground' }
