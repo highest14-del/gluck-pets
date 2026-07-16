@@ -1,0 +1,1734 @@
+{
+ "version": 1,
+ "canvas": 384,
+ "images": [
+  {
+   "key": "momo_front_angry",
+   "dog": "momo",
+   "view": "front",
+   "pose": "angry",
+   "kor": "화남",
+   "file": "img/momo/front_angry.png",
+   "bbox": [
+    110,
+    31,
+    272,
+    352
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_front_beg",
+   "dog": "momo",
+   "view": "front",
+   "pose": "beg",
+   "kor": "애원",
+   "file": "img/momo/front_beg.png",
+   "bbox": [
+    110,
+    31,
+    273,
+    352
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_front_curious",
+   "dog": "momo",
+   "view": "front",
+   "pose": "curious",
+   "kor": "궁금",
+   "file": "img/momo/front_curious.png",
+   "bbox": [
+    119,
+    31,
+    263,
+    352
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_front_focus",
+   "dog": "momo",
+   "view": "front",
+   "pose": "focus",
+   "kor": "집중",
+   "file": "img/momo/front_focus.png",
+   "bbox": [
+    120,
+    31,
+    262,
+    352
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_front_happy",
+   "dog": "momo",
+   "view": "front",
+   "pose": "happy",
+   "kor": "행복",
+   "file": "img/momo/front_happy.png",
+   "bbox": [
+    102,
+    31,
+    282,
+    352
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_front_laugh",
+   "dog": "momo",
+   "view": "front",
+   "pose": "laugh",
+   "kor": "크게웃기",
+   "file": "img/momo/front_laugh.png",
+   "bbox": [
+    110,
+    31,
+    274,
+    352
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_front_sad",
+   "dog": "momo",
+   "view": "front",
+   "pose": "sad",
+   "kor": "슬픔",
+   "file": "img/momo/front_sad.png",
+   "bbox": [
+    104,
+    31,
+    279,
+    352
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_front_scared",
+   "dog": "momo",
+   "view": "front",
+   "pose": "scared",
+   "kor": "겁먹음",
+   "file": "img/momo/front_scared.png",
+   "bbox": [
+    79,
+    31,
+    304,
+    352
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_front_sleepy",
+   "dog": "momo",
+   "view": "front",
+   "pose": "sleepy",
+   "kor": "졸림",
+   "file": "img/momo/front_sleepy.png",
+   "bbox": [
+    105,
+    31,
+    275,
+    352
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_front_startle",
+   "dog": "momo",
+   "view": "front",
+   "pose": "startle",
+   "kor": "놀람",
+   "file": "img/momo/front_startle.png",
+   "bbox": [
+    106,
+    31,
+    276,
+    352
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_front_tongue",
+   "dog": "momo",
+   "view": "front",
+   "pose": "tongue",
+   "kor": "메롱",
+   "file": "img/momo/front_tongue.png",
+   "bbox": [
+    110,
+    31,
+    273,
+    353
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_front_wink",
+   "dog": "momo",
+   "view": "front",
+   "pose": "wink",
+   "kor": "윙크",
+   "file": "img/momo/front_wink.png",
+   "bbox": [
+    105,
+    31,
+    278,
+    352
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_belly",
+   "dog": "momo",
+   "view": "side",
+   "pose": "belly",
+   "kor": "배보이기",
+   "file": "img/momo/side_belly.png",
+   "bbox": [
+    31,
+    126,
+    353,
+    257
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_crouch",
+   "dog": "momo",
+   "view": "side",
+   "pose": "crouch",
+   "kor": "덮치기준비",
+   "file": "img/momo/side_crouch.png",
+   "bbox": [
+    31,
+    59,
+    353,
+    324
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_excited",
+   "dog": "momo",
+   "view": "side",
+   "pose": "excited",
+   "kor": "신남",
+   "file": "img/momo/side_excited.png",
+   "bbox": [
+    31,
+    67,
+    352,
+    316
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_growl",
+   "dog": "momo",
+   "view": "side",
+   "pose": "growl",
+   "kor": "으르렁",
+   "file": "img/momo/side_growl.png",
+   "bbox": [
+    31,
+    50,
+    353,
+    333
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_jump",
+   "dog": "momo",
+   "view": "side",
+   "pose": "jump",
+   "kor": "점프",
+   "file": "img/momo/side_jump.png",
+   "bbox": [
+    31,
+    85,
+    352,
+    298
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_land",
+   "dog": "momo",
+   "view": "side",
+   "pose": "land",
+   "kor": "착지",
+   "file": "img/momo/side_land.png",
+   "bbox": [
+    31,
+    58,
+    353,
+    326
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_licknose",
+   "dog": "momo",
+   "view": "side",
+   "pose": "licknose",
+   "kor": "코핥기",
+   "file": "img/momo/side_licknose.png",
+   "bbox": [
+    31,
+    55,
+    353,
+    329
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_lickpaw",
+   "dog": "momo",
+   "view": "side",
+   "pose": "lickpaw",
+   "kor": "앞발핥기",
+   "file": "img/momo/side_lickpaw.png",
+   "bbox": [
+    31,
+    35,
+    353,
+    347
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_lookback",
+   "dog": "momo",
+   "view": "side",
+   "pose": "lookback",
+   "kor": "뒤돌아보기",
+   "file": "img/momo/side_lookback.png",
+   "bbox": [
+    32,
+    36,
+    352,
+    348
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_lookdown",
+   "dog": "momo",
+   "view": "side",
+   "pose": "lookdown",
+   "kor": "아래쳐다보기",
+   "file": "img/momo/side_lookdown.png",
+   "bbox": [
+    31,
+    79,
+    353,
+    305
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_lookup",
+   "dog": "momo",
+   "view": "side",
+   "pose": "lookup",
+   "kor": "위쳐다보기",
+   "file": "img/momo/side_lookup.png",
+   "bbox": [
+    31,
+    37,
+    353,
+    346
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_pawup",
+   "dog": "momo",
+   "view": "side",
+   "pose": "pawup",
+   "kor": "앞발들기",
+   "file": "img/momo/side_pawup.png",
+   "bbox": [
+    31,
+    52,
+    353,
+    332
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_pounce",
+   "dog": "momo",
+   "view": "side",
+   "pose": "pounce",
+   "kor": "덮치기",
+   "file": "img/momo/side_pounce.png",
+   "bbox": [
+    31,
+    100,
+    352,
+    284
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_proud",
+   "dog": "momo",
+   "view": "side",
+   "pose": "proud",
+   "kor": "당당함",
+   "file": "img/momo/side_proud.png",
+   "bbox": [
+    31,
+    35,
+    352,
+    348
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_roll",
+   "dog": "momo",
+   "view": "side",
+   "pose": "roll",
+   "kor": "구르기",
+   "file": "img/momo/side_roll.png",
+   "bbox": [
+    31,
+    45,
+    353,
+    338
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_run",
+   "dog": "momo",
+   "view": "side",
+   "pose": "run",
+   "kor": "달리기",
+   "file": "img/momo/side_run.png",
+   "bbox": [
+    31,
+    100,
+    352,
+    284
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_scratch",
+   "dog": "momo",
+   "view": "side",
+   "pose": "scratch",
+   "kor": "귀긁기",
+   "file": "img/momo/side_scratch.png",
+   "bbox": [
+    39,
+    31,
+    345,
+    352
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_shake",
+   "dog": "momo",
+   "view": "side",
+   "pose": "shake",
+   "kor": "몸털기",
+   "file": "img/momo/side_shake.png",
+   "bbox": [
+    32,
+    58,
+    353,
+    340
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_sit",
+   "dog": "momo",
+   "view": "side",
+   "pose": "sit",
+   "kor": "앉기",
+   "file": "img/momo/side_sit.png",
+   "bbox": [
+    59,
+    31,
+    326,
+    352
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_skid",
+   "dog": "momo",
+   "view": "side",
+   "pose": "skid",
+   "kor": "급정지",
+   "file": "img/momo/side_skid.png",
+   "bbox": [
+    32,
+    49,
+    353,
+    334
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_sleep",
+   "dog": "momo",
+   "view": "side",
+   "pose": "sleep",
+   "kor": "자기",
+   "file": "img/momo/side_sleep.png",
+   "bbox": [
+    32,
+    119,
+    352,
+    265
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_slide",
+   "dog": "momo",
+   "view": "side",
+   "pose": "slide",
+   "kor": "미끄러짐",
+   "file": "img/momo/side_slide.png",
+   "bbox": [
+    31,
+    86,
+    353,
+    296
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_sneak",
+   "dog": "momo",
+   "view": "side",
+   "pose": "sneak",
+   "kor": "살금살금",
+   "file": "img/momo/side_sneak.png",
+   "bbox": [
+    31,
+    88,
+    353,
+    296
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_sneeze",
+   "dog": "momo",
+   "view": "side",
+   "pose": "sneeze",
+   "kor": "재채기",
+   "file": "img/momo/side_sneeze.png",
+   "bbox": [
+    31,
+    76,
+    353,
+    308
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_sniff",
+   "dog": "momo",
+   "view": "side",
+   "pose": "sniff",
+   "kor": "냄새맡기",
+   "file": "img/momo/side_sniff.png",
+   "bbox": [
+    31,
+    80,
+    352,
+    306
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_stand",
+   "dog": "momo",
+   "view": "side",
+   "pose": "stand",
+   "kor": "서기",
+   "file": "img/momo/side_stand.png",
+   "bbox": [
+    34,
+    66,
+    352,
+    317
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_standup",
+   "dog": "momo",
+   "view": "side",
+   "pose": "standup",
+   "kor": "두발서기",
+   "file": "img/momo/side_standup.png",
+   "bbox": [
+    128,
+    31,
+    256,
+    352
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_startle",
+   "dog": "momo",
+   "view": "side",
+   "pose": "startle",
+   "kor": "놀람",
+   "file": "img/momo/side_startle.png",
+   "bbox": [
+    31,
+    98,
+    352,
+    289
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_stretch",
+   "dog": "momo",
+   "view": "side",
+   "pose": "stretch",
+   "kor": "기지개",
+   "file": "img/momo/side_stretch.png",
+   "bbox": [
+    33,
+    88,
+    352,
+    298
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_sulk",
+   "dog": "momo",
+   "view": "side",
+   "pose": "sulk",
+   "kor": "시무룩",
+   "file": "img/momo/side_sulk.png",
+   "bbox": [
+    31,
+    73,
+    353,
+    311
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_tiptoe",
+   "dog": "momo",
+   "view": "side",
+   "pose": "tiptoe",
+   "kor": "까치발",
+   "file": "img/momo/side_tiptoe.png",
+   "bbox": [
+    31,
+    79,
+    352,
+    304
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_tired",
+   "dog": "momo",
+   "view": "side",
+   "pose": "tired",
+   "kor": "지침",
+   "file": "img/momo/side_tired.png",
+   "bbox": [
+    31,
+    65,
+    353,
+    318
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_trot",
+   "dog": "momo",
+   "view": "side",
+   "pose": "trot",
+   "kor": "종종걸음",
+   "file": "img/momo/side_trot.png",
+   "bbox": [
+    31,
+    78,
+    352,
+    305
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_walk",
+   "dog": "momo",
+   "view": "side",
+   "pose": "walk",
+   "kor": "걷기",
+   "file": "img/momo/side_walk.png",
+   "bbox": [
+    31,
+    86,
+    352,
+    298
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_wobble",
+   "dog": "momo",
+   "view": "side",
+   "pose": "wobble",
+   "kor": "비틀비틀",
+   "file": "img/momo/side_wobble.png",
+   "bbox": [
+    31,
+    67,
+    352,
+    316
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_side_yawn",
+   "dog": "momo",
+   "view": "side",
+   "pose": "yawn",
+   "kor": "하품",
+   "file": "img/momo/side_yawn.png",
+   "bbox": [
+    31,
+    61,
+    352,
+    322
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_front_angry",
+   "dog": "nana",
+   "view": "front",
+   "pose": "angry",
+   "kor": "화남",
+   "file": "img/nana/front_angry.png",
+   "bbox": [
+    119,
+    31,
+    265,
+    353
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_front_beg",
+   "dog": "nana",
+   "view": "front",
+   "pose": "beg",
+   "kor": "애원",
+   "file": "img/nana/front_beg.png",
+   "bbox": [
+    114,
+    31,
+    268,
+    352
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_front_curious",
+   "dog": "nana",
+   "view": "front",
+   "pose": "curious",
+   "kor": "궁금",
+   "file": "img/nana/front_curious.png",
+   "bbox": [
+    120,
+    31,
+    263,
+    352
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_front_focus",
+   "dog": "nana",
+   "view": "front",
+   "pose": "focus",
+   "kor": "집중",
+   "file": "img/nana/front_focus.png",
+   "bbox": [
+    124,
+    31,
+    259,
+    353
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_front_happy",
+   "dog": "nana",
+   "view": "front",
+   "pose": "happy",
+   "kor": "행복",
+   "file": "img/nana/front_happy.png",
+   "bbox": [
+    106,
+    31,
+    277,
+    352
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_front_laugh",
+   "dog": "nana",
+   "view": "front",
+   "pose": "laugh",
+   "kor": "크게웃기",
+   "file": "img/nana/front_laugh.png",
+   "bbox": [
+    116,
+    31,
+    266,
+    353
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_front_sad",
+   "dog": "nana",
+   "view": "front",
+   "pose": "sad",
+   "kor": "슬픔",
+   "file": "img/nana/front_sad.png",
+   "bbox": [
+    97,
+    31,
+    287,
+    352
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_front_scared",
+   "dog": "nana",
+   "view": "front",
+   "pose": "scared",
+   "kor": "겁먹음",
+   "file": "img/nana/front_scared.png",
+   "bbox": [
+    37,
+    31,
+    345,
+    353
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_front_sleepy",
+   "dog": "nana",
+   "view": "front",
+   "pose": "sleepy",
+   "kor": "졸림",
+   "file": "img/nana/front_sleepy.png",
+   "bbox": [
+    96,
+    31,
+    286,
+    352
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_front_startle",
+   "dog": "nana",
+   "view": "front",
+   "pose": "startle",
+   "kor": "놀람",
+   "file": "img/nana/front_startle.png",
+   "bbox": [
+    116,
+    31,
+    267,
+    352
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_front_tongue",
+   "dog": "nana",
+   "view": "front",
+   "pose": "tongue",
+   "kor": "메롱",
+   "file": "img/nana/front_tongue.png",
+   "bbox": [
+    104,
+    31,
+    278,
+    353
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_front_wink",
+   "dog": "nana",
+   "view": "front",
+   "pose": "wink",
+   "kor": "윙크",
+   "file": "img/nana/front_wink.png",
+   "bbox": [
+    109,
+    31,
+    273,
+    353
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_belly",
+   "dog": "nana",
+   "view": "side",
+   "pose": "belly",
+   "kor": "배보이기",
+   "file": "img/nana/side_belly.png",
+   "bbox": [
+    31,
+    71,
+    353,
+    310
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_crouch",
+   "dog": "nana",
+   "view": "side",
+   "pose": "crouch",
+   "kor": "덮치기준비",
+   "file": "img/nana/side_crouch.png",
+   "bbox": [
+    32,
+    47,
+    352,
+    337
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_excited",
+   "dog": "nana",
+   "view": "side",
+   "pose": "excited",
+   "kor": "신남",
+   "file": "img/nana/side_excited.png",
+   "bbox": [
+    33,
+    58,
+    352,
+    325
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_growl",
+   "dog": "nana",
+   "view": "side",
+   "pose": "growl",
+   "kor": "으르렁",
+   "file": "img/nana/side_growl.png",
+   "bbox": [
+    31,
+    65,
+    352,
+    318
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_jump",
+   "dog": "nana",
+   "view": "side",
+   "pose": "jump",
+   "kor": "점프",
+   "file": "img/nana/side_jump.png",
+   "bbox": [
+    33,
+    71,
+    352,
+    312
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_land",
+   "dog": "nana",
+   "view": "side",
+   "pose": "land",
+   "kor": "착지",
+   "file": "img/nana/side_land.png",
+   "bbox": [
+    31,
+    82,
+    353,
+    302
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_licknose",
+   "dog": "nana",
+   "view": "side",
+   "pose": "licknose",
+   "kor": "코핥기",
+   "file": "img/nana/side_licknose.png",
+   "bbox": [
+    31,
+    48,
+    353,
+    336
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_lickpaw",
+   "dog": "nana",
+   "view": "side",
+   "pose": "lickpaw",
+   "kor": "앞발핥기",
+   "file": "img/nana/side_lickpaw.png",
+   "bbox": [
+    31,
+    38,
+    353,
+    345
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_lookback",
+   "dog": "nana",
+   "view": "side",
+   "pose": "lookback",
+   "kor": "뒤돌아보기",
+   "file": "img/nana/side_lookback.png",
+   "bbox": [
+    31,
+    33,
+    352,
+    350
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_lookdown",
+   "dog": "nana",
+   "view": "side",
+   "pose": "lookdown",
+   "kor": "아래쳐다보기",
+   "file": "img/nana/side_lookdown.png",
+   "bbox": [
+    31,
+    69,
+    352,
+    315
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_lookup",
+   "dog": "nana",
+   "view": "side",
+   "pose": "lookup",
+   "kor": "위쳐다보기",
+   "file": "img/nana/side_lookup.png",
+   "bbox": [
+    37,
+    31,
+    347,
+    353
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_pawup",
+   "dog": "nana",
+   "view": "side",
+   "pose": "pawup",
+   "kor": "앞발들기",
+   "file": "img/nana/side_pawup.png",
+   "bbox": [
+    31,
+    31,
+    352,
+    353
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_pounce",
+   "dog": "nana",
+   "view": "side",
+   "pose": "pounce",
+   "kor": "덮치기",
+   "file": "img/nana/side_pounce.png",
+   "bbox": [
+    31,
+    102,
+    353,
+    281
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_proud",
+   "dog": "nana",
+   "view": "side",
+   "pose": "proud",
+   "kor": "당당함",
+   "file": "img/nana/side_proud.png",
+   "bbox": [
+    31,
+    40,
+    352,
+    343
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_roll",
+   "dog": "nana",
+   "view": "side",
+   "pose": "roll",
+   "kor": "구르기",
+   "file": "img/nana/side_roll.png",
+   "bbox": [
+    31,
+    49,
+    352,
+    333
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_run",
+   "dog": "nana",
+   "view": "side",
+   "pose": "run",
+   "kor": "달리기",
+   "file": "img/nana/side_run.png",
+   "bbox": [
+    31,
+    94,
+    352,
+    289
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_scratch",
+   "dog": "nana",
+   "view": "side",
+   "pose": "scratch",
+   "kor": "귀긁기",
+   "file": "img/nana/side_scratch.png",
+   "bbox": [
+    31,
+    43,
+    352,
+    340
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_shake",
+   "dog": "nana",
+   "view": "side",
+   "pose": "shake",
+   "kor": "몸털기",
+   "file": "img/nana/side_shake.png",
+   "bbox": [
+    33,
+    60,
+    352,
+    325
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_sit",
+   "dog": "nana",
+   "view": "side",
+   "pose": "sit",
+   "kor": "앉기",
+   "file": "img/nana/side_sit.png",
+   "bbox": [
+    41,
+    31,
+    345,
+    352
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_skid",
+   "dog": "nana",
+   "view": "side",
+   "pose": "skid",
+   "kor": "급정지",
+   "file": "img/nana/side_skid.png",
+   "bbox": [
+    31,
+    66,
+    352,
+    317
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_sleep",
+   "dog": "nana",
+   "view": "side",
+   "pose": "sleep",
+   "kor": "자기",
+   "file": "img/nana/side_sleep.png",
+   "bbox": [
+    33,
+    125,
+    352,
+    259
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_slide",
+   "dog": "nana",
+   "view": "side",
+   "pose": "slide",
+   "kor": "미끄러짐",
+   "file": "img/nana/side_slide.png",
+   "bbox": [
+    31,
+    97,
+    353,
+    286
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_sneak",
+   "dog": "nana",
+   "view": "side",
+   "pose": "sneak",
+   "kor": "살금살금",
+   "file": "img/nana/side_sneak.png",
+   "bbox": [
+    31,
+    88,
+    353,
+    296
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_sneeze",
+   "dog": "nana",
+   "view": "side",
+   "pose": "sneeze",
+   "kor": "재채기",
+   "file": "img/nana/side_sneeze.png",
+   "bbox": [
+    31,
+    61,
+    350,
+    323
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_sniff",
+   "dog": "nana",
+   "view": "side",
+   "pose": "sniff",
+   "kor": "냄새맡기",
+   "file": "img/nana/side_sniff.png",
+   "bbox": [
+    33,
+    78,
+    352,
+    311
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_stand",
+   "dog": "nana",
+   "view": "side",
+   "pose": "stand",
+   "kor": "서기",
+   "file": "img/nana/side_stand.png",
+   "bbox": [
+    31,
+    58,
+    352,
+    325
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_standup",
+   "dog": "nana",
+   "view": "side",
+   "pose": "standup",
+   "kor": "두발서기",
+   "file": "img/nana/side_standup.png",
+   "bbox": [
+    121,
+    31,
+    262,
+    353
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_startle",
+   "dog": "nana",
+   "view": "side",
+   "pose": "startle",
+   "kor": "놀람",
+   "file": "img/nana/side_startle.png",
+   "bbox": [
+    31,
+    102,
+    352,
+    284
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_stretch",
+   "dog": "nana",
+   "view": "side",
+   "pose": "stretch",
+   "kor": "기지개",
+   "file": "img/nana/side_stretch.png",
+   "bbox": [
+    34,
+    90,
+    352,
+    297
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_sulk",
+   "dog": "nana",
+   "view": "side",
+   "pose": "sulk",
+   "kor": "시무룩",
+   "file": "img/nana/side_sulk.png",
+   "bbox": [
+    32,
+    83,
+    353,
+    301
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_tiptoe",
+   "dog": "nana",
+   "view": "side",
+   "pose": "tiptoe",
+   "kor": "까치발",
+   "file": "img/nana/side_tiptoe.png",
+   "bbox": [
+    31,
+    75,
+    353,
+    308
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_tired",
+   "dog": "nana",
+   "view": "side",
+   "pose": "tired",
+   "kor": "지침",
+   "file": "img/nana/side_tired.png",
+   "bbox": [
+    31,
+    85,
+    352,
+    299
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_trot",
+   "dog": "nana",
+   "view": "side",
+   "pose": "trot",
+   "kor": "종종걸음",
+   "file": "img/nana/side_trot.png",
+   "bbox": [
+    31,
+    67,
+    352,
+    316
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_walk",
+   "dog": "nana",
+   "view": "side",
+   "pose": "walk",
+   "kor": "걷기",
+   "file": "img/nana/side_walk.png",
+   "bbox": [
+    31,
+    86,
+    352,
+    297
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_wobble",
+   "dog": "nana",
+   "view": "side",
+   "pose": "wobble",
+   "kor": "비틀비틀",
+   "file": "img/nana/side_wobble.png",
+   "bbox": [
+    31,
+    76,
+    353,
+    308
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_yawn",
+   "dog": "nana",
+   "view": "side",
+   "pose": "yawn",
+   "kor": "하품",
+   "file": "img/nana/side_yawn.png",
+   "bbox": [
+    34,
+    67,
+    352,
+    316
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  }
+ ]
+}
