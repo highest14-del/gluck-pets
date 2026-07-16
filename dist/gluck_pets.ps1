@@ -15,7 +15,7 @@ ELog "엔진 시작"
 
 # P/Invoke + ULW 헬퍼 — System.Drawing 참조 필수 (PS5.1 기본 참조에 없음)
 
-Add-Type -ReferencedAssemblies 'System.Drawing' -TypeDefinition @"
+Add-Type -ReferencedAssemblies 'System.Drawing','System.Windows.Forms' -TypeDefinition @"
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -80,20 +80,30 @@ public class GPLayer {
   [DllImport("gdi32.dll")] static extern bool DeleteDC(IntPtr hdc);
   [DllImport("gdi32.dll")] static extern IntPtr SelectObject(IntPtr hDC, IntPtr h);
   [DllImport("gdi32.dll")] static extern bool DeleteObject(IntPtr h);
-  public static void Draw(IntPtr hwnd, System.Drawing.Bitmap bmp, int x, int y) {
+  public static bool Draw(IntPtr hwnd, System.Drawing.Bitmap bmp, int x, int y) {
     IntPtr screenDc = GetDC(IntPtr.Zero);
-    IntPtr memDc = CreateCompatibleDC(screenDc);
-    IntPtr hBmp = bmp.GetHbitmap(System.Drawing.Color.FromArgb(0,0,0,0));
-    IntPtr old = SelectObject(memDc, hBmp);
-    POINT dst = new POINT(x, y);
-    SIZE sz = new SIZE(bmp.Width, bmp.Height);
-    POINT src = new POINT(0, 0);
-    BLEND bf = new BLEND(); bf.op = 0; bf.alpha = 255; bf.fmt = 1;
-    UpdateLayeredWindow(hwnd, screenDc, ref dst, ref sz, memDc, ref src, 0, ref bf, 2);
-    SelectObject(memDc, old);
-    DeleteObject(hBmp);
-    DeleteDC(memDc);
-    ReleaseDC(IntPtr.Zero, screenDc);
+    IntPtr memDc = IntPtr.Zero; IntPtr hBmp = IntPtr.Zero; IntPtr old = IntPtr.Zero;
+    try {
+      memDc = CreateCompatibleDC(screenDc);
+      hBmp = bmp.GetHbitmap(System.Drawing.Color.FromArgb(0,0,0,0));
+      old = SelectObject(memDc, hBmp);
+      POINT dst = new POINT(x, y);
+      SIZE sz = new SIZE(bmp.Width, bmp.Height);
+      POINT src = new POINT(0, 0);
+      BLEND bf = new BLEND(); bf.op = 0; bf.alpha = 255; bf.fmt = 1;
+      return UpdateLayeredWindow(hwnd, screenDc, ref dst, ref sz, memDc, ref src, 0, ref bf, 2);
+    } finally {
+      if (old != IntPtr.Zero) SelectObject(memDc, old);
+      if (hBmp != IntPtr.Zero) DeleteObject(hBmp);
+      if (memDc != IntPtr.Zero) DeleteDC(memDc);
+      ReleaseDC(IntPtr.Zero, screenDc);
+    }
+  }
+}
+public class GPQuietForm : System.Windows.Forms.Form {
+  protected override bool ShowWithoutActivation { get { return true; } }
+  protected override System.Windows.Forms.CreateParams CreateParams {
+    get { var cp = base.CreateParams; cp.ExStyle |= 0x08000000; return cp; }  // WS_EX_NOACTIVATE — 포커스 강탈 방지
   }
 }
 "@
@@ -127,6 +137,21 @@ $App = @{ pets=(New-Object System.Collections.ArrayList); hearts=(New-Object Sys
 
 function Sign1($c) { if ($c) { return 1 } else { return -1 } }
 
+# 마우스 핸들러 — New-Pet 폼과 크로마 폴백 PictureBox 양쪽에서 재사용
+# 더블클릭은 두 번째 MouseDown(Clicks>=2)에서 분기 — down→grab이 선점하는 순서 문제 회피
+# 주의: 핸들러 안에서는 $s.Tag만 쓸 것 ($p 등 바깥 변수는 동적 스코프로 엉뚱한 펫에 바인딩될 수 있음)
+$script:HDown = { param($s,$e)
+  if ($e.Button -ne [System.Windows.Forms.MouseButtons]::Left) { return }
+  $pet = $s.Tag
+  if ($e.Clicks -ge 2) {
+    if (@('drag','fall') -contains $pet.state) { $pet.state='idle'; $pet.vx=0; $pet.vy=0 }
+    Pet-Head $pet
+  } else {
+    On-Grab $pet
+  }
+}
+$script:HUp = { param($s,$e) if ($e.Button -eq [System.Windows.Forms.MouseButtons]::Left) { On-Release $s.Tag } }
+
 # ---------------------------------------------------------------- 에셋 로드
 function Build-Frames {
   $cnt = 0
@@ -135,7 +160,14 @@ function Build-Frames {
     if (($cnt % 10) -eq 0) { [System.Windows.Forms.Application]::DoEvents() }
     $path = Join-Path $AssetDir ($im.file -replace '/', '\')
     if (-not (Test-Path $path)) { ELog ("누락: " + $im.file); continue }
-    $srcImg = [System.Drawing.Image]::FromFile($path)
+    try {
+      $srcImg = [System.Drawing.Image]::FromFile($path)
+    } catch {
+      # 손상 파일(부분 다운로드 등): 삭제해서 다음 실행 때 재다운로드 유도
+      ELog ("손상 이미지 스킵+삭제: " + $im.file)
+      try { Remove-Item $path -Force } catch {}
+      continue
+    }
     $bmp = New-Object System.Drawing.Bitmap($SPR, $SPR, [System.Drawing.Imaging.PixelFormat]::Format32bppPArgb)
     $g = [System.Drawing.Graphics]::FromImage($bmp)
     $g.InterpolationMode = 'HighQualityBicubic'
@@ -204,15 +236,21 @@ function Render-Pet($p) {
   if ($null -eq $bmp) { $bmp = $Frames["$($p.kind)|side_stand|$($p.facing)"] }
   if ($null -eq $bmp) { return }
   if ($script:UseULW) {
-    try { [GPLayer]::Draw($p.form.Handle, $bmp, [int]$p.x, [int]$p.y); return } catch { $script:UseULW = $false }
+    $ok = $false
+    try { $ok = [GPLayer]::Draw($p.form.Handle, $bmp, [int]$p.x, [int]$p.y) } catch {}
+    if ($ok) { return }
+    $script:UseULW = $false
+    ELog "ULW 실패(FALSE/예외) → 크로마 폴백 전환"
   }
   if ($null -eq $p.pb) {
-    # ULW 실패 시 크로마키 폴백을 즉석 구성 (레이어드 속성 제거 필수)
+    # ULW 실패 시 크로마키 폴백을 즉석 구성 (레이어드 제거 + 핸들러/메뉴 재부착 필수)
     try { [GPWin]::UnLayer($p.form.Handle) } catch {}
     $p.form.BackColor = $CHROMA; $p.form.TransparencyKey = $CHROMA
     $pb2 = New-Object System.Windows.Forms.PictureBox
     $pb2.Width=$SPR; $pb2.Height=$SPR; $pb2.BackColor=$CHROMA; $pb2.SizeMode='Zoom'
     $pb2.Tag = $p
+    $pb2.add_MouseDown($script:HDown); $pb2.add_MouseUp($script:HUp)
+    $pb2.ContextMenuStrip = $p.form.ContextMenuStrip
     $p.form.Controls.Add($pb2)
     $p.pb = $pb2
   }
@@ -226,7 +264,8 @@ function Detach-Social($p) {
     $q = $p.partner; $p.partner = $null
     if ($null -ne $q.partner -and $q.partner.id -eq $p.id) {
       $q.partner = $null
-      if (@('chase','flee','carry','ride') -contains $q.state) { $q.state = 'idle'; $q.timer = 40 }
+      if ($q.state -eq 'ride') { $q.state='fall'; $q.vx=0; $q.vy=-6 }   # 라이더는 낙하로 (바닥 순간이동 방지)
+      elseif (@('chase','flee','carry') -contains $q.state) { $q.state = 'idle'; $q.timer = 40 }
     }
   }
   if ($p.state -eq 'ride') { $p.vy = -6 }
@@ -257,7 +296,7 @@ function Position-Speech($sp) {
 
 function Say($p, $text, $life=95) {
   foreach ($s in $App.speeches) { if ($s.pet.id -eq $p.id) { return } }
-  $bf = New-Object System.Windows.Forms.Form
+  $bf = New-Object GPQuietForm
   $bf.FormBorderStyle='None'; $bf.ShowInTaskbar=$false; $bf.TopMost=$true; $bf.StartPosition='Manual'
   $lbl = New-Object System.Windows.Forms.Label
   $lbl.AutoSize=$true; $lbl.Text=$text
@@ -286,7 +325,7 @@ function Say-Emotion($p, $frame) {
 function Spawn-Hearts($x, $y, $n) {
   if ($App.hearts.Count -gt 8) { return }
   for ($i=0; $i -lt $n; $i++) {
-    $hf = New-Object System.Windows.Forms.Form
+    $hf = New-Object GPQuietForm
     $hf.FormBorderStyle='None'; $hf.ShowInTaskbar=$false; $hf.TopMost=$true; $hf.StartPosition='Manual'
     $lbl = New-Object System.Windows.Forms.Label
     $lbl.AutoSize=$true; $lbl.Text=[string][char]0x2764
@@ -303,7 +342,10 @@ function Spawn-Hearts($x, $y, $n) {
   }
 }
 
-function Force-State($p,$state,$ticks) { if ($p.state -eq 'drag') { return }; Detach-Social $p; $p.state=$state; $p.timer=$ticks; $p.vx=0; $p.seq=0 }
+function Force-State($p,$state,$ticks) {
+  if (@('drag','jump','fall','ride') -contains $p.state) { return }   # 공중 상태에서 강제 전이 시 순간이동 방지
+  Detach-Social $p; $p.state=$state; $p.timer=$ticks; $p.vx=0; $p.seq=0
+}
 function Pet-Head($p) {
   if (@('drag','fall','jump') -contains $p.state) { return }
   Detach-Social $p; $p.state='facecam'; $p.timer=60; $p.vx=0
@@ -318,44 +360,41 @@ function On-Grab($p) {
   $cur = [System.Windows.Forms.Cursor]::Position
   $p.dragOff = @(($cur.X - $p.x), ($cur.Y - $p.y))
   $p.trail.Clear()
-  $p.dragStage = 0; $p.dragHold = 0
-}
-function On-DragMove($p) {
-  if ($p.state -ne 'drag') { return }
-  $cur = [System.Windows.Forms.Cursor]::Position
-  $nx = $cur.X - $p.dragOff[0]; $ny = $cur.Y - $p.dragOff[1]
-  [void]$p.trail.Add(@(($nx - $p.x), ($ny - $p.y)))
-  while ($p.trail.Count -gt 5) { $p.trail.RemoveAt(0) }
-  $p.x = $nx; $p.y = $ny
+  $p.dragStage = 3; $p.dragHold = 0; $p.dragWant = 3
 }
 function On-Release($p) {
   if ($p.state -ne 'drag') { return }
-  if ($p.trail.Count -gt 0) {
-    $sx=0.0; $sy=0.0
-    foreach ($d in $p.trail) { $sx += $d[0]; $sy += $d[1] }
-    $p.vx = [Math]::Max(-20, [Math]::Min(20, ($sx / $p.trail.Count) * 0.7))
-    $p.vy = [Math]::Max(-18, [Math]::Min(12, ($sy / $p.trail.Count) * 0.7))
+  # trail = 최근 틱별 위치 스냅샷 → 틱당 속도로 환산 (이벤트 빈도 무관)
+  if ($p.trail.Count -ge 2) {
+    $first = $p.trail[0]; $last = $p.trail[$p.trail.Count - 1]
+    $n = $p.trail.Count - 1
+    $p.vx = [Math]::Max(-22, [Math]::Min(22, ($last[0] - $first[0]) / $n))
+    $p.vy = [Math]::Max(-18, [Math]::Min(14, ($last[1] - $first[1]) / $n))
   } else { $p.vx = 0; $p.vy = 0 }
   $p.state = 'fall'
 }
 
 function Drag-Frame($p) {
-  # 대롱대롱 4단계: side_hang90/hang60/hang30/front_hang0 (없으면 폴백)
+  # 대롱대롱 4단계 — 펫이 커서를 스프링 추종하므로 dx(커서-펫 편차)가 살아 움직인다
   $cur = [System.Windows.Forms.Cursor]::Position
-  $dx = $cur.X - (Cx $p)
-  $adx = [Math]::Abs($dx)
-  $R = $SPR * 1.2
-  $ratio = $adx / $R
-  # 단계 판정 (가이드: 0.75/0.45/0.15) — 깜빡임 방지는 3틱(90ms) 유지 조건으로
+  $tx = $cur.X - $p.dragOff[0]; $ty = $cur.Y - $p.dragOff[1]
+  $p.x += ($tx - $p.x) * 0.28
+  $p.y += ($ty - $p.y) * 0.34
+  [void]$p.trail.Add(@($p.x, $p.y))          # 틱별 위치 (던지기 속도용)
+  while ($p.trail.Count -gt 6) { $p.trail.RemoveAt(0) }
+  $dx = $tx - $p.x
+  $ratio = [Math]::Abs($dx) / ($SPR * 0.6)
+  # 단계 판정 (0.75/0.45/0.15) + 같은 후보 3틱(90ms) 연속 시 확정
   $want = 3
   if ($ratio -ge 0.75) { $want = 0 }
   elseif ($ratio -ge 0.45) { $want = 1 }
   elseif ($ratio -ge 0.15) { $want = 2 }
-  if ($want -ne $p.dragStage) {
+  if ($want -eq $p.dragStage) { $p.dragHold = 0 }
+  elseif ($want -eq $p.dragWant) {
     $p.dragHold++
     if ($p.dragHold -ge 3) { $p.dragStage = $want; $p.dragHold = 0 }
-  } else { $p.dragHold = 0 }
-  if ($dx -ne 0) { $p.facing = Sign1 ($dx -gt 0) }
+  } else { $p.dragWant = $want; $p.dragHold = 1 }
+  if ([Math]::Abs($dx) -gt 3) { $p.facing = Sign1 ($dx -gt 0) }
   $stages = @('side_hang90','side_hang60','side_hang30','front_hang0')
   $f = $stages[$p.dragStage]
   if (F $p.kind $f) { return $f }
@@ -386,7 +425,7 @@ function Decide($p) {
   elseif ($r -lt 0.60) { $p.state='stretchy'; $p.timer=$rng.Next(100,160); $p.seq=0 }
   elseif ($r -lt 0.65) { $p.state='lookaround'; $p.timer=$rng.Next(60,120) }
   elseif ($r -lt 0.70) { $p.state='facecam'; $p.timer=$rng.Next(70,130)
-    $p.camframe = Pick $p.kind @('front_happy','front_curious','front_focus','front_wink','front_tongue','front_beg','front_laugh','front_stare')
+    $p.camframe = Pick $p.kind @('front_happy','front_curious','front_focus','front_wink','front_tongue','front_beg','front_laugh','front_stare','front_sleepy','front_sad')
     if ($p.camframe -ne 'front_stare' -and $rng.NextDouble() -lt 0.55) { Say-Emotion $p $p.camframe } }
   elseif ($r -lt 0.80) { $p.state='idle'; $p.timer=$rng.Next(50,150) }
   elseif ($r -lt 0.90) { $p.state='sit'; $p.timer=$rng.Next(120,280) }
@@ -437,7 +476,13 @@ function Update-Pet($p) {
   $p.anim++
   $st = $p.state
 
-  if ($st -eq 'drag') { $p.frame = Drag-Frame $p; return }
+  if ($st -eq 'drag') {
+    # MouseUp 유실(캡처 강탈) 시 자가 복구
+    if (([System.Windows.Forms.Control]::MouseButtons -band [System.Windows.Forms.MouseButtons]::Left) -eq 0) {
+      On-Release $p; return
+    }
+    $p.frame = Drag-Frame $p; return
+  }
 
   if ($st -eq 'ride') {
     $c = $p.partner
@@ -538,8 +583,6 @@ function Update-Pet($p) {
       $p.facing = -$p.facing
       if ($st -eq 'zoomies') { $p.skid = 7 }
     }
-    # 걷기/달리기 미세 바운스
-    if (@('run','chase','flee','zoomies') -contains $st) { $p.y -= [int](([Math]::Abs([Math]::Sin($p.anim*0.5))) * $SPR * 0.03) }
     $p.frame = $frame
   }
   elseif ($st -eq 'pounce') {
@@ -587,6 +630,9 @@ function Update-Pet($p) {
   elseif ($st -eq 'wallstand') {
     $p.frame = 'side_wallstand'
   }
+  elseif ($st -eq 'exhausted') {
+    $p.frame = 'side_tired'
+  }
   elseif ($st -eq 'sit') {
     $p.frame = 'side_sit'
     if ($rng.NextDouble() -lt 0.004) { $p.frame='side_yawn' }
@@ -596,7 +642,7 @@ function Update-Pet($p) {
     $p.zseq++
     if (($p.zseq % 40) -eq 0) {
       $zt = @('z','z Z','z Z Z')[([int]($p.zseq / 40)) % 3]
-      foreach ($s in $App.speeches) { if ($s.pet.id -eq $p.id) { $s.form.Controls[0].Text = $zt; $s.life = 45; Position-Speech $s; $zt=$null; break } }
+      foreach ($s in $App.speeches) { if ($s.pet.id -eq $p.id) { $s.form.Controls[0].Text = $zt; $s.form.ClientSize = $s.form.Controls[0].PreferredSize; $s.life = 45; Position-Speech $s; $zt=$null; break } }
       if ($zt) { Say $p $zt 45 }
     }
   }
@@ -605,18 +651,22 @@ function Update-Pet($p) {
     $p.frame = $opts[([int]([Math]::Floor($p.anim/45))) % $opts.Count]
   }
 
+  # 프레임 확정 후 y 재계산 — 프레임 간 발높이(FootPad) 차이로 인한 떨림 방지
+  if ($null -ne $p.platform) { $p.y = Stand-Y $p $p.platform } else { $p.y = Ground-Y $p }
+  if (@('run','chase','flee','zoomies') -contains $st) {
+    $p.y -= [int](([Math]::Abs([Math]::Sin($p.anim*0.5))) * $SPR * 0.03)
+  }
+
   if ($p.timer -le 0 -and $st -ne 'landing' -and $st -ne 'pounce' -and $st -ne 'caught' -and $st -ne 'shakeoff') {
     if ($null -ne $p.partner) { Detach-Social $p }
     if ($st -eq 'zoomies') { $p.state='exhausted'; $p.timer=70; $p.frame='side_tired'; return }
-    if ($st -eq 'exhausted') { }
     Decide $p
   }
-  elseif ($st -eq 'exhausted') { $p.frame='side_tired'; if ($p.timer -le 0) { Decide $p } }
 }
 
 # ---------------------------------------------------------------- 펫 생성
 function New-Pet($id, $name, $kind, $x) {
-  $f = New-Object System.Windows.Forms.Form
+  $f = New-Object GPQuietForm
   $f.FormBorderStyle='None'; $f.ShowInTaskbar=$false; $f.TopMost=$true; $f.StartPosition='Manual'
   $f.Width=$SPR; $f.Height=$SPR
   $pb = $null
@@ -632,7 +682,7 @@ function New-Pet($id, $name, $kind, $x) {
           timer=$rng.Next(30,90); anim=0; platform=$null; platLeft=0; jump=$null;
           partner=$null; dragOff=@(0,0); trail=(New-Object System.Collections.ArrayList);
           frame='side_stand'; seq=0; zseq=0; skid=0; camframe='front_happy';
-          dragStage=0; dragHold=0; dragStage3=0 }
+          dragStage=3; dragHold=0; dragWant=3 }
   $p.y = [double](Ground-Y $p)
 
   $menu = New-Object System.Windows.Forms.ContextMenuStrip
@@ -649,15 +699,9 @@ function New-Pet($id, $name, $kind, $x) {
   if ($null -ne $pb) { $pb.ContextMenuStrip = $menu; $pb.Tag = $p }
   $f.Tag = $p
 
-  $handler_down = { param($s,$e) if ($e.Button -eq [System.Windows.Forms.MouseButtons]::Left) { On-Grab $s.Tag } }
-  $handler_move = { param($s,$e) On-DragMove $s.Tag }
-  $handler_up = { param($s,$e) if ($e.Button -eq [System.Windows.Forms.MouseButtons]::Left) { On-Release $s.Tag } }
-  $handler_dbl = { param($s,$e) Pet-Head $s.Tag }
-  $f.add_MouseDown($handler_down); $f.add_MouseMove($handler_move)
-  $f.add_MouseUp($handler_up); $f.add_MouseDoubleClick($handler_dbl)
+  $f.add_MouseDown($script:HDown); $f.add_MouseUp($script:HUp)
   if ($null -ne $pb) {
-    $pb.add_MouseDown($handler_down); $pb.add_MouseMove($handler_move)
-    $pb.add_MouseUp($handler_up); $pb.add_MouseDoubleClick($handler_dbl)
+    $pb.add_MouseDown($script:HDown); $pb.add_MouseUp($script:HUp)
   }
 
   $null = $f.Handle
@@ -677,9 +721,14 @@ function Start-App {
     return
   }
 
-  [System.Windows.Forms.Application]::SetUnhandledExceptionMode([System.Windows.Forms.UnhandledExceptionMode]::CatchException)
+  # 부트스트랩이 스플래시 창을 먼저 만들면 예외모드 변경이 불가 — 실패해도 무해(핸들러는 기본 모드에서도 동작)
+  try { [System.Windows.Forms.Application]::SetUnhandledExceptionMode([System.Windows.Forms.UnhandledExceptionMode]::CatchException) }
+  catch { ELog "예외모드 변경 생략 (스플래시 선생성)" }
   [System.Windows.Forms.Application]::add_ThreadException({
     param($s,$e)
+    if ($script:Dying) { return }
+    $script:Dying = $true
+    try { if ($script:Timer) { $script:Timer.Stop() } } catch {}
     ELog ("틱 오류: " + $e.Exception.Message)
     [System.Windows.Forms.MessageBox]::Show(("GLUCK 펫 오류:`n" + $e.Exception.Message + "`n`n" + $e.Exception.StackTrace), "GLUCK 펫", 'OK', 'Error') | Out-Null
     [System.Windows.Forms.Application]::Exit()
@@ -728,15 +777,16 @@ function Start-App {
   # 부트스트랩 자기 갱신 (펫 표시 후 조용히 — 다음 실행부터 새 부트스트랩 적용)
   try {
     [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-    $bwc = New-Object System.Net.WebClient
-    $bwc.DownloadFile('https://raw.githubusercontent.com/highest14-del/gluck-pets/AI%EA%B4%80%EC%A0%9C/dist/bootstrap.ps1',
+    $script:BootWC = New-Object System.Net.WebClient
+    $script:BootWC.DownloadFileAsync(
+      (New-Object Uri('https://raw.githubusercontent.com/highest14-del/gluck-pets/AI%EA%B4%80%EC%A0%9C/dist/bootstrap.ps1')),
       (Join-Path (Join-Path $env:LocalAppData 'GLUCK_PETS') 'bootstrap.ps1'))
-    ELog "부트스트랩 자기 갱신 OK"
+    ELog "부트스트랩 자기 갱신 시작(비동기)"
   } catch { ELog ("부트스트랩 갱신 실패(무시): " + $_.Exception.Message) }
 
-  $timer = New-Object System.Windows.Forms.Timer
-  $timer.Interval = $TICK_MS
-  $timer.add_Tick({
+  $script:Timer = New-Object System.Windows.Forms.Timer
+  $script:Timer.Interval = $TICK_MS
+  $script:Timer.add_Tick({
     $App.tick++
     if (($App.tick % 16) -eq 1) { Refresh-Platforms }
     foreach ($p in $App.pets) { Update-Pet $p }
@@ -754,7 +804,7 @@ function Start-App {
     foreach ($s in $deadSp) { $s.form.Close(); $App.speeches.Remove($s) }
     foreach ($p in $App.pets) { Render-Pet $p }
   })
-  $timer.Start()
+  $script:Timer.Start()
   $ctx = New-Object System.Windows.Forms.ApplicationContext
   [System.Windows.Forms.Application]::Run($ctx)
 }

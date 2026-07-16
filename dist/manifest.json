@@ -18,7 +18,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 103858
   },
   {
    "key": "momo_front_beg",
@@ -36,7 +37,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 94609
   },
   {
    "key": "momo_front_curious",
@@ -54,7 +56,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 91240
   },
   {
    "key": "momo_front_focus",
@@ -72,7 +75,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 89212
   },
   {
    "key": "momo_front_hang0",
@@ -90,7 +94,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 71248
   },
   {
    "key": "momo_front_happy",
@@ -108,7 +113,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 114801
   },
   {
    "key": "momo_front_laugh",
@@ -126,7 +132,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 97193
   },
   {
    "key": "momo_front_sad",
@@ -144,7 +151,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 110356
   },
   {
    "key": "momo_front_scared",
@@ -162,7 +170,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 147737
   },
   {
    "key": "momo_front_sleepy",
@@ -180,7 +189,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 111311
   },
   {
    "key": "momo_front_stare",
@@ -198,7 +208,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 89179
   },
   {
    "key": "momo_front_startle",
@@ -216,7 +227,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 112748
   },
   {
    "key": "momo_front_tongue",
@@ -234,7 +246,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 98213
   },
   {
    "key": "momo_front_wink",
@@ -252,7 +265,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 98141
   },
   {
    "key": "momo_side_belly",
@@ -270,7 +284,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 72353
   },
   {
    "key": "momo_side_crouch",
@@ -288,7 +303,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 124421
   },
   {
    "key": "momo_side_excited",
@@ -306,7 +322,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 107209
   },
   {
    "key": "momo_side_growl",
@@ -324,7 +341,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 123541
   },
   {
    "key": "momo_side_hang30",
@@ -343,7 +361,8 @@
     1024,
     1024
    ],
-   "facing": "L"
+   "facing": "L",
+   "size": 75079
   },
   {
    "key": "momo_side_hang60",
@@ -362,7 +381,8 @@
     1024,
     1024
    ],
-   "facing": "L"
+   "facing": "L",
+   "size": 82693
   },
   {
    "key": "momo_side_hang90",
@@ -381,7 +401,8 @@
     1024,
     1024
    ],
-   "facing": "L"
+   "facing": "L",
+   "size": 87215
   },
   {
    "key": "momo_side_jump",
@@ -399,7 +420,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 98130
   },
   {
    "key": "momo_side_land",
@@ -417,7 +439,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 121687
   },
   {
    "key": "momo_side_licknose",
@@ -435,7 +458,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 125357
   },
   {
    "key": "momo_side_lickpaw",
@@ -453,7 +477,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 138155
   },
   {
    "key": "momo_side_lookback",
@@ -471,7 +496,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 153244
   },
   {
    "key": "momo_side_lookdown",
@@ -489,7 +515,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 94902
   },
   {
    "key": "momo_side_lookup",
@@ -507,7 +534,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 126976
   },
   {
    "key": "momo_side_pawup",
@@ -525,7 +553,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 125666
   },
   {
    "key": "momo_side_pounce",
@@ -543,7 +572,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 83340
   },
   {
    "key": "momo_side_proud",
@@ -561,7 +591,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 136895
   },
   {
    "key": "momo_side_roll",
@@ -579,7 +610,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 121007
   },
   {
    "key": "momo_side_run",
@@ -597,7 +629,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 77890
   },
   {
    "key": "momo_side_scratch",
@@ -615,7 +648,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 141101
   },
   {
    "key": "momo_side_shake",
@@ -633,7 +667,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 142486
   },
   {
    "key": "momo_side_sit",
@@ -651,7 +686,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 108969
   },
   {
    "key": "momo_side_skid",
@@ -669,7 +705,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 116964
   },
   {
    "key": "momo_side_sleep",
@@ -687,7 +724,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 97066
   },
   {
    "key": "momo_side_slide",
@@ -705,7 +743,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 92430
   },
   {
    "key": "momo_side_sneak",
@@ -723,7 +762,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 97237
   },
   {
    "key": "momo_side_sneeze",
@@ -741,7 +781,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 109520
   },
   {
    "key": "momo_side_sniff",
@@ -759,7 +800,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 106582
   },
   {
    "key": "momo_side_stand",
@@ -777,7 +819,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 110829
   },
   {
    "key": "momo_side_standup",
@@ -795,7 +838,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 62022
   },
   {
    "key": "momo_side_startle",
@@ -813,7 +857,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 105095
   },
   {
    "key": "momo_side_stretch",
@@ -831,7 +876,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 99065
   },
   {
    "key": "momo_side_sulk",
@@ -849,7 +895,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 103137
   },
   {
    "key": "momo_side_tiptoe",
@@ -867,7 +914,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 105798
   },
   {
    "key": "momo_side_tired",
@@ -885,7 +933,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 117296
   },
   {
    "key": "momo_side_trot",
@@ -903,7 +952,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 102710
   },
   {
    "key": "momo_side_walk",
@@ -921,7 +971,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 94521
   },
   {
    "key": "momo_side_wallstand",
@@ -939,7 +990,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 76619
   },
   {
    "key": "momo_side_wobble",
@@ -957,7 +1009,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 114237
   },
   {
    "key": "momo_side_yawn",
@@ -975,7 +1028,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 108619
   },
   {
    "key": "nana_front_angry",
@@ -993,7 +1047,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 109369
   },
   {
    "key": "nana_front_beg",
@@ -1011,7 +1066,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 101657
   },
   {
    "key": "nana_front_curious",
@@ -1029,7 +1085,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 100223
   },
   {
    "key": "nana_front_focus",
@@ -1047,7 +1104,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 96571
   },
   {
    "key": "nana_front_hang0",
@@ -1065,7 +1123,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 77842
   },
   {
    "key": "nana_front_happy",
@@ -1083,7 +1142,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 125072
   },
   {
    "key": "nana_front_laugh",
@@ -1101,7 +1161,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 110886
   },
   {
    "key": "nana_front_sad",
@@ -1119,7 +1180,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 134368
   },
   {
    "key": "nana_front_scared",
@@ -1137,7 +1199,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 166073
   },
   {
    "key": "nana_front_sleepy",
@@ -1155,7 +1218,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 129240
   },
   {
    "key": "nana_front_stare",
@@ -1173,7 +1237,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 102970
   },
   {
    "key": "nana_front_startle",
@@ -1191,7 +1256,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 118720
   },
   {
    "key": "nana_front_tongue",
@@ -1209,7 +1275,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 117288
   },
   {
    "key": "nana_front_wink",
@@ -1227,7 +1294,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 111132
   },
   {
    "key": "nana_side_belly",
@@ -1245,7 +1313,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 110192
   },
   {
    "key": "nana_side_crouch",
@@ -1263,7 +1332,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 143211
   },
   {
    "key": "nana_side_excited",
@@ -1281,7 +1351,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 116901
   },
   {
    "key": "nana_side_growl",
@@ -1299,7 +1370,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 118717
   },
   {
    "key": "nana_side_hang30",
@@ -1318,7 +1390,8 @@
     1024,
     1024
    ],
-   "facing": "L"
+   "facing": "L",
+   "size": 77945
   },
   {
    "key": "nana_side_hang60",
@@ -1337,7 +1410,8 @@
     1024,
     1024
    ],
-   "facing": "L"
+   "facing": "L",
+   "size": 80121
   },
   {
    "key": "nana_side_hang90",
@@ -1356,7 +1430,8 @@
     1024,
     1024
    ],
-   "facing": "L"
+   "facing": "L",
+   "size": 80412
   },
   {
    "key": "nana_side_jump",
@@ -1374,7 +1449,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 117077
   },
   {
    "key": "nana_side_land",
@@ -1392,7 +1468,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 91163
   },
   {
    "key": "nana_side_licknose",
@@ -1410,7 +1487,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 129200
   },
   {
    "key": "nana_side_lickpaw",
@@ -1428,7 +1506,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 148355
   },
   {
    "key": "nana_side_lookback",
@@ -1446,7 +1525,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 171649
   },
   {
    "key": "nana_side_lookdown",
@@ -1464,7 +1544,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 104462
   },
   {
    "key": "nana_side_lookup",
@@ -1482,7 +1563,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 129440
   },
   {
    "key": "nana_side_pawup",
@@ -1500,7 +1582,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 135082
   },
   {
    "key": "nana_side_pounce",
@@ -1518,7 +1601,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 79627
   },
   {
    "key": "nana_side_proud",
@@ -1536,7 +1620,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 129788
   },
   {
    "key": "nana_side_roll",
@@ -1554,7 +1639,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 139814
   },
   {
    "key": "nana_side_run",
@@ -1572,7 +1658,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 83459
   },
   {
    "key": "nana_side_scratch",
@@ -1590,7 +1677,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 144464
   },
   {
    "key": "nana_side_shake",
@@ -1608,7 +1696,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 131763
   },
   {
    "key": "nana_side_sit",
@@ -1626,7 +1715,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 122800
   },
   {
    "key": "nana_side_skid",
@@ -1644,7 +1734,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 125436
   },
   {
    "key": "nana_side_sleep",
@@ -1662,7 +1753,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 89554
   },
   {
    "key": "nana_side_slide",
@@ -1680,7 +1772,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 91601
   },
   {
    "key": "nana_side_sneak",
@@ -1698,7 +1791,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 105255
   },
   {
    "key": "nana_side_sneeze",
@@ -1716,7 +1810,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 132939
   },
   {
    "key": "nana_side_sniff",
@@ -1734,7 +1829,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 108133
   },
   {
    "key": "nana_side_stand",
@@ -1752,7 +1848,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 108416
   },
   {
    "key": "nana_side_standup",
@@ -1770,7 +1867,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 64821
   },
   {
    "key": "nana_side_startle",
@@ -1788,7 +1886,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 98618
   },
   {
    "key": "nana_side_stretch",
@@ -1806,7 +1905,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 98238
   },
   {
    "key": "nana_side_sulk",
@@ -1824,7 +1924,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 97942
   },
   {
    "key": "nana_side_tiptoe",
@@ -1842,7 +1943,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 113111
   },
   {
    "key": "nana_side_tired",
@@ -1860,7 +1962,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 106021
   },
   {
    "key": "nana_side_trot",
@@ -1878,7 +1981,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 115596
   },
   {
    "key": "nana_side_walk",
@@ -1896,7 +2000,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 94926
   },
   {
    "key": "nana_side_wallstand",
@@ -1914,7 +2019,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 77364
   },
   {
    "key": "nana_side_wobble",
@@ -1932,7 +2038,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 103031
   },
   {
    "key": "nana_side_yawn",
@@ -1950,7 +2057,8 @@
    "src_size": [
     1024,
     1024
-   ]
+   ],
+   "size": 106259
   }
  ]
 }

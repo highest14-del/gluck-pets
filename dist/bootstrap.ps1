@@ -5,6 +5,10 @@
 $ErrorActionPreference = 'Continue'
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
+try {
+  Add-Type -Namespace GPB -Name Dpi -MemberDefinition '[DllImport("user32.dll")] public static extern bool SetProcessDPIAware();'
+  [void][GPB.Dpi]::SetProcessDPIAware()   # 첫 창 생성 전에 (이후엔 변경 불가)
+} catch {}
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 $Base = 'https://raw.githubusercontent.com/highest14-del/gluck-pets/AI%EA%B4%80%EC%A0%9C/dist'
@@ -41,7 +45,11 @@ if (Test-Path $localVerFile) {
 WLog "로컬 버전: $localVer"
 
 $remote = $null
-try { $remote = $wc.DownloadString("$Base/version.json") | ConvertFrom-Json; WLog ("원격 버전: " + $remote.version) }
+try {
+  # TrimStart(U+FEFF): BOM 포함 저장 시 5.1 ConvertFrom-Json 즉사 방지
+  $remote = $wc.DownloadString("$Base/version.json").TrimStart([char]0xFEFF) | ConvertFrom-Json
+  WLog ("원격 버전: " + $remote.version)
+}
 catch { WLog ("버전 확인 실패(오프라인?): " + $_.Exception.Message) }
 
 if ($null -ne $remote -and [int]$remote.version -gt [int]$localVer) {
@@ -56,9 +64,20 @@ if ($null -ne $remote -and [int]$remote.version -gt [int]$localVer) {
       $rel = $im.file -replace '/', '\'
       $dst = Join-Path $Assets $rel
       New-Item -ItemType Directory -Force -Path (Split-Path $dst) | Out-Null
-      if (-not (Test-Path $dst) -or $remote.force) { $wc.DownloadFile(("$Base/" + $im.file), $dst) }
+      # 필요 판정: 없음 / 강제 / 크기 불일치(내용 교체·손상 감지)
+      $need = -not (Test-Path $dst)
+      if (-not $need -and $remote.force) { $need = $true }
+      if (-not $need -and $im.PSObject.Properties['size'] -and $im.size) {
+        if ((Get-Item $dst).Length -ne [long]$im.size) { $need = $true }
+      }
+      if ($need) {
+        $tmp = $dst + '.tmp'
+        $wc.DownloadFile(("$Base/" + $im.file), $tmp)      # 임시 파일로 받고
+        Move-Item -Force $tmp $dst                          # 성공 시에만 원자적 교체
+      }
       $n++
-      if (($n % 12) -eq 0) { Splash ("이미지 받는 중... " + $n + "/" + $man.images.Count); }
+      if (($n % 12) -eq 0) { Splash ("이미지 받는 중... " + $n + "/" + $man.images.Count) }
+      [System.Windows.Forms.Application]::DoEvents()
     }
     Set-Content -Path $localVerFile -Value ($remote | ConvertTo-Json) -Encoding UTF8
     WLog "업데이트 완료 ($n개 확인)"
@@ -72,6 +91,10 @@ if (-not (Test-Path $engine)) {
   Copy-Item (Join-Path $here 'gluck_pets.ps1') $engine -Force
   if (Test-Path (Join-Path $here 'assets')) {
     Copy-Item (Join-Path $here 'assets\*') $Assets -Recurse -Force
+  } elseif (Test-Path (Join-Path $here 'manifest.json')) {
+    # dist 평면 레이아웃(개발/저장소 직접 실행) 대응
+    Copy-Item (Join-Path $here 'manifest.json') (Join-Path $Assets 'manifest.json') -Force
+    if (Test-Path (Join-Path $here 'img')) { Copy-Item (Join-Path $here 'img') $Assets -Recurse -Force }
   }
 }
 
