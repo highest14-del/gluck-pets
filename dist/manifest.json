@@ -75,6 +75,24 @@
    ]
   },
   {
+   "key": "momo_front_hang0",
+   "dog": "momo",
+   "view": "front",
+   "pose": "hang0",
+   "kor": "대롱대롱",
+   "file": "img/momo/front_hang0.png",
+   "bbox": [
+    138,
+    31,
+    245,
+    353
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
    "key": "momo_front_happy",
    "dog": "momo",
    "view": "front",
@@ -158,6 +176,24 @@
     31,
     275,
     352
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "momo_front_stare",
+   "dog": "momo",
+   "view": "front",
+   "pose": "stare",
+   "kor": "빤히보기",
+   "file": "img/momo/front_stare.png",
+   "bbox": [
+    122,
+    31,
+    262,
+    353
    ],
    "src_size": [
     1024,
@@ -289,6 +325,63 @@
     1024,
     1024
    ]
+  },
+  {
+   "key": "momo_side_hang30",
+   "dog": "momo",
+   "view": "side",
+   "pose": "hang30",
+   "kor": "대롱대롱",
+   "file": "img/momo/side_hang30.png",
+   "bbox": [
+    129,
+    31,
+    254,
+    353
+   ],
+   "src_size": [
+    1024,
+    1024
+   ],
+   "facing": "L"
+  },
+  {
+   "key": "momo_side_hang60",
+   "dog": "momo",
+   "view": "side",
+   "pose": "hang60",
+   "kor": "대롱대롱",
+   "file": "img/momo/side_hang60.png",
+   "bbox": [
+    110,
+    31,
+    273,
+    353
+   ],
+   "src_size": [
+    1024,
+    1024
+   ],
+   "facing": "L"
+  },
+  {
+   "key": "momo_side_hang90",
+   "dog": "momo",
+   "view": "side",
+   "pose": "hang90",
+   "kor": "대롱대롱",
+   "file": "img/momo/side_hang90.png",
+   "bbox": [
+    98,
+    31,
+    286,
+    353
+   ],
+   "src_size": [
+    1024,
+    1024
+   ],
+   "facing": "L"
   },
   {
    "key": "momo_side_jump",
@@ -831,6 +924,24 @@
    ]
   },
   {
+   "key": "momo_side_wallstand",
+   "dog": "momo",
+   "view": "side",
+   "pose": "wallstand",
+   "kor": "벽기대서기",
+   "file": "img/momo/side_wallstand.png",
+   "bbox": [
+    95,
+    31,
+    289,
+    353
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
    "key": "momo_side_wobble",
    "dog": "momo",
    "view": "side",
@@ -939,6 +1050,24 @@
    ]
   },
   {
+   "key": "nana_front_hang0",
+   "dog": "nana",
+   "view": "front",
+   "pose": "hang0",
+   "kor": "대롱대롱",
+   "file": "img/nana/front_hang0.png",
+   "bbox": [
+    141,
+    31,
+    242,
+    353
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
    "key": "nana_front_happy",
    "dog": "nana",
    "view": "front",
@@ -1021,6 +1150,24 @@
     96,
     31,
     286,
+    352
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_front_stare",
+   "dog": "nana",
+   "view": "front",
+   "pose": "stare",
+   "kor": "빤히보기",
+   "file": "img/nana/front_stare.png",
+   "bbox": [
+    121,
+    31,
+    262,
     352
    ],
    "src_size": [
@@ -1153,6 +1300,63 @@
     1024,
     1024
    ]
+  },
+  {
+   "key": "nana_side_hang30",
+   "dog": "nana",
+   "view": "side",
+   "pose": "hang30",
+   "kor": "대롱대롱",
+   "file": "img/nana/side_hang30.png",
+   "bbox": [
+    132,
+    31,
+    251,
+    353
+   ],
+   "src_size": [
+    1024,
+    1024
+   ],
+   "facing": "L"
+  },
+  {
+   "key": "nana_side_hang60",
+   "dog": "nana",
+   "view": "side",
+   "pose": "hang60",
+   "kor": "대롱대롱",
+   "file": "img/nana/side_hang60.png",
+   "bbox": [
+    105,
+    31,
+    279,
+    353
+   ],
+   "src_size": [
+    1024,
+    1024
+   ],
+   "facing": "L"
+  },
+  {
+   "key": "nana_side_hang90",
+   "dog": "nana",
+   "view": "side",
+   "pose": "hang90",
+   "kor": "대롱대롱",
+   "file": "img/nana/side_hang90.png",
+   "bbox": [
+    99,
+    31,
+    284,
+    353
+   ],
+   "src_size": [
+    1024,
+    1024
+   ],
+   "facing": "L"
   },
   {
    "key": "nana_side_jump",
@@ -1688,6 +1892,24 @@
     86,
     352,
     297
+   ],
+   "src_size": [
+    1024,
+    1024
+   ]
+  },
+  {
+   "key": "nana_side_wallstand",
+   "dog": "nana",
+   "view": "side",
+   "pose": "wallstand",
+   "kor": "벽기대서기",
+   "file": "img/nana/side_wallstand.png",
+   "bbox": [
+    86,
+    31,
+    297,
+    353
    ],
    "src_size": [
     1024,

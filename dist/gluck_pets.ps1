@@ -370,8 +370,8 @@ function Decide($p) {
   elseif ($r -lt 0.60) { $p.state='stretchy'; $p.timer=$rng.Next(100,160); $p.seq=0 }
   elseif ($r -lt 0.65) { $p.state='lookaround'; $p.timer=$rng.Next(60,120) }
   elseif ($r -lt 0.70) { $p.state='facecam'; $p.timer=$rng.Next(70,130)
-    $p.camframe = Pick $p.kind @('front_happy','front_curious','front_focus','front_wink','front_tongue','front_beg','front_laugh')
-    if ($rng.NextDouble() -lt 0.55) { Say-Emotion $p $p.camframe } }
+    $p.camframe = Pick $p.kind @('front_happy','front_curious','front_focus','front_wink','front_tongue','front_beg','front_laugh','front_stare')
+    if ($p.camframe -ne 'front_stare' -and $rng.NextDouble() -lt 0.55) { Say-Emotion $p $p.camframe } }
   elseif ($r -lt 0.80) { $p.state='idle'; $p.timer=$rng.Next(50,150) }
   elseif ($r -lt 0.90) { $p.state='sit'; $p.timer=$rng.Next(120,280) }
   else { $p.state='sleep'; $p.timer=$rng.Next(350,750); $p.zseq=0 }
@@ -508,8 +508,17 @@ function Update-Pet($p) {
     }
     $p.x += $speed * $p.facing
     if ($p.x -le $leftLim -or $p.x -ge $rightLim) {
+      $atRight = $p.x -ge $rightLim
       $p.x = [Math]::Max($leftLim, [Math]::Min($rightLim, $p.x))
       if ($null -ne $p.platform -and (@('run','chase','flee','zoomies') -contains $st) -and $rng.NextDouble() -lt 0.5) { Hop-Off $p; return }
+      # 화면 가장자리 벽에 앞발 올리고 기대기
+      if ($null -eq $p.platform -and (@('walk','run','sniff') -contains $st) -and $rng.NextDouble() -lt 0.3 -and (F $p.kind 'side_wallstand')) {
+        $p.facing = Sign1 $atRight
+        $p.x += $p.facing * $SPR * 0.06     # 앞발이 경계에 닿게 살짝 밀착
+        $p.state = 'wallstand'; $p.timer = $rng.Next(70,140)
+        $p.frame = 'side_wallstand'
+        return
+      }
       $p.facing = -$p.facing
       if ($st -eq 'zoomies') { $p.skid = 7 }
     }
@@ -558,6 +567,9 @@ function Update-Pet($p) {
   }
   elseif ($st -eq 'facecam') {
     $p.frame = $p.camframe
+  }
+  elseif ($st -eq 'wallstand') {
+    $p.frame = 'side_wallstand'
   }
   elseif ($st -eq 'sit') {
     $p.frame = 'side_sit'
