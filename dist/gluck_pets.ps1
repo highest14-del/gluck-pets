@@ -428,6 +428,7 @@ function Style-Bubble($form) {
 }
 
 function Say($p, $text, $life=95) {
+ try {
   foreach ($s in $App.speeches) { if ($s.pet.id -eq $p.id) { return } }
   # 개별 파스텔: 나나=크림, 모모=연핑크
   if ($p.kind -eq 'momo') {
@@ -456,6 +457,7 @@ function Say($p, $text, $life=95) {
   Position-Speech $sp
   $bf.Show()
   try { [GPWin]::HideFromAltTab($bf.Handle) } catch {}
+ } catch { ELog ("말풍선 오류(무시): " + $_.Exception.Message) }
 }
 
 function Say-Emotion($p, $frame) {
@@ -466,6 +468,7 @@ function Say-Emotion($p, $frame) {
 }
 
 function Spawn-Hearts($x, $y, $n) {
+ try {
   if ($App.hearts.Count -gt 8) { return }
   for ($i=0; $i -lt $n; $i++) {
     $hf = New-Object GPQuietForm
@@ -483,6 +486,7 @@ function Spawn-Hearts($x, $y, $n) {
     $hf.Left=[int]$heart.x; $hf.Top=[int]$heart.y; $hf.Show()
     try { [GPWin]::HideFromAltTab($hf.Handle) } catch {}
   }
+ } catch { ELog ("하트 오류(무시): " + $_.Exception.Message) }
 }
 
 function Restart-Pets {
@@ -506,11 +510,16 @@ function Force-State($p,$state,$ticks) {
   Detach-Social $p; $p.state=$state; $p.timer=$ticks; $p.vx=0; $p.seq=0
 }
 function Pet-Head($p) {
-  if (@('drag','fall','jump') -contains $p.state) { return }
-  Detach-Social $p; $p.state='facecam'; $p.timer=60; $p.vx=0
-  $p.camframe = Pick $p.kind @('front_happy','front_laugh','front_wink')
-  Say-Emotion $p $p.camframe
-  Spawn-Hearts ((Cx $p) - 20) ($p.y + $SPR*0.1) 3
+  if (@('drag','fall','jump','ride') -contains $p.state) { return }
+  try {
+    Detach-Social $p; $p.state='facecam'; $p.timer=60; $p.vx=0
+    $p.camframe = Pick $p.kind @('front_happy','front_laugh','front_wink')
+    Say-Emotion $p $p.camframe
+    Spawn-Hearts ((Cx $p) - 20) ($p.y + $SPR*0.1) 3
+  } catch {
+    ELog ("쓰다듬기 연출 오류(계속 실행): " + $_.Exception.Message)
+    $p.state = 'idle'; $p.timer = 40
+  }
 }
 
 # ---------------------------------------------------------------- 드래그 (4단계 시선)
@@ -920,14 +929,20 @@ function Start-App {
   # 부트스트랩이 스플래시 창을 먼저 만들면 예외모드 변경이 불가 — 실패해도 무해(핸들러는 기본 모드에서도 동작)
   try { [System.Windows.Forms.Application]::SetUnhandledExceptionMode([System.Windows.Forms.UnhandledExceptionMode]::CatchException) }
   catch { ELog "예외모드 변경 생략 (스플래시 선생성)" }
+  $script:ErrCount = 0
   [System.Windows.Forms.Application]::add_ThreadException({
     param($s,$e)
-    if ($script:Dying) { return }
-    $script:Dying = $true
-    try { if ($script:Timer) { $script:Timer.Stop() } } catch {}
-    ELog ("틱 오류: " + $e.Exception.Message)
-    [System.Windows.Forms.MessageBox]::Show(("GLUCK 펫 오류:`n" + $e.Exception.Message + "`n`n" + $e.Exception.StackTrace), "GLUCK 펫", 'OK', 'Error') | Out-Null
-    [System.Windows.Forms.Application]::Exit()
+    $script:ErrCount++
+    ELog ("이벤트 오류 #" + $script:ErrCount + ": " + $e.Exception.Message + " || " + $e.Exception.StackTrace)
+    if ($script:ErrCount -eq 1) {
+      # 첫 오류만 알리고 계속 실행 (일회성 결함으로 앱이 죽지 않게)
+      [System.Windows.Forms.MessageBox]::Show(("나나모모에 사소한 오류가 있었지만 계속 실행합니다.`n(반복되면 이 내용을 캡처해 주세요)`n`n" + $e.Exception.Message), "나나모모", 'OK', 'Information') | Out-Null
+    }
+    if ($script:ErrCount -ge 30) {
+      try { if ($script:Timer) { $script:Timer.Stop() } } catch {}
+      [System.Windows.Forms.MessageBox]::Show(("오류가 반복되어 종료합니다. 로그: " + $script:LogFile + "`n`n" + $e.Exception.Message), "나나모모", 'OK', 'Error') | Out-Null
+      [System.Windows.Forms.Application]::Exit()
+    }
   })
 
   # ULW(픽셀 알파) 사전 테스트 — 실패 시 처음부터 크로마 모드로 생성
