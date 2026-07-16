@@ -996,16 +996,17 @@ function Start-App {
   try {
     $vbsPath = Join-Path $HomeDir '글룩펫_실행.vbs'
     if (Test-Path $vbsPath) {
-      $ws = New-Object -ComObject WScript.Shell
+      # 주의: PS 변수는 대소문자 무시 — $sc를 쓰면 스케일 $SC를 덮어써 op_Multiply COM 오류 발생 (실사례)
+      $wshell = New-Object -ComObject WScript.Shell
       $desk = [Environment]::GetFolderPath('Desktop')
-      $sc = $ws.CreateShortcut((Join-Path $desk '나나모모.lnk'))
-      $sc.TargetPath = 'wscript.exe'
-      $sc.Arguments = '"' + $vbsPath + '"'
-      $sc.WorkingDirectory = $HomeDir
-      $sc.IconLocation = (Join-Path $HomeDir 'icon.ico')
-      $sc.Description = '나나와 모모 - 실사 데스크톱 펫'
-      $sc.WindowStyle = 7
-      $sc.Save()
+      $lnkObj = $wshell.CreateShortcut((Join-Path $desk '나나모모.lnk'))
+      $lnkObj.TargetPath = 'wscript.exe'
+      $lnkObj.Arguments = '"' + $vbsPath + '"'
+      $lnkObj.WorkingDirectory = $HomeDir
+      $lnkObj.IconLocation = (Join-Path $HomeDir 'icon.ico')
+      $lnkObj.Description = '나나와 모모 - 실사 데스크톱 펫'
+      $lnkObj.WindowStyle = 7
+      $lnkObj.Save()
       $old = Join-Path $desk 'GLUCK 펫.lnk'
       if (Test-Path $old) { Remove-Item $old -Force }
       ELog "바로가기 '나나모모' 갱신"
