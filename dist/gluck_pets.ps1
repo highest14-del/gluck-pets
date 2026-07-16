@@ -67,6 +67,16 @@ public class GPWin {
     if (h == IntPtr.Zero) return 0;
     return GetAncestor(h, 2).ToInt64();   // GA_ROOT
   }
+  [DllImport("user32.dll")] static extern IntPtr GetForegroundWindow();
+  public static long Foreground() { return GetForegroundWindow().ToInt64(); }
+  [StructLayout(LayoutKind.Sequential)] struct LASTINPUTINFO { public uint cbSize; public uint dwTime; }
+  [DllImport("user32.dll")] static extern bool GetLastInputInfo(ref LASTINPUTINFO plii);
+  public static long IdleMs() {
+    LASTINPUTINFO li = new LASTINPUTINFO();
+    li.cbSize = (uint)Marshal.SizeOf(typeof(LASTINPUTINFO));
+    if (!GetLastInputInfo(ref li)) return 0;
+    return (long)(unchecked((uint)Environment.TickCount - li.dwTime));
+  }
   public static List<long[]> Platforms(long[] exclude, int workTop) {
     var res = new List<long[]>();
     EnumWindows(delegate(IntPtr h, IntPtr l) {
@@ -83,7 +93,7 @@ public class GPWin {
       int w=r.right-r.left, ht=r.bottom-r.top;
       if (w<260||ht<160) return true;
       if (r.top<=workTop+4) return true;
-      res.Add(new long[]{hv, r.left, r.top, r.right});
+      res.Add(new long[]{hv, r.left, r.top, r.right, r.bottom});
       return true;
     }, IntPtr.Zero);
     return res;
@@ -231,7 +241,7 @@ $FootPad = @{}     # "kind|frame" -> px (창 하단에서 발바닥까지)
 $BboxX = @{}       # "kind|frame" -> @(좌, 우+1) 스케일된 실루엣 가로 범위 (벽 밀착용)
 $HasFrame = @{}
 $script:UseULW = $true
-$App = @{ pets=(New-Object System.Collections.ArrayList); hearts=(New-Object System.Collections.ArrayList); speeches=(New-Object System.Collections.ArrayList); plat=@{}; tick=0 }
+$App = @{ pets=(New-Object System.Collections.ArrayList); hearts=(New-Object System.Collections.ArrayList); speeches=(New-Object System.Collections.ArrayList); plat=@{}; tick=0; busy=0.0; away=$false }
 
 function Sign1($c) { if ($c) { return 1 } else { return -1 } }
 
@@ -351,7 +361,7 @@ function Refresh-Platforms {
   if ($ex.Count -eq 0) { [void]$ex.Add([long]0) }
   $raw = [GPWin]::Platforms([long[]]$ex.ToArray([long]), [int]$App.plat.workTop)
   $wins = New-Object System.Collections.ArrayList
-  foreach ($w in $raw) { [void]$wins.Add(@{ id=$w[0]; left=[int]$w[1]; top=[int]$w[2]; right=[int]$w[3] }) }
+  foreach ($w in $raw) { [void]$wins.Add(@{ id=$w[0]; left=[int]$w[1]; top=[int]$w[2]; right=[int]$w[3]; bottom=[int]$w[4] }) }
   $App.plat.windows = $wins
   $own = @{}
   foreach ($h in $ex) { $own[[long]$h] = $true }
@@ -715,19 +725,72 @@ function Decide($p) {
     return
   }
   $o = Other-Pet $p
+  $busy = ($App.busy -gt 0.7)
+  # 히든연출: 동반 낮잠 — 상대가 (지면에서) 자고 있으면 곁으로 가서 같이 잔다
+  if ($p.snuggle -and ($null -eq $o -or $o.state -ne 'sleep')) { $p.snuggle = $false }   # 상대가 깼으면 접기
+  if ($null -ne $o -and $o.state -eq 'sleep' -and (Interruptible $p) -and $null -eq $p.platform -and $null -eq $o.platform -and (On-GroundLevel $p) -and ($p.snuggle -or $rng.NextDouble() -lt 0.2)) {
+    $d = [Math]::Abs((Cx $p) - (Cx $o))
+    if ($d -lt ($SPR * 1.15)) {
+      $p.snuggle = $false
+      ELog ("히든연출: " + $p.name + " 동반 낮잠")
+      Start-Seq $p @('side_prone1','side_prone2','side_prone3','side_liedown1','side_liedown2','side_liedown3') 7 'sleep' (Sleep-Ticks)
+      return
+    } elseif ($d -lt ($SPR * 3.5)) {
+      $p.snuggle = $true   # 도착 후 다시 주사위 안 굴리고 바로 눕게
+      $p.state = 'walk'; $p.facing = Sign1 ((Cx $o) -gt (Cx $p))
+      $p.timer = [int]([Math]::Max(20, ($d - $SPR) / $WALK_SPEED))
+      return
+    } else { $p.snuggle = $false }
+  }
+  # 사용자 작업 창에 앞발 기대보기 (드묾 — 60~150초 쿨다운, 전경 창이 바닥까지 있을 때)
+  if ($null -eq $p.platform -and $App.tick -ge $p.leanCoolAt -and $rng.NextDouble() -lt 0.3) {
+    $p.leanCoolAt = $App.tick + [int]((2000 + $rng.Next(0, 3000)) * $ADV_MUL)
+    $bxw = $BboxX["$($p.kind)|side_wallstand"]
+    $fg = 0
+    try { $fg = [GPWin]::Foreground() } catch {}
+    if ($fg -ne 0 -and $null -ne $bxw -and (F $p.kind 'side_wallstand')) {
+      foreach ($w in $App.plat.windows) {
+        if ($w.id -ne $fg) { continue }
+        $scrW = Screen-Of (($w.left + $w.right) / 2)   # 창이 있는 화면 기준으로 판정
+        if ($w.bottom -lt ($scrW.bottom - 60)) { break }   # 창이 공중에 떠 있음
+        if ((Cx $p) -lt (($w.left + $w.right) / 2)) { $tx = $w.left - $bxw[1]; $tf = 1 }
+        else { $tx = $w.right - ($SPR - $bxw[1]); $tf = -1 }
+        $tx = [Math]::Max($scrW.left + 2, [Math]::Min($scrW.right - $SPR - 2, $tx))   # 화면 밖 목표 방지
+        if ([Math]::Abs($tx - $p.x) -gt 700) { break }
+        $p.leanX = [double]$tx; $p.leanId = $w.id; $p.leanFace = $tf
+        $p.state = 'golean'
+        $p.timer = [int]([Math]::Abs($tx - $p.x) / $WALK_SPEED) + 80
+        ELog ("창기대기 계획: " + $p.name + " hwnd=" + $w.id + " x=" + [int]$tx)
+        return
+      }
+    }
+  }
   $r = $rng.NextDouble()
-  if ($null -ne $o -and (Interruptible $o) -and (Interruptible $p)) {
+  if (-not $busy -and $null -ne $o -and (Interruptible $o) -and (Interruptible $p)) {
     $bothGround = ($null -eq $p.platform -and $null -eq $o.platform)
     if ($bothGround -and $r -lt 0.07) { Start-Chase $p $o; return }
     if ((On-GroundLevel $p) -and (On-GroundLevel $o) -and [Math]::Abs((Cx $p)-(Cx $o)) -lt ($SPR*1.3) -and $r -lt 0.14) { Start-Ride $p $o; return }
   }
-  if ($r -lt 0.13 -and (Plan-Jump $p)) { return }
+  $jchance = 0.13
+  if ($busy) { $jchance = 0.04 } elseif ($App.away) { $jchance = 0.2 }
+  if ($r -lt $jchance -and (Plan-Jump $p)) { return }
   if ($null -ne $p.platform -and $r -lt 0.2) { Hop-Off $p; return }
   $r = $rng.NextDouble()
+  # 사용자가 바쁘면 뛰기/우다다 슬롯을 조용한 행동으로 돌리고, 자리를 비우면 심심해서 활발
+  if ($busy) {
+    if ($r -ge 0.16 -and $r -lt 0.31) { $r = @(0.05, 0.85, 0.62)[$rng.Next(3)] }   # run/zoomies → walk/sit/lookaround
+  } elseif ($App.away) {
+    if ($r -ge 0.70 -and $r -lt 0.77) { $r = 0.27 }   # idle → zoomies
+  }
   if ($r -lt 0.11) { $p.state='walk'; $p.facing=Sign1($rng.Next(2) -eq 0); $p.timer=$rng.Next(70,220) }
   elseif ($r -lt 0.16) { $p.state='trot'; $p.facing=Sign1($rng.Next(2) -eq 0); $p.timer=$rng.Next(60,150) }
   elseif ($r -lt 0.24) { $p.state='run'; $p.facing=Sign1($rng.Next(2) -eq 0); $p.timer=$rng.Next(40,110) }
-  elseif ($r -lt 0.31) { $p.state='zoomies'; $p.facing=Sign1($rng.Next(2) -eq 0); $p.timer=$rng.Next(80,160); $p.skid=0 }
+  elseif ($r -lt 0.31) { $p.state='zoomies'; $p.facing=Sign1($rng.Next(2) -eq 0); $p.timer=$rng.Next(80,160); $p.skid=0
+    # 히든연출: 동반 우다다 — 가끔 둘이 같이 질주
+    if ($null -ne $o -and (Interruptible $o) -and $null -eq $o.platform -and $rng.NextDouble() -lt 0.35) {
+      $o.state='zoomies'; $o.facing=$p.facing; $o.timer=$p.timer; $o.skid=0
+      ELog "히든연출: 동반 우다다"
+    } }
   elseif ($r -lt 0.38) { $p.state='sniff'; $p.facing=Sign1($rng.Next(2) -eq 0); $p.timer=$rng.Next(80,170) }
   elseif ($r -lt 0.44) { $p.state='sneak'; $p.facing=Sign1($rng.Next(2) -eq 0); $p.timer=$rng.Next(70,140) }
   elseif ($r -lt 0.50) { $p.state='groom'; $p.timer=$rng.Next(150,260); $p.seq=0 }
@@ -744,7 +807,7 @@ function Decide($p) {
       Enter-FaceCam $p 'presleep' 'front_sleepy' 45
       $p.afterFace = 'sleep'
     } else {
-      Start-Seq $p @('side_prone1','side_prone2','side_prone3','side_liedown1','side_liedown2','side_liedown3') 7 'sleep' ($rng.Next(350,750))
+      Start-Seq $p @('side_prone1','side_prone2','side_prone3','side_liedown1','side_liedown2','side_liedown3') 7 'sleep' (Sleep-Ticks)
     }
   }
 }
@@ -844,6 +907,14 @@ function Start-Seq($p, $frames, $per, $next, $nextTimer) {
   $p.seqFrames = $avail; $p.seqPer = $per
   $p.seqNextState = $next; $p.seqNextTimer = $nextTimer
   $p.state = 'seqplay'; $p.seq = 0; $p.timer = 9999
+}
+
+# 수면 길이 변주: 30% 쪽잠(6~12초) / 55% 보통(12~27초) / 15% 긴잠(36~72초)
+function Sleep-Ticks {
+  $r = $rng.NextDouble()
+  if ($r -lt 0.30) { return $rng.Next(200, 400) }
+  if ($r -lt 0.85) { return $rng.Next(400, 900) }
+  return $rng.Next(1200, 2400)
 }
 
 # ---------------------------------------------------------------- 틱
@@ -1099,6 +1170,39 @@ function Update-Pet($p) {
   elseif ($st -eq 'excited') {
     $p.frame = AF $p 'side_excited' 5
   }
+  elseif ($st -eq 'golean') {
+    # 전경 창 옆까지 걸어가서 앞발 기대기 (창이 사라지거나 시간 초과면 포기)
+    $wl = Find-Plat $p.leanId
+    if ($null -eq $wl -or $p.timer -le 0) { $p.state='idle'; $p.timer=$rng.Next(30,80) }
+    else {
+      # 창이 움직여도 매 틱 최신 좌표로 목표 갱신 (도착 순간 텔레포트 방지) + 화면 안 클램프
+      $bx3 = $BboxX["$($p.kind)|side_wallstand"]
+      $scrL = Screen-Of (($wl.left + $wl.right) / 2)
+      if ($p.leanFace -eq 1) { $p.leanX = [double]($wl.left - $bx3[1]) } else { $p.leanX = [double]($wl.right - ($SPR - $bx3[1])) }
+      $p.leanX = [Math]::Max($scrL.left + 2, [Math]::Min($scrL.right - $SPR - 2, $p.leanX))
+      $ldx = $p.leanX - $p.x
+      if ([Math]::Abs($ldx) -le ($WALK_SPEED * 1.2)) {
+        $p.x = $p.leanX
+        $p.facing = $p.leanFace
+        $p.state = 'wallstand'; $p.timer = $rng.Next(80, 170)
+        $p.frame = 'side_wallstand'
+        ELog ("창기대기: " + $p.name + " 도착")
+      } else {
+        $p.facing = Sign1 ($ldx -gt 0)
+        $prevX2 = $p.x
+        $p.x += $WALK_SPEED * $p.facing
+        $gNew2 = Ground-Y $p
+        if ([Math]::Abs($gNew2 - $p.y) -gt ($SPR * 0.25)) {
+          # 모니터 경계 단차 → 순간이동 대신 포기
+          $p.x = $prevX2; $p.state = 'idle'; $p.timer = $rng.Next(30, 80)
+        } else {
+          $cyc2 = $script:WalkCyc[$p.kind]
+          $per2 = if ($cyc2.Count -ge 3) { 5 } else { 8 }
+          $p.frame = $cyc2[([int]([Math]::Floor($p.anim / $per2))) % $cyc2.Count]
+        }
+      }
+    }
+  }
   elseif ($st -eq 'shakeoff') {
     $p.frame = AF $p 'side_shake' 3
     if ($p.timer -le 0) { $p.state='idle'; $p.timer=$rng.Next(30,80) }
@@ -1155,7 +1259,7 @@ function Update-Pet($p) {
   if (@('run','chase','flee','zoomies') -contains $st) {
     $p.y -= [int](([Math]::Abs([Math]::Sin($p.anim*0.5))) * $SPR * 0.03)
   }
-  elseif (@('walk','trot','carry','sniff','sneak') -contains $st) {
+  elseif (@('walk','trot','carry','sniff','sneak','golean') -contains $st) {
     $p.y -= [int](([Math]::Abs([Math]::Sin($p.anim*0.3))) * $SPR * 0.012)
   }
 
@@ -1163,9 +1267,9 @@ function Update-Pet($p) {
     if ($null -ne $p.partner) { Detach-Social $p }
     if ($st -eq 'zoomies') { $p.state='exhausted'; $p.timer=70; $p.frame='side_tired'; return }
     if ($st -eq 'facecam' -and $p.afterFace -eq 'sleep') {
-      # 졸린 정면 → 엎드리기→눕기→잠 체인
+      # 졸린 정면 → 엎드리기→눕기→잠 체인 (수면 길이는 쪽잠~긴잠 변주)
       $p.afterFace = ''
-      Start-Seq $p @('side_prone1','side_prone2','side_prone3','side_liedown1','side_liedown2','side_liedown3') 7 'sleep' ($rng.Next(350,750))
+      Start-Seq $p @('side_prone1','side_prone2','side_prone3','side_liedown1','side_liedown2','side_liedown3') 7 'sleep' (Sleep-Ticks)
       return
     }
     if ($st -eq 'sleep') {
@@ -1199,6 +1303,7 @@ function New-Pet($id, $name, $kind, $x) {
           nextFaceAt=($rng.Next(300,900)); lastCamPose=''; afterFace=''; faceReason='';
           dwell=0; dwellCoolAt=0; petCnt=0; petCntAt=0; landKind='';
           jumpCoolAt=0; monJumpCoolAt=($rng.Next(800,1600)); visited=(New-Object System.Collections.ArrayList);
+          leanCoolAt=($rng.Next(1200,2600)); leanX=0.0; leanId=[long]0; leanFace=1; snuggle=$false;
           dragStage=3; dragHold=0; dragWant=3;
           lastKey=''; lastBmp=$null; fadeFrom=$null; fade=0; scratch=$null; scratchG=$null }
   $p.y = [double](Ground-Y $p)
@@ -1381,7 +1486,17 @@ function Start-App {
         }
       } catch { ELog ("부트스트랩 교체 실패(무시): " + $_.Exception.Message) }
     }
-    if (($App.tick % 16) -eq 1) { Refresh-Platforms }
+    if (($App.tick % 16) -eq 1) {
+      Refresh-Platforms
+      # 사용자 활동 감지: 최근 ~80초 중 입력 활발 비율(EMA) → busy / 45초 이상 무입력 → away
+      try {
+        $idleMs = [GPWin]::IdleMs()
+        $s = 0.0
+        if ($idleMs -lt 2000) { $s = 1.0 }
+        $App.busy = 0.9 * $App.busy + 0.1 * $s
+        $App.away = ($idleMs -gt 45000)
+      } catch {}
+    }
     foreach ($p in $App.pets) { Update-Pet $p }
     $dead = New-Object System.Collections.ArrayList
     foreach ($h in $App.hearts) {
