@@ -13,7 +13,9 @@ $script:LogFile = Join-Path (Join-Path $env:LocalAppData 'GLUCK_PETS') 'log.txt'
 function ELog($m) { try { Add-Content -Path $script:LogFile -Value ((Get-Date -Format 'HH:mm:ss.f') + " [pet] " + $m) -Encoding UTF8 } catch {} }
 ELog "엔진 시작"
 
-Add-Type @"
+# P/Invoke + ULW 헬퍼 — System.Drawing 참조 필수 (PS5.1 기본 참조에 없음)
+
+Add-Type -ReferencedAssemblies 'System.Drawing' -TypeDefinition @"
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;

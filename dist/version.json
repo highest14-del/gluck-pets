@@ -1,1 +1,1 @@
-{"version": 4, "note": "로딩표시+로그+에러팝업+ULW사전테스트", "force": true}
+{"version": 5, "note": "System.Drawing 어셈블리 참조 수정"}
