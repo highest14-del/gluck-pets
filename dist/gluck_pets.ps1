@@ -680,6 +680,7 @@ function Set-PetSize($h) {
 function Force-State($p,$state,$ticks) {
   if (@('drag','jump','fall','ride') -contains $p.state) { return }   # 공중 상태에서 강제 전이 시 순간이동 방지
   Detach-Social $p; $p.state=$state; $p.timer=$ticks; $p.vx=0; $p.seq=0
+  $p.afterFace = ''; $p.afterSeq = ''
 }
 function Pet-Head($p) {
   if (@('drag','fall','jump','jumpprep','ride') -contains $p.state) { return }
@@ -719,7 +720,7 @@ function On-Grab($p) {
   $p.grabPlat = $p.platform   # 톡 건드리기 시 제자리 복원용
   Detach-Social $p; $p.state='drag'; $p.platform=$null; $p.jump=$null
   $p.landKind = ''   # 이전 추락 사유가 던지기 착지에 오염되지 않게
-  $p.afterSeq = ''
+  $p.afterSeq = ''; $p.afterFace = ''
   $p.grabAt = $App.tick
   # 커서가 목덜미(상단 중앙)를 잡은 것처럼 — 클릭 지점과 무관
   $p.dragOff = @(($SPR * 0.5), ($SPR * 0.10))
@@ -850,9 +851,9 @@ function Decide($p) {
   if (-not $busy -and $null -ne $o -and (Interruptible $o) -and (Interruptible $p)) {
     $bothGround = ($null -eq $p.platform -and $null -eq $o.platform)
     # 인사/코비비기: 가까이 있을 때 마주보며 (히든연출 — 반대편은 좌우반전으로 마주봄)
-    if ($bothGround -and [Math]::Abs((Cx $p)-(Cx $o)) -lt ($SPR*1.25) -and $r -lt 0.10 -and (F $p.kind 'side_greeting1')) {
+    if ($bothGround -and [Math]::Abs((Cx $p)-(Cx $o)) -lt ($SPR*1.25) -and $r -lt 0.10 -and (F $p.kind 'side_greeting1') -and (F $o.kind 'side_greeting1')) {
       $sg = 'greeting'
-      if ((F $p.kind 'side_nuzzle1') -and $rng.NextDouble() -lt 0.5) { $sg = 'nuzzle' }
+      if ((F $p.kind 'side_nuzzle1') -and (F $o.kind 'side_nuzzle1') -and $rng.NextDouble() -lt 0.5) { $sg = 'nuzzle' }
       $p.facing = Sign1 ((Cx $o) -gt (Cx $p))
       $o.facing = Sign1 ((Cx $p) -gt (Cx $o))
       $fg1 = @(); foreach ($n5 in 1..6) { $fg1 += ('side_' + $sg + $n5) }
@@ -1009,6 +1010,7 @@ function Land-On($p, $plat) {
 
 # 일회성 전이 시퀀스 재생 (프레임 없으면 목적 상태로 직행 — 안전 폴백)
 function Start-Seq($p, $frames, $per, $next, $nextTimer) {
+  $p.afterSeq = ''   # 이전 시퀀스의 예약 체인 무효화 (호출자는 호출 직후 재설정)
   $avail = @($frames | Where-Object { F $p.kind $_ })
   if ($avail.Count -eq 0) {
     $p.state = $next; $p.timer = $nextTimer
@@ -1433,7 +1435,7 @@ function Update-Pet($p) {
       # 정면 종료 → 역방향 카메라 전환으로 옆모습 복귀
       $ct2 = @()
       foreach ($n in 4,3,2,1) {
-        $c2 = FirstF $p.kind @("diag30_camturn$n", "diag60_camturn$n", "side_camturn$n", "front_camturn$n")
+        $c2 = FirstF $p.kind @("diag60_camturn$n", "diag30_camturn$n", "side_camturn$n", "front_camturn$n")
         if ($c2) { $ct2 += $c2 }
       }
       if ($ct2.Count -ge 2) { Start-Seq $p $ct2 3 'idle' ($rng.Next(30,70)); return }
