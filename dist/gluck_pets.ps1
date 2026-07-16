@@ -239,9 +239,20 @@ function Pick($kind, $frames) {
 
 # ---------------------------------------------------------------- 플랫폼(창)
 function Refresh-Platforms {
-  $wa = [System.Windows.Forms.Screen]::PrimaryScreen.WorkingArea
-  $App.plat.workLeft = $wa.Left; $App.plat.workTop = $wa.Top
-  $App.plat.workRight = $wa.Right; $App.plat.workBottom = $wa.Bottom
+  # 멀티 모니터: 모든 화면의 작업영역을 세계로 사용
+  $scrs = New-Object System.Collections.ArrayList
+  $wl = [int]::MaxValue; $wt = [int]::MaxValue; $wr = [int]::MinValue; $wb = [int]::MinValue
+  foreach ($s in [System.Windows.Forms.Screen]::AllScreens) {
+    $wa2 = $s.WorkingArea
+    [void]$scrs.Add(@{ left=$wa2.Left; top=$wa2.Top; right=$wa2.Right; bottom=$wa2.Bottom })
+    if ($wa2.Left -lt $wl) { $wl = $wa2.Left }
+    if ($wa2.Top -lt $wt) { $wt = $wa2.Top }
+    if ($wa2.Right -gt $wr) { $wr = $wa2.Right }
+    if ($wa2.Bottom -gt $wb) { $wb = $wa2.Bottom }
+  }
+  $App.plat.screens = $scrs
+  $App.plat.workLeft = $wl; $App.plat.workTop = $wt
+  $App.plat.workRight = $wr; $App.plat.workBottom = $wb
   $ex = New-Object System.Collections.ArrayList
   foreach ($p in $App.pets) { [void]$ex.Add([long]$p.form.Handle.ToInt64()) }
   foreach ($h in $App.hearts) { [void]$ex.Add([long]$h.form.Handle.ToInt64()) }
@@ -257,7 +268,16 @@ function Refresh-Platforms {
 }
 
 function Foot($p) { $k = "$($p.kind)|$($p.frame)"; if ($FootPad.ContainsKey($k)) { return $FootPad[$k] } return 4 }
-function Ground-Y($p) { return $App.plat.workBottom - $SPR + (Foot $p) }
+function Screen-Of($x) {
+  $best = $null; $bd = [double]::MaxValue
+  foreach ($s in $App.plat.screens) {
+    if ($x -ge $s.left -and $x -lt $s.right) { return $s }
+    $d = [Math]::Min([Math]::Abs($x - $s.left), [Math]::Abs($x - $s.right))
+    if ($d -lt $bd) { $bd = $d; $best = $s }
+  }
+  return $best
+}
+function Ground-Y($p) { $s = Screen-Of (Cx $p); return $s.bottom - $SPR + (Foot $p) }
 function Stand-Y($p, $plat) { return $plat.top - $SPR + (Foot $p) }
 function Find-Plat($id) { foreach ($w in $App.plat.windows) { if ($w.id -eq $id) { return $w } } return $null }
 function Feet($p) { return $p.y + $SPR - (Foot $p) }
@@ -287,7 +307,8 @@ function Landing($cx, $prevFeet, $newFeet) {
     }
   }
   if ($null -ne $best) { return $best }
-  if ($newFeet -ge $App.plat.workBottom) { return 'ground' }
+  $gb = (Screen-Of $cx).bottom
+  if ($newFeet -ge $gb) { return 'ground' }
   return $null
 }
 
@@ -694,7 +715,18 @@ function Update-Pet($p) {
     } elseif ($st -eq 'flee' -and $null -ne $p.partner) {
       $p.facing = Sign1 ($p.partner.x -lt $p.x)
     }
+    $prevX = $p.x
     $p.x += $speed * $p.facing
+    if ($null -eq $p.platform) {
+      $gNew = Ground-Y $p
+      if (($gNew - $p.y) -gt ($SPR * 0.25)) {
+        # 옆 모니터 바닥이 더 낮음 → 자연 낙하로 넘어가기
+        $p.state = 'fall'; $p.vy = 0; $p.frame = $frame; return
+      } elseif (($p.y - $gNew) -gt ($SPR * 0.25)) {
+        # 더 높은 모니터 단차 → 올라가지 못하고 돌아섬
+        $p.x = $prevX; $p.facing = -$p.facing
+      }
+    }
     if ($p.x -le $leftLim -or $p.x -ge $rightLim) {
       $atRight = $p.x -ge $rightLim
       $p.x = [Math]::Max($leftLim, [Math]::Min($rightLim, $p.x))
