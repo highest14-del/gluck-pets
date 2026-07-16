@@ -24,6 +24,9 @@ CLAMP = (0.72, 1.45)
 
 HANG_L = {"hang90", "hang60", "hang30"}   # facing=L 유지 대상
 
+# 개별 컷 색감 보정 (사장님 피드백): 감마 >1 = 중간톤 어둡게, 흰 부분 유지
+TONE_GAMMA = {"나나_정면_크게웃기.png": 1.15}
+
 MAP_EXTRA = {
     ("옆", "대롱대롱"): ("side", "hang90"),
     ("대각60", "대롱대롱"): ("side", "hang60"),
@@ -104,12 +107,22 @@ def process(job):
     meta = parse(fname)
     dog, view, pose, kor = meta
     W, H, rgba = decode_png(os.path.join(SRC, fname))
+    if fname in TONE_GAMMA:
+        lut = [round(255 * (v / 255) ** TONE_GAMMA[fname]) for v in range(256)]
+        for i in range(0, W * H * 4, 4):
+            if rgba[i + 3]:
+                rgba[i] = lut[rgba[i]]; rgba[i + 1] = lut[rgba[i + 1]]; rgba[i + 2] = lut[rgba[i + 2]]
     bb = bbox_alpha(W, H, rgba)
     # 세로로 긴 포즈(대롱대롱·두발서기·정면 등)가 캔버스를 넘으면 머리가 잘림 → 다 들어가게 축소
     bh = bb[3] - bb[1]
     fit = (ANCHOR_Y - 6.0) / bh
     if scale > fit:
         scale = fit
+    # 가로로 긴 포즈(달리기 뻗음·눕기)가 캔버스를 넘으면 입/귀가 잘림 → 가로 가드 (v19)
+    bw = bb[2] - bb[0]
+    fit_w = (TARGET - 10.0) / bw
+    if scale > fit_w:
+        scale = fit_w
     small = rescale_place(W, H, rgba, scale, bb)
     nbb = bbox_alpha(TARGET, TARGET, small)
     outp = os.path.join(DST, dog, f"{view}_{pose}.png")
@@ -132,18 +145,46 @@ if __name__ == "__main__":
             print(f"measured {fname}: sqrtA={math.sqrt(area):.0f}", flush=True)
     # 기준: 각 강아지 side 서기의 sqrt-area
     anchors = {}
+    stand_bb = {}
+    sit_ref = {}
     for fname in files:
         meta = parse(fname)
         if meta and meta[1] == "side" and meta[2] == "stand":
             anchors[meta[0]] = math.sqrt(stats[fname][0])
-    print("anchors:", anchors)
+            stand_bb[meta[0]] = stats[fname][1]
+    base = 384.0 / 1024.0
+    for fname in files:
+        meta = parse(fname)
+        if meta and meta[1] == "side" and meta[2] == "sit":
+            f = anchors[meta[0]] / math.sqrt(stats[fname][0])
+            f = max(CLAMP[0], min(CLAMP[1], f))
+            bb = stats[fname][1]
+            sit_ref[meta[0]] = (bb[3] - bb[1]) * base * f   # side_sit 출력 높이
+    out_stand_w = {d: (bb[2] - bb[0]) * base for d, bb in stand_bb.items()}
+    print("anchors:", anchors, "| stand_w:", {d: round(v) for d, v in out_stand_w.items()},
+          "| sit_h:", {d: round(v) for d, v in sit_ref.items()})
+
+    # 면적 규칙이 실패하는 포즈 계열 (v19):
+    #  - 정면: 몸이 짧아 면적↓ → 과대 확대. 목표 = side_sit 출력 높이 (같은 앉은 자세의 회전일 뿐)
+    #  - 눕기·잠·배: 웅크려 면적↓ → 과대 확대 + 좌우 잘림. 목표 폭 = 서기 폭 (코~꼬리 길이 보존)
+    #  - 엎드리기: 스핑크스 = 서기 폭의 1.05배 (앞발이 앞으로 나옴)
+    LY_FLAT = {"sleep", "sleep1", "sleep2", "liedown1", "liedown2", "liedown3", "belly"}
+    LY_PRONE = {"prone1", "prone2", "prone3"}
     jobs = []
     for fname in files:
-        dog = parse(fname)[0]
-        f = anchors[dog] / math.sqrt(stats[fname][0])
-        f = max(CLAMP[0], min(CLAMP[1], f))
-        base = 384.0 / 1024.0
-        jobs.append((fname, base * f))
+        dog, view, pose, _ = parse(fname)
+        bb = stats[fname][1]
+        if view == "front":
+            scale = sit_ref[dog] / (bb[3] - bb[1])
+        elif pose in LY_FLAT:
+            scale = out_stand_w[dog] / (bb[2] - bb[0])
+        elif pose in LY_PRONE:
+            scale = out_stand_w[dog] * 1.05 / (bb[2] - bb[0])
+        else:
+            f = anchors[dog] / math.sqrt(stats[fname][0])
+            f = max(CLAMP[0], min(CLAMP[1], f))
+            scale = base * f
+        jobs.append((fname, scale))
     with Pool(4) as pool:
         recs = []
         for i, rec in enumerate(pool.imap_unordered(process, jobs)):

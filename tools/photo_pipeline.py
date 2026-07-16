@@ -32,6 +32,7 @@ POSE = {
     "앞발핥기": "lickpaw", "위쳐다보기": "lookup", "으르렁": "growl",
     "자기": "sleep", "재채기": "sneeze", "점프": "jump", "종종걸음": "trot",
     "지침": "tired", "착지": "land", "코핥기": "licknose", "하품": "yawn",
+    "엎드리기": "prone", "눕기": "liedown", "일어나기": "rise", "주저앉기": "sitdown",
     "겁먹음": "scared", "궁금": "curious", "메롱": "tongue", "슬픔": "sad",
     "애원": "beg", "윙크": "wink", "졸림": "sleepy", "집중": "focus",
     "크게웃기": "laugh", "행복": "happy", "화남": "angry",

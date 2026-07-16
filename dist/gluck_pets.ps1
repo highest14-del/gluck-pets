@@ -218,6 +218,7 @@ $MAX_FALL = $SPR * 0.28
 $rng = New-Object System.Random
 $Frames = @{}      # "kind|frame|facing" -> Bitmap
 $FootPad = @{}     # "kind|frame" -> px (창 하단에서 발바닥까지)
+$BboxX = @{}       # "kind|frame" -> @(좌, 우+1) 스케일된 실루엣 가로 범위 (벽 밀착용)
 $HasFrame = @{}
 $script:UseULW = $true
 $App = @{ pets=(New-Object System.Collections.ArrayList); hearts=(New-Object System.Collections.ArrayList); speeches=(New-Object System.Collections.ArrayList); plat=@{}; tick=0 }
@@ -269,7 +270,10 @@ function Build-Frames {
     else { $Frames["$key|1"] = $bmp; $Frames["$key|-1"] = $flip }
     $HasFrame[$key] = $true
     $pad = 4
-    if ($im.bbox) { $pad = [int](($CANVAS - 1 - [int]$im.bbox[3]) * $SC) }
+    if ($im.bbox) {
+      $pad = [int](($CANVAS - 1 - [int]$im.bbox[3]) * $SC)
+      $BboxX[$key] = @([int]([int]$im.bbox[0] * $SC), [int](([int]$im.bbox[2] + 1) * $SC))
+    }
     $FootPad[$key] = $pad
   }
 }
@@ -885,9 +889,17 @@ function Update-Pet($p) {
       $p.x = [Math]::Max($leftLim, [Math]::Min($rightLim, $p.x))
       if ($null -ne $p.platform -and (@('run','chase','flee','zoomies') -contains $st) -and $rng.NextDouble() -lt 0.5) { Hop-Off $p; return }
       # 화면 가장자리 벽에 앞발 올리고 기대기
-      if ($null -eq $p.platform -and (@('walk','run','sniff') -contains $st) -and $rng.NextDouble() -lt 0.3 -and (F $p.kind 'side_wallstand')) {
+      if ($null -eq $p.platform -and (@('walk','run','trot','sniff') -contains $st) -and $rng.NextDouble() -lt 0.3 -and (F $p.kind 'side_wallstand')) {
         $p.facing = Sign1 $atRight
-        $p.x += $p.facing * $SPR * 0.06     # 앞발이 경계에 닿게 살짝 밀착
+        # 앞발끝(실루엣 가장자리)이 화면 모서리에 정확히 닿게 — 캔버스 여백만큼 창을 밀어냄
+        $bx = $BboxX["$($p.kind)|side_wallstand"]
+        if ($bx) {
+          $scr = Screen-Of (Cx $p)
+          if ($atRight) { $p.x = $scr.right - $bx[1] }
+          else { $p.x = $scr.left - ($SPR - $bx[1]) }
+        } else {
+          $p.x += $p.facing * $SPR * 0.06
+        }
         $p.state = 'wallstand'; $p.timer = $rng.Next(70,140)
         $p.frame = 'side_wallstand'
         return

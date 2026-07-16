@@ -10,16 +10,16 @@
    "kor": "화남",
    "file": "img/momo/front_angry.png",
    "bbox": [
-    107,
-    16,
-    276,
+    113,
+    37,
+    271,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 111577
+   "size": 99635
   },
   {
    "key": "momo_front_beg",
@@ -29,16 +29,16 @@
    "kor": "애원",
    "file": "img/momo/front_beg.png",
    "bbox": [
-    104,
-    6,
-    279,
+    112,
+    37,
+    272,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 106741
+   "size": 90557
   },
   {
    "key": "momo_front_curious",
@@ -48,16 +48,16 @@
    "kor": "궁금",
    "file": "img/momo/front_curious.png",
    "bbox": [
-    114,
-    6,
-    270,
+    121,
+    37,
+    263,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 103444
+   "size": 87416
   },
   {
    "key": "momo_front_focus",
@@ -67,16 +67,16 @@
    "kor": "집중",
    "file": "img/momo/front_focus.png",
    "bbox": [
-    115,
-    6,
-    268,
+    122,
+    37,
+    262,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 101431
+   "size": 85736
   },
   {
    "key": "momo_front_hang0",
@@ -86,16 +86,16 @@
    "kor": "대롱대롱",
    "file": "img/momo/front_hang0.png",
    "bbox": [
-    134,
-    6,
-    250,
+    139,
+    37,
+    245,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 80682
+   "size": 68431
   },
   {
    "key": "momo_front_happy",
@@ -105,16 +105,16 @@
    "kor": "행복",
    "file": "img/momo/front_happy.png",
    "bbox": [
-    106,
-    44,
-    279,
+    104,
+    37,
+    281,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 104915
+   "size": 109129
   },
   {
    "key": "momo_front_laugh",
@@ -124,16 +124,16 @@
    "kor": "크게웃기",
    "file": "img/momo/front_laugh.png",
    "bbox": [
-    105,
-    12,
-    279,
+    112,
+    37,
+    272,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 106322
+   "size": 93278
   },
   {
    "key": "momo_front_sad",
@@ -143,16 +143,16 @@
    "kor": "슬픔",
    "file": "img/momo/front_sad.png",
    "bbox": [
-    105,
-    32,
-    279,
+    106,
+    37,
+    278,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 107588
+   "size": 105104
   },
   {
    "key": "momo_front_scared",
@@ -162,16 +162,16 @@
    "kor": "겁먹음",
    "file": "img/momo/front_scared.png",
    "bbox": [
-    95,
-    74,
-    289,
+    82,
+    37,
+    302,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 112033
+   "size": 140694
   },
   {
    "key": "momo_front_sleepy",
@@ -181,16 +181,16 @@
    "kor": "졸림",
    "file": "img/momo/front_sleepy.png",
    "bbox": [
-    109,
-    40,
-    275,
+    108,
+    37,
+    276,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 103949
+   "size": 106074
   },
   {
    "key": "momo_front_stare",
@@ -200,16 +200,16 @@
    "kor": "빤히보기",
    "file": "img/momo/front_stare.png",
    "bbox": [
-    117,
-    6,
-    268,
+    123,
+    37,
+    261,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 100585
+   "size": 85600
   },
   {
    "key": "momo_front_startle",
@@ -220,7 +220,7 @@
    "file": "img/momo/front_startle.png",
    "bbox": [
     109,
-    39,
+    37,
     275,
     353
    ],
@@ -228,7 +228,7 @@
     1024,
     1024
    ],
-   "size": 106292
+   "size": 107879
   },
   {
    "key": "momo_front_tongue",
@@ -238,16 +238,16 @@
    "kor": "메롱",
    "file": "img/momo/front_tongue.png",
    "bbox": [
-    106,
-    15,
-    278,
+    112,
+    37,
+    272,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 104778
+   "size": 93436
   },
   {
    "key": "momo_front_wink",
@@ -257,16 +257,16 @@
    "kor": "윙크",
    "file": "img/momo/front_wink.png",
    "bbox": [
-    100,
-    13,
-    284,
+    106,
+    37,
+    278,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 106630
+   "size": 94062
   },
   {
    "key": "momo_side_belly",
@@ -276,16 +276,16 @@
    "kor": "배보이기",
    "file": "img/momo/side_belly.png",
    "bbox": [
-    0,
-    188,
-    383,
+    33,
+    223,
+    351,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 105959
+   "size": 70479
   },
   {
    "key": "momo_side_crouch",
@@ -507,16 +507,16 @@
    "kor": "점프3",
    "file": "img/momo/side_jump3.png",
    "bbox": [
-    0,
-    138,
-    383,
-    351
+    5,
+    154,
+    379,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 105557
+   "size": 93929
   },
   {
    "key": "momo_side_jump4",
@@ -640,16 +640,16 @@
    "kor": "눕기1",
    "file": "img/momo/side_liedown1.png",
    "bbox": [
-    9,
-    172,
-    375,
+    33,
+    196,
+    351,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 107741
+   "size": 83603
   },
   {
    "key": "momo_side_liedown2",
@@ -659,16 +659,16 @@
    "kor": "눕기2",
    "file": "img/momo/side_liedown2.png",
    "bbox": [
-    0,
-    209,
-    383,
+    32,
+    240,
+    351,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 104793
+   "size": 69424
   },
   {
    "key": "momo_side_liedown3",
@@ -678,16 +678,16 @@
    "kor": "눕기3",
    "file": "img/momo/side_liedown3.png",
    "bbox": [
-    2,
-    200,
-    382,
+    33,
+    225,
+    352,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 105447
+   "size": 76443
   },
   {
    "key": "momo_side_lookback",
@@ -773,16 +773,16 @@
    "kor": "덮치기",
    "file": "img/momo/side_pounce.png",
    "bbox": [
-    2,
-    136,
-    382,
+    5,
+    139,
+    379,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 111778
+   "size": 108809
   },
   {
    "key": "momo_side_prone1",
@@ -792,16 +792,16 @@
    "kor": "엎드리기1",
    "file": "img/momo/side_prone1.png",
    "bbox": [
-    21,
-    141,
-    363,
+    25,
+    146,
+    359,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 110333
+   "size": 105869
   },
   {
    "key": "momo_side_prone2",
@@ -811,8 +811,8 @@
    "kor": "엎드리기2",
    "file": "img/momo/side_prone2.png",
    "bbox": [
-    24,
-    173,
+    25,
+    174,
     360,
     353
    ],
@@ -820,7 +820,7 @@
     1024,
     1024
    ],
-   "size": 110027
+   "size": 109307
   },
   {
    "key": "momo_side_prone3",
@@ -830,16 +830,16 @@
    "kor": "엎드리기3",
    "file": "img/momo/side_prone3.png",
    "bbox": [
-    11,
-    167,
-    373,
+    25,
+    180,
+    360,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 105900
+   "size": 92472
   },
   {
    "key": "momo_side_proud",
@@ -925,16 +925,16 @@
    "kor": "달리기",
    "file": "img/momo/side_run.png",
    "bbox": [
-    0,
-    129,
-    383,
+    5,
+    138,
+    379,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 108968
+   "size": 101622
   },
   {
    "key": "momo_side_run1",
@@ -963,16 +963,16 @@
    "kor": "달리기2",
    "file": "img/momo/side_run2.png",
    "bbox": [
-    0,
-    162,
-    383,
+    5,
+    191,
+    379,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 101998
+   "size": 82121
   },
   {
    "key": "momo_side_run3",
@@ -982,16 +982,16 @@
    "kor": "달리기3",
    "file": "img/momo/side_run3.png",
    "bbox": [
-    0,
-    121,
-    383,
+    5,
+    136,
+    379,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 111395
+   "size": 99582
   },
   {
    "key": "momo_side_scratch",
@@ -1210,16 +1210,16 @@
    "kor": "자기",
    "file": "img/momo/side_sleep.png",
    "bbox": [
-    25,
-    200,
-    359,
+    33,
+    208,
+    351,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 103553
+   "size": 94631
   },
   {
    "key": "momo_side_sleep1",
@@ -1229,16 +1229,16 @@
    "kor": "자기1",
    "file": "img/momo/side_sleep1.png",
    "bbox": [
-    40,
-    193,
-    345,
+    33,
+    186,
+    352,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 101567
+   "size": 110447
   },
   {
    "key": "momo_side_sleep2",
@@ -1248,16 +1248,16 @@
    "kor": "자기2",
    "file": "img/momo/side_sleep2.png",
    "bbox": [
-    41,
-    191,
-    343,
+    32,
+    182,
+    352,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 103373
+   "size": 114806
   },
   {
    "key": "momo_side_slide",
@@ -1685,16 +1685,16 @@
    "kor": "화남",
    "file": "img/nana/front_angry.png",
    "bbox": [
-    113,
-    7,
-    271,
+    123,
+    50,
+    261,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 124609
+   "size": 98093
   },
   {
    "key": "nana_front_beg",
@@ -1704,16 +1704,16 @@
    "kor": "애원",
    "file": "img/nana/front_beg.png",
    "bbox": [
-    109,
-    6,
-    275,
+    119,
+    50,
+    265,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 116330
+   "size": 91031
   },
   {
    "key": "nana_front_curious",
@@ -1723,16 +1723,16 @@
    "kor": "궁금",
    "file": "img/nana/front_curious.png",
    "bbox": [
-    114,
-    6,
-    270,
+    124,
+    50,
+    260,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 114689
+   "size": 89987
   },
   {
    "key": "nana_front_focus",
@@ -1742,16 +1742,16 @@
    "kor": "집중",
    "file": "img/nana/front_focus.png",
    "bbox": [
-    119,
-    6,
-    265,
+    128,
+    50,
+    256,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 109631
+   "size": 86234
   },
   {
    "key": "nana_front_hang0",
@@ -1761,16 +1761,16 @@
    "kor": "대롱대롱",
    "file": "img/nana/front_hang0.png",
    "bbox": [
-    137,
-    6,
-    247,
+    144,
+    50,
+    240,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 89916
+   "size": 70367
   },
   {
    "key": "nana_front_happy",
@@ -1780,16 +1780,16 @@
    "kor": "행복",
    "file": "img/nana/front_happy.png",
    "bbox": [
-    109,
-    39,
-    275,
+    111,
+    50,
+    272,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 119125
+   "size": 111559
   },
   {
    "key": "nana_front_laugh",
@@ -1799,16 +1799,16 @@
    "kor": "크게웃기",
    "file": "img/nana/front_laugh.png",
    "bbox": [
-    111,
-    7,
-    272,
+    122,
+    50,
+    262,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 125795
+   "size": 99002
   },
   {
    "key": "nana_front_sad",
@@ -1827,7 +1827,7 @@
     1024,
     1024
    ],
-   "size": 119545
+   "size": 119244
   },
   {
    "key": "nana_front_scared",
@@ -1837,16 +1837,16 @@
    "kor": "겁먹음",
    "file": "img/nana/front_scared.png",
    "bbox": [
-    62,
-    82,
-    321,
+    47,
+    50,
+    336,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 120508
+   "size": 147456
   },
   {
    "key": "nana_front_sleepy",
@@ -1857,15 +1857,15 @@
    "file": "img/nana/front_sleepy.png",
    "bbox": [
     102,
-    47,
-    282,
+    50,
+    281,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 116273
+   "size": 114694
   },
   {
    "key": "nana_front_stare",
@@ -1875,16 +1875,16 @@
    "kor": "빤히보기",
    "file": "img/nana/front_stare.png",
    "bbox": [
-    116,
-    6,
-    268,
+    126,
+    50,
+    258,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 117555
+   "size": 92140
   },
   {
    "key": "nana_front_startle",
@@ -1894,16 +1894,16 @@
    "kor": "놀람",
    "file": "img/nana/front_startle.png",
    "bbox": [
-    114,
-    24,
-    270,
+    120,
+    50,
+    264,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 123930
+   "size": 106049
   },
   {
    "key": "nana_front_tongue",
@@ -1913,16 +1913,16 @@
    "kor": "메롱",
    "file": "img/nana/front_tongue.png",
    "bbox": [
-    101,
-    18,
-    282,
+    110,
+    50,
+    274,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 124970
+   "size": 104431
   },
   {
    "key": "nana_front_wink",
@@ -1932,16 +1932,16 @@
    "kor": "윙크",
    "file": "img/nana/front_wink.png",
    "bbox": [
-    103,
-    7,
-    280,
+    114,
+    50,
+    269,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 125894
+   "size": 98908
   },
   {
    "key": "nana_side_belly",
@@ -1951,16 +1951,16 @@
    "kor": "배보이기",
    "file": "img/nana/side_belly.png",
    "bbox": [
-    18,
-    94,
-    366,
+    32,
+    114,
+    353,
     352
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 126667
+   "size": 108837
   },
   {
    "key": "nana_side_crouch",
@@ -2182,16 +2182,16 @@
    "kor": "점프3",
    "file": "img/nana/side_jump3.png",
    "bbox": [
-    2,
-    124,
-    382,
+    5,
+    128,
+    379,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 112618
+   "size": 109202
   },
   {
    "key": "nana_side_jump4",
@@ -2220,16 +2220,16 @@
    "kor": "착지",
    "file": "img/nana/side_land.png",
    "bbox": [
-    1,
-    92,
-    383,
+    5,
+    97,
+    379,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 123815
+   "size": 119737
   },
   {
    "key": "nana_side_land1",
@@ -2315,16 +2315,16 @@
    "kor": "눕기1",
    "file": "img/nana/side_liedown1.png",
    "bbox": [
-    9,
-    140,
-    375,
+    32,
+    167,
+    352,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 112898
+   "size": 88142
   },
   {
    "key": "nana_side_liedown2",
@@ -2334,16 +2334,16 @@
    "kor": "눕기2",
    "file": "img/nana/side_liedown2.png",
    "bbox": [
-    15,
-    149,
-    369,
+    32,
+    168,
+    352,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 115563
+   "size": 96311
   },
   {
    "key": "nana_side_liedown3",
@@ -2353,16 +2353,16 @@
    "kor": "눕기3",
    "file": "img/nana/side_liedown3.png",
    "bbox": [
-    0,
-    203,
-    383,
+    32,
+    234,
+    353,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 116852
+   "size": 77761
   },
   {
    "key": "nana_side_lookback",
@@ -2448,16 +2448,16 @@
    "kor": "덮치기",
    "file": "img/nana/side_pounce.png",
    "bbox": [
-    0,
-    125,
-    383,
+    5,
+    145,
+    379,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 121624
+   "size": 104672
   },
   {
    "key": "nana_side_prone1",
@@ -2467,16 +2467,16 @@
    "kor": "엎드리기1",
    "file": "img/nana/side_prone1.png",
    "bbox": [
-    27,
-    134,
-    358,
+    24,
+    131,
+    361,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 108254
+   "size": 111267
   },
   {
    "key": "nana_side_prone2",
@@ -2486,16 +2486,16 @@
    "kor": "엎드리기2",
    "file": "img/nana/side_prone2.png",
    "bbox": [
-    10,
-    155,
-    374,
+    23,
+    169,
+    361,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 109027
+   "size": 94848
   },
   {
    "key": "nana_side_prone3",
@@ -2505,16 +2505,16 @@
    "kor": "엎드리기3",
    "file": "img/nana/side_prone3.png",
    "bbox": [
-    12,
-    158,
-    372,
+    24,
+    171,
+    361,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 105698
+   "size": 93150
   },
   {
    "key": "nana_side_proud",
@@ -2600,16 +2600,16 @@
    "kor": "달리기",
    "file": "img/nana/side_run.png",
    "bbox": [
-    4,
-    124,
-    380,
+    5,
+    126,
+    379,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 110700
+   "size": 109739
   },
   {
    "key": "nana_side_run1",
@@ -2638,16 +2638,16 @@
    "kor": "달리기2",
    "file": "img/nana/side_run2.png",
    "bbox": [
-    0,
-    176,
-    383,
-    340
+    5,
+    211,
+    379,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 107480
+   "size": 77935
   },
   {
    "key": "nana_side_run3",
@@ -2657,16 +2657,16 @@
    "kor": "달리기3",
    "file": "img/nana/side_run3.png",
    "bbox": [
-    0,
-    138,
-    383,
+    5,
+    146,
+    379,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 115597
+   "size": 108933
   },
   {
    "key": "nana_side_scratch",
@@ -2885,16 +2885,16 @@
    "kor": "자기",
    "file": "img/nana/side_sleep.png",
    "bbox": [
-    17,
-    205,
-    368,
+    32,
+    218,
+    353,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 105093
+   "size": 88880
   },
   {
    "key": "nana_side_sleep1",
@@ -2904,16 +2904,16 @@
    "kor": "자기1",
    "file": "img/nana/side_sleep1.png",
    "bbox": [
-    35,
-    184,
-    350,
+    32,
+    181,
+    353,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 105234
+   "size": 109247
   },
   {
    "key": "nana_side_sleep2",
@@ -2923,16 +2923,16 @@
    "kor": "자기2",
    "file": "img/nana/side_sleep2.png",
    "bbox": [
-    26,
-    199,
-    359,
+    32,
+    204,
+    353,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 106107
+   "size": 99378
   },
   {
    "key": "nana_side_slide",
@@ -2942,16 +2942,16 @@
    "kor": "미끄러짐",
    "file": "img/nana/side_slide.png",
    "bbox": [
-    3,
-    132,
-    381,
+    5,
+    134,
+    379,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 121483
+   "size": 119850
   },
   {
    "key": "nana_side_sneak",
