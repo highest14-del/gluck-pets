@@ -473,7 +473,7 @@ function Detach-Social($p) {
   }
   if ($p.state -eq 'ride') { $p.vy = -6 }
 }
-function Interruptible($p) { return (@('idle','walk','sit','sniff','lookaround') -contains $p.state) }
+function Interruptible($p) { return (@('idle','walk','trot','sit','sniff','lookaround') -contains $p.state) }
 function On-GroundLevel($p) { return ($null -eq $p.platform -and [Math]::Abs($p.y - (Ground-Y $p)) -lt ($SPR*0.1)) }
 function Start-Chase($p,$o) { $p.partner=$o; $o.partner=$p; $p.state='chase'; $o.state='flee'; $t=$rng.Next(120,220); $p.timer=$t; $o.timer=$t }
 function Start-Ride($r,$c) { $r.partner=$c; $c.partner=$r; $r.state='ride'; $c.state='carry'; $t=$rng.Next(150,300); $r.timer=$t; $c.timer=$t }
@@ -661,7 +661,8 @@ function Decide($p) {
   if ($r -lt 0.13 -and (Plan-Jump $p)) { return }
   if ($null -ne $p.platform -and $r -lt 0.2) { Hop-Off $p; return }
   $r = $rng.NextDouble()
-  if ($r -lt 0.16) { $p.state='walk'; $p.facing=Sign1($rng.Next(2) -eq 0); $p.timer=$rng.Next(70,220) }
+  if ($r -lt 0.11) { $p.state='walk'; $p.facing=Sign1($rng.Next(2) -eq 0); $p.timer=$rng.Next(70,220) }
+  elseif ($r -lt 0.16) { $p.state='trot'; $p.facing=Sign1($rng.Next(2) -eq 0); $p.timer=$rng.Next(60,150) }
   elseif ($r -lt 0.24) { $p.state='run'; $p.facing=Sign1($rng.Next(2) -eq 0); $p.timer=$rng.Next(40,110) }
   elseif ($r -lt 0.31) { $p.state='zoomies'; $p.facing=Sign1($rng.Next(2) -eq 0); $p.timer=$rng.Next(80,160); $p.skid=0 }
   elseif ($r -lt 0.38) { $p.state='sniff'; $p.facing=Sign1($rng.Next(2) -eq 0); $p.timer=$rng.Next(80,170) }
@@ -673,9 +674,11 @@ function Decide($p) {
   elseif ($r -lt 0.70) { $p.state='facecam'; $p.timer=$rng.Next(70,130)
     $p.camframe = Pick $p.kind @('front_happy','front_curious','front_focus','front_wink','front_tongue','front_beg','front_laugh','front_stare','front_sleepy','front_sad')
     if ($p.camframe -ne 'front_stare' -and $rng.NextDouble() -lt 0.55) { Say-Emotion $p $p.camframe } }
-  elseif ($r -lt 0.80) { $p.state='idle'; $p.timer=$rng.Next(50,150) }
-  elseif ($r -lt 0.90) { $p.state='sit'; $p.timer=$rng.Next(120,280) }
-  else { $p.state='sleep'; $p.timer=$rng.Next(350,750); $p.zseq=0 }
+  elseif ($r -lt 0.77) { $p.state='idle'; $p.timer=$rng.Next(50,150) }
+  elseif ($r -lt 0.80) { $p.state='excited'; $p.timer=$rng.Next(60,110)
+    if ($rng.NextDouble() -lt 0.5) { Say-Emotion $p 'side_excited' } }
+  elseif ($r -lt 0.90) { Start-Seq $p @('side_sitdown1','side_sitdown2') 6 'sit' ($rng.Next(120,280)) }
+  else { Start-Seq $p @('side_prone1','side_prone2','side_prone3','side_liedown1','side_liedown2','side_liedown3') 7 'sleep' ($rng.Next(350,750)) }
 }
 
 function Plan-Jump($p) {
@@ -696,9 +699,14 @@ function Plan-Jump($p) {
   $w = $pick[0]; $lx = $pick[1]
   $ty = $w.top - $SPR + 6
   $t = [Math]::Max(16, [Math]::Min(34, [int]([Math]::Abs($ty - $p.y)/14 + [Math]::Abs($lx - $p.x)/24)))
-  $p.jump = @{ plat=$w; t=$t; tick=0; vx=(($lx - $p.x)/$t); vy=((($ty - $p.y) - 0.5*$GRAVITY*$t*$t)/$t) }
+  $p.jump = @{ plat=$w; t=$t; tick=0; lx=$lx; ty=$ty; vx=(($lx - $p.x)/$t); vy=((($ty - $p.y) - 0.5*$GRAVITY*$t*$t)/$t) }
   $p.facing = Sign1 ($lx -ge $p.x)
-  $p.state = 'jump'; $p.platform = $null
+  if (F $p.kind 'side_jump1') {
+    # 도약 준비 웅크림 — 발사 시점에 속도 재계산 (플랫폼은 발사 때까지 유지)
+    $p.state = 'jumpprep'; $p.timer = 5
+  } else {
+    $p.state = 'jump'; $p.platform = $null
+  }
   return $true
 }
 
@@ -713,9 +721,22 @@ function Land-On($p, $plat) {
   if ($plat -is [string]) { $plat = $null }
   $p.platform = $plat
   $p.vx = 0; $p.vy = 0
-  $p.state = 'landing'; $p.timer = 9
+  $p.state = 'landing'; $p.timer = 9; $p.seq = 0
   $p.frame = 'side_land'
   if ($null -ne $plat) { $p.platLeft = $plat.left; $p.y = Stand-Y $p $plat } else { $p.y = Ground-Y $p }
+}
+
+# 일회성 전이 시퀀스 재생 (프레임 없으면 목적 상태로 직행 — 안전 폴백)
+function Start-Seq($p, $frames, $per, $next, $nextTimer) {
+  $avail = @($frames | Where-Object { F $p.kind $_ })
+  if ($avail.Count -eq 0) {
+    $p.state = $next; $p.timer = $nextTimer
+    if ($next -eq 'sleep') { $p.zseq = 0 }
+    return
+  }
+  $p.seqFrames = $avail; $p.seqPer = $per
+  $p.seqNextState = $next; $p.seqNextTimer = $nextTimer
+  $p.state = 'seqplay'; $p.seq = 0; $p.timer = 9999
 }
 
 # ---------------------------------------------------------------- 틱
@@ -745,9 +766,16 @@ function Update-Pet($p) {
 
   if ($st -eq 'jump') {
     $j = $p.jump; $j.tick++
+    $vyNow = $j.vy + $GRAVITY * ($j.tick - 1)
     $p.x += $j.vx
-    $p.y += $j.vy + $GRAVITY * ($j.tick - 1)
-    $p.frame = 'side_jump'
+    $p.y += $vyNow
+    # 포물선 단계별 프레임: 상승 jump2 → 정점 jump3 → 하강 jump4 (프레임별 개별 폴백)
+    $jf = 'side_jump'
+    $band = $GRAVITY * 1.5
+    if ($vyNow -lt (-$band)) { if (F $p.kind 'side_jump2') { $jf = 'side_jump2' } }
+    elseif ($vyNow -gt $band) { if (F $p.kind 'side_jump4') { $jf = 'side_jump4' } }
+    else { if (F $p.kind 'side_jump3') { $jf = 'side_jump3' } }
+    $p.frame = $jf
     if ($j.tick -ge $j.t) {
       $w = Find-Plat $j.plat.id
       if ($null -eq $w) { $p.state='fall'; $p.vx=$j.vx; $p.vy=2 } else { Land-On $p $w }
@@ -789,7 +817,7 @@ function Update-Pet($p) {
 
   $p.timer--
 
-  if (@('walk','run','chase','flee','carry','zoomies','sniff','sneak') -contains $st) {
+  if (@('walk','run','chase','flee','carry','zoomies','sniff','sneak','trot') -contains $st) {
     $speed = $WALK_SPEED
     $frame = 'side_walk'
     switch ($st) {
@@ -797,6 +825,7 @@ function Update-Pet($p) {
                   $cyc = $script:WalkCyc[$p.kind]
                   $per = if ($cyc.Count -ge 3) { 5 } else { 8 }
                   $frame = $cyc[([int]([Math]::Floor($p.anim / $per))) % $cyc.Count] }
+      'trot'    { $speed=$WALK_SPEED*1.5; $frame = AF $p 'side_trot' 5 }
       'run'     { $speed=$RUN_SPEED
                   $cyc = $script:RunCyc[$p.kind]
                   $frame = $cyc[([int]([Math]::Floor($p.anim / 4))) % $cyc.Count] }
@@ -868,11 +897,37 @@ function Update-Pet($p) {
     $p.frame = AF $p 'side_startle' 6
     if ($p.timer -le 0) { $p.state='facecam'; $p.timer=40; $p.camframe='front_happy' }
   }
+  elseif ($st -eq 'jumpprep') {
+    $p.frame = 'side_jump1'
+    if ($p.timer -le 0) {
+      $j = $p.jump
+      $j.vx = (($j.lx - $p.x) / $j.t)
+      $j.vy = ((($j.ty - $p.y) - 0.5 * $GRAVITY * $j.t * $j.t) / $j.t)
+      $p.state = 'jump'; $p.platform = $null
+      return
+    }
+  }
+  elseif ($st -eq 'seqplay') {
+    $idx = [int][Math]::Floor($p.seq / $p.seqPer)
+    if ($null -eq $p.seqFrames -or $idx -ge $p.seqFrames.Count) {
+      $ns = $p.seqNextState
+      $p.state = $ns; $p.timer = $p.seqNextTimer; $p.seq = 0
+      if ($ns -eq 'sleep') { $p.zseq = 0 }
+      return
+    }
+    $p.frame = $p.seqFrames[$idx]
+    $p.seq++
+  }
   elseif ($st -eq 'landing') {
-    $p.frame = AF $p 'side_land' 4
+    $lf = @(@('side_land1','side_land2') | Where-Object { F $p.kind $_ })
+    if ($lf.Count -gt 0) { $p.frame = $lf[[Math]::Min($lf.Count - 1, [int][Math]::Floor($p.seq / 5))]; $p.seq++ }
+    else { $p.frame = AF $p 'side_land' 4 }
     if ($p.timer -le 0) {
       if ($rng.NextDouble() -lt 0.3) { $p.state='shakeoff'; $p.timer=26 } else { $p.state='idle'; $p.timer=$rng.Next(25,70) }
     }
+  }
+  elseif ($st -eq 'excited') {
+    $p.frame = AF $p 'side_excited' 5
   }
   elseif ($st -eq 'shakeoff') {
     $p.frame = AF $p 'side_shake' 3
@@ -930,13 +985,18 @@ function Update-Pet($p) {
   if (@('run','chase','flee','zoomies') -contains $st) {
     $p.y -= [int](([Math]::Abs([Math]::Sin($p.anim*0.5))) * $SPR * 0.03)
   }
-  elseif (@('walk','carry','sniff','sneak') -contains $st) {
+  elseif (@('walk','trot','carry','sniff','sneak') -contains $st) {
     $p.y -= [int](([Math]::Abs([Math]::Sin($p.anim*0.3))) * $SPR * 0.012)
   }
 
-  if ($p.timer -le 0 -and $st -ne 'landing' -and $st -ne 'pounce' -and $st -ne 'caught' -and $st -ne 'shakeoff') {
+  if ($p.timer -le 0 -and (@('landing','pounce','caught','shakeoff','seqplay','jumpprep') -notcontains $st)) {
     if ($null -ne $p.partner) { Detach-Social $p }
     if ($st -eq 'zoomies') { $p.state='exhausted'; $p.timer=70; $p.frame='side_tired'; return }
+    if ($st -eq 'sleep') {
+      # 깨어나기: 눕기 역순 → 일어나기 → 잠깐 서기 (프레임 없으면 바로 idle)
+      Start-Seq $p @('side_liedown3','side_liedown2','side_liedown1','side_rise1','side_rise2') 6 'idle' ($rng.Next(40,90))
+      return
+    }
     Decide $p
   }
 }
@@ -959,6 +1019,7 @@ function New-Pet($id, $name, $kind, $x) {
           timer=$rng.Next(30,90); anim=0; platform=$null; platLeft=0; jump=$null;
           partner=$null; dragOff=@(0,0); trail=(New-Object System.Collections.ArrayList);
           frame='side_stand'; seq=0; zseq=0; skid=0; camframe='front_happy';
+          seqFrames=$null; seqPer=6; seqNextState='idle'; seqNextTimer=40;
           dragStage=3; dragHold=0; dragWant=3;
           lastKey=''; lastBmp=$null; fadeFrom=$null; fade=0; scratch=$null; scratchG=$null }
   $p.y = [double](Ground-Y $p)
@@ -1082,11 +1143,12 @@ function Start-App {
   if ($null -ne $SplashForm) { try { $SplashForm.Close() } catch {} }
 
   # 바로가기를 '나나모모'로 갱신 + 새 아이콘 (기존 설치 자동 마이그레이션)
+  # icon2.ico = 나나·모모 얼굴 클로즈업 (새 파일명 → 윈도우 아이콘 캐시 우회)
   try {
     $script:IconWC = New-Object System.Net.WebClient
     $script:IconWC.DownloadFileAsync(
-      (New-Object Uri('https://raw.githubusercontent.com/highest14-del/gluck-pets/AI%EA%B4%80%EC%A0%9C/dist/icon.ico')),
-      (Join-Path $HomeDir 'icon.ico'))
+      (New-Object Uri('https://raw.githubusercontent.com/highest14-del/gluck-pets/AI%EA%B4%80%EC%A0%9C/dist/icon2.ico')),
+      (Join-Path $HomeDir 'icon2.ico'))
   } catch {}
   try {
     $vbsPath = Join-Path $HomeDir '글룩펫_실행.vbs'
@@ -1098,7 +1160,9 @@ function Start-App {
       $lnkObj.TargetPath = 'wscript.exe'
       $lnkObj.Arguments = '"' + $vbsPath + '"'
       $lnkObj.WorkingDirectory = $HomeDir
-      $lnkObj.IconLocation = (Join-Path $HomeDir 'icon.ico')
+      $ic2 = Join-Path $HomeDir 'icon2.ico'
+      if (Test-Path $ic2) { $lnkObj.IconLocation = $ic2 }
+      else { $lnkObj.IconLocation = (Join-Path $HomeDir 'icon.ico') }
       $lnkObj.Description = '나나와 모모 - 실사 데스크톱 펫'
       $lnkObj.WindowStyle = 7
       $lnkObj.Save()
