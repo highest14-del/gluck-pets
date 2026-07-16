@@ -31,6 +31,7 @@ public class GPWin {
   [DllImport("dwmapi.dll")] public static extern int DwmGetWindowAttribute(IntPtr h, int a, out RECT r, int size);
   [DllImport("dwmapi.dll")] public static extern int DwmGetWindowAttribute(IntPtr h, int a, out int v, int size);
   [DllImport("user32.dll")] public static extern bool SetProcessDPIAware();
+  [DllImport("user32.dll")] public static extern bool SetProcessDpiAwarenessContext(IntPtr c);
   [DllImport("user32.dll")] public static extern int GetWindowLong(IntPtr h, int n);
   [DllImport("user32.dll")] public static extern int SetWindowLong(IntPtr h, int n, int v);
   [StructLayout(LayoutKind.Sequential)] public struct RECT { public int left, top, right, bottom; }
@@ -118,11 +119,22 @@ public class GPQuietForm : System.Windows.Forms.Form {
 }
 "@
 
-[void][GPWin]::SetProcessDPIAware()
+try {
+  # Per-Monitor V2: 모니터 배율이 달라도 OS가 창을 강제 확대하지 않게 (모니터별 크기 널뜀 방지)
+  if (-not [GPWin]::SetProcessDpiAwarenessContext((New-Object IntPtr(-4)))) { [void][GPWin]::SetProcessDPIAware() }
+} catch { try { [void][GPWin]::SetProcessDPIAware() } catch {} }
 ELog "Add-Type OK"
 
 # ---------------------------------------------------------------- 설정
-$PET_H = 250            # 화면상 펫 캔버스 높이(px) — 200~340 취향껏
+$HomeDir = Join-Path $env:LocalAppData 'GLUCK_PETS'
+$PET_H = 250            # 기본값 — settings.json(우클릭 메뉴 '크기')로 변경 가능
+try {
+  $sf = Join-Path $HomeDir 'settings.json'
+  if (Test-Path $sf) {
+    $cfg = (Get-Content $sf -Raw -Encoding UTF8).TrimStart([char]0xFEFF) | ConvertFrom-Json
+    if ($cfg.pet_h) { $PET_H = [Math]::Max(150, [Math]::Min(420, [int]$cfg.pet_h)) }
+  }
+} catch {}
 $TICK_MS = 30
 $PETS = @( @{name='나나';kind='nana'}, @{name='모모';kind='momo'} )
 $CHROMA = [System.Drawing.Color]::FromArgb(255,255,0,255)
@@ -471,6 +483,22 @@ function Spawn-Hearts($x, $y, $n) {
     $hf.Left=[int]$heart.x; $hf.Top=[int]$heart.y; $hf.Show()
     try { [GPWin]::HideFromAltTab($hf.Handle) } catch {}
   }
+}
+
+function Restart-Pets {
+  try { $script:Timer.Stop() } catch {}
+  foreach ($q in $App.pets) { try { $q.form.Close() } catch {} }
+  try { $script:Mutex.ReleaseMutex() } catch {}
+  try { $script:Mutex.Dispose() } catch {}
+  $vbs = Join-Path $HomeDir '글룩펫_실행.vbs'
+  if (Test-Path $vbs) { Start-Process wscript.exe ('"' + $vbs + '"') }
+  [System.Windows.Forms.Application]::Exit()
+}
+function Set-PetSize($h) {
+  try {
+    @{ pet_h = $h } | ConvertTo-Json | Set-Content -Path (Join-Path $HomeDir 'settings.json') -Encoding UTF8
+  } catch {}
+  Restart-Pets
 }
 
 function Force-State($p,$state,$ticks) {
@@ -857,6 +885,11 @@ function New-Pet($id, $name, $kind, $x) {
   $mi = $menu.Items.Add("코~ 자자"); $mi.add_Click({ param($s,$e) Force-State $s.Owner.Tag 'sleep' 600 })
   $mi = $menu.Items.Add("일어나!"); $mi.add_Click({ param($s,$e) Force-State $s.Owner.Tag 'idle' 30 })
   [void]$menu.Items.Add((New-Object System.Windows.Forms.ToolStripSeparator))
+  $mi = $menu.Items.Add("크기: 작게"); $mi.add_Click({ Set-PetSize 190 })
+  $mi = $menu.Items.Add("크기: 보통"); $mi.add_Click({ Set-PetSize 250 })
+  $mi = $menu.Items.Add("크기: 크게"); $mi.add_Click({ Set-PetSize 310 })
+  $mi = $menu.Items.Add("크기: 아주 크게"); $mi.add_Click({ Set-PetSize 380 })
+  [void]$menu.Items.Add((New-Object System.Windows.Forms.ToolStripSeparator))
   $mi = $menu.Items.Add("펫 모두 종료"); $mi.add_Click({ [System.Windows.Forms.Application]::Exit() })
   $f.ContextMenuStrip = $menu
   if ($null -ne $pb) { $pb.ContextMenuStrip = $menu; $pb.Tag = $p }
@@ -937,6 +970,32 @@ function Start-App {
   Refresh-Platforms
   ELog ("펫 " + $App.pets.Count + "마리 표시 완료 (ULW=" + $script:UseULW + ")")
   if ($null -ne $SplashForm) { try { $SplashForm.Close() } catch {} }
+
+  # 바로가기를 '나나모모'로 갱신 + 새 아이콘 (기존 설치 자동 마이그레이션)
+  try {
+    $script:IconWC = New-Object System.Net.WebClient
+    $script:IconWC.DownloadFileAsync(
+      (New-Object Uri('https://raw.githubusercontent.com/highest14-del/gluck-pets/AI%EA%B4%80%EC%A0%9C/dist/icon.ico')),
+      (Join-Path $HomeDir 'icon.ico'))
+  } catch {}
+  try {
+    $vbsPath = Join-Path $HomeDir '글룩펫_실행.vbs'
+    if (Test-Path $vbsPath) {
+      $ws = New-Object -ComObject WScript.Shell
+      $desk = [Environment]::GetFolderPath('Desktop')
+      $sc = $ws.CreateShortcut((Join-Path $desk '나나모모.lnk'))
+      $sc.TargetPath = 'wscript.exe'
+      $sc.Arguments = '"' + $vbsPath + '"'
+      $sc.WorkingDirectory = $HomeDir
+      $sc.IconLocation = (Join-Path $HomeDir 'icon.ico')
+      $sc.Description = '나나와 모모 - 실사 데스크톱 펫'
+      $sc.WindowStyle = 7
+      $sc.Save()
+      $old = Join-Path $desk 'GLUCK 펫.lnk'
+      if (Test-Path $old) { Remove-Item $old -Force }
+      ELog "바로가기 '나나모모' 갱신"
+    }
+  } catch { ELog ("바로가기 갱신 실패(무시): " + $_.Exception.Message) }
 
   # 부트스트랩 자기 갱신 (펫 표시 후 조용히 — 다음 실행부터 새 부트스트랩 적용)
   try {
