@@ -52,6 +52,15 @@ public class GPWin {
   [DllImport("user32.dll")] static extern IntPtr WindowFromPoint(PT p);
   [DllImport("user32.dll")] static extern IntPtr GetAncestor(IntPtr h, int flags);
   [DllImport("gdi32.dll")] public static extern IntPtr CreateRoundRectRgn(int a, int b, int c, int d, int e, int f);
+  [DllImport("gdi32.dll")] static extern uint GetPixel(IntPtr hdc, int x, int y);
+  [DllImport("user32.dll")] static extern IntPtr GetDC(IntPtr h);
+  [DllImport("user32.dll")] static extern int ReleaseDC(IntPtr h, IntPtr dc);
+  public static uint ScreenPixel(int x, int y) {
+    IntPtr dc = GetDC(IntPtr.Zero);
+    uint c = GetPixel(dc, x, y);
+    ReleaseDC(IntPtr.Zero, dc);
+    return c;
+  }
   public static long TopWindowAt(int x, int y) {
     PT p; p.x = x; p.y = y;
     IntPtr h = WindowFromPoint(p);
@@ -84,6 +93,12 @@ public class GPLayer {
   [StructLayout(LayoutKind.Sequential)] struct POINT { public int x, y; public POINT(int a,int b){x=a;y=b;} }
   [StructLayout(LayoutKind.Sequential)] struct SIZE { public int cx, cy; public SIZE(int a,int b){cx=a;cy=b;} }
   [StructLayout(LayoutKind.Sequential)] struct BLEND { public byte op, flags, alpha, fmt; }
+  [StructLayout(LayoutKind.Sequential)] struct BMIH {
+    public uint biSize; public int biWidth; public int biHeight;
+    public ushort biPlanes; public ushort biBitCount; public uint biCompression;
+    public uint biSizeImage; public int biXPPM; public int biYPPM;
+    public uint biClrUsed; public uint biClrImportant;
+  }
   [DllImport("user32.dll")] static extern bool UpdateLayeredWindow(IntPtr hwnd, IntPtr hdcDst, ref POINT pptDst, ref SIZE psize, IntPtr hdcSrc, ref POINT pptSrc, int crKey, ref BLEND pblend, int dwFlags);
   [DllImport("user32.dll")] static extern IntPtr GetDC(IntPtr hWnd);
   [DllImport("user32.dll")] static extern int ReleaseDC(IntPtr hWnd, IntPtr hDC);
@@ -91,24 +106,74 @@ public class GPLayer {
   [DllImport("gdi32.dll")] static extern bool DeleteDC(IntPtr hdc);
   [DllImport("gdi32.dll")] static extern IntPtr SelectObject(IntPtr hDC, IntPtr h);
   [DllImport("gdi32.dll")] static extern bool DeleteObject(IntPtr h);
+  [DllImport("gdi32.dll")] static extern IntPtr CreateDIBSection(IntPtr hdc, ref BMIH bmi, uint usage, out IntPtr bits, IntPtr hSection, uint offset);
+  [DllImport("kernel32.dll", EntryPoint="RtlMoveMemory")] static extern void CopyMemory(IntPtr dst, IntPtr src, UIntPtr len);
+  // GetHbitmap 는 일부 PC에서 픽셀 알파를 잃어 ULW가 '성공'을 반환해도 화면엔 안 그려짐(개 투명).
+  // 32bpp 프리멀티플라이드 DIB 섹션을 직접 만들어 넘기는 정석 경로로 교체.
   public static bool Draw(IntPtr hwnd, System.Drawing.Bitmap bmp, int x, int y) {
+    int w = bmp.Width, h = bmp.Height;
     IntPtr screenDc = GetDC(IntPtr.Zero);
-    IntPtr memDc = IntPtr.Zero; IntPtr hBmp = IntPtr.Zero; IntPtr old = IntPtr.Zero;
+    IntPtr memDc = CreateCompatibleDC(screenDc);
+    IntPtr hBmp = IntPtr.Zero; IntPtr old = IntPtr.Zero;
+    System.Drawing.Imaging.BitmapData bd = null;
     try {
-      memDc = CreateCompatibleDC(screenDc);
-      hBmp = bmp.GetHbitmap(System.Drawing.Color.FromArgb(0,0,0,0));
+      BMIH bi = new BMIH();
+      bi.biSize = (uint)Marshal.SizeOf(typeof(BMIH));
+      bi.biWidth = w; bi.biHeight = -h;   // top-down
+      bi.biPlanes = 1; bi.biBitCount = 32; bi.biCompression = 0;
+      IntPtr bits;
+      hBmp = CreateDIBSection(screenDc, ref bi, 0, out bits, IntPtr.Zero, 0);
+      if (hBmp == IntPtr.Zero || bits == IntPtr.Zero) return false;
+      bd = bmp.LockBits(new System.Drawing.Rectangle(0,0,w,h),
+             System.Drawing.Imaging.ImageLockMode.ReadOnly,
+             System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+      int rowBytes = w * 4;
+      for (int r = 0; r < h; r++) {
+        CopyMemory(new IntPtr(bits.ToInt64() + (long)r * rowBytes),
+                   new IntPtr(bd.Scan0.ToInt64() + (long)r * bd.Stride),
+                   (UIntPtr)(uint)rowBytes);
+      }
+      bmp.UnlockBits(bd); bd = null;
       old = SelectObject(memDc, hBmp);
       POINT dst = new POINT(x, y);
-      SIZE sz = new SIZE(bmp.Width, bmp.Height);
+      SIZE sz = new SIZE(w, h);
       POINT src = new POINT(0, 0);
-      BLEND bf = new BLEND(); bf.op = 0; bf.alpha = 255; bf.fmt = 1;
-      return UpdateLayeredWindow(hwnd, screenDc, ref dst, ref sz, memDc, ref src, 0, ref bf, 2);
-    } finally {
+      BLEND bf = new BLEND(); bf.op = 0; bf.flags = 0; bf.alpha = 255; bf.fmt = 1;  // AC_SRC_ALPHA
+      return UpdateLayeredWindow(hwnd, screenDc, ref dst, ref sz, memDc, ref src, 0, ref bf, 2);  // ULW_ALPHA
+    } catch { return false; }
+    finally {
+      if (bd != null) { try { bmp.UnlockBits(bd); } catch {} }
       if (old != IntPtr.Zero) SelectObject(memDc, old);
       if (hBmp != IntPtr.Zero) DeleteObject(hBmp);
       if (memDc != IntPtr.Zero) DeleteDC(memDc);
       ReleaseDC(IntPtr.Zero, screenDc);
     }
+  }
+  // 크로마키 폴백용: 반투명 가장자리를 1비트 마스크로 다져서 마젠타 후광 제거
+  public static System.Drawing.Bitmap Matte(System.Drawing.Bitmap src, byte thr, byte cr, byte cg, byte cb) {
+    int w = src.Width, h = src.Height;
+    var rect = new System.Drawing.Rectangle(0, 0, w, h);
+    var sd = src.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+    int sStride = sd.Stride;
+    byte[] sbuf = new byte[sStride * h];
+    Marshal.Copy(sd.Scan0, sbuf, 0, sbuf.Length);
+    src.UnlockBits(sd);
+    var dst = new System.Drawing.Bitmap(w, h, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+    var dd = dst.LockBits(rect, System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+    int dStride = dd.Stride;
+    byte[] dbuf = new byte[dStride * h];
+    for (int y = 0; y < h; y++) {
+      int so = y * sStride, doo = y * dStride;
+      for (int xx = 0; xx < w; xx++) {
+        byte a = sbuf[so + xx * 4 + 3];
+        int di = doo + xx * 3;
+        if (a < thr) { dbuf[di] = cb; dbuf[di + 1] = cg; dbuf[di + 2] = cr; }   // BGR = 크로마
+        else { dbuf[di] = sbuf[so + xx * 4]; dbuf[di + 1] = sbuf[so + xx * 4 + 1]; dbuf[di + 2] = sbuf[so + xx * 4 + 2]; }
+      }
+    }
+    Marshal.Copy(dbuf, 0, dd.Scan0, dbuf.Length);
+    dst.UnlockBits(dd);
+    return dst;
   }
 }
 public class GPQuietForm : System.Windows.Forms.Form {
@@ -329,6 +394,18 @@ $script:FadeCM = New-Object System.Drawing.Imaging.ColorMatrix
 $script:FadeIA = New-Object System.Drawing.Imaging.ImageAttributes
 $FADE_TICKS = 5   # 프레임 전환 크로스페이드 길이 (5틱 = 150ms)
 
+# 크로마 폴백에서 쓸 '후광 제거' 프레임 캐시 — 원본 비트맵 참조를 키로 지연 생성
+$script:ChromaCache = @{}
+function Get-ChromaFrame($bmp) {
+  if ($null -eq $bmp) { return $null }
+  if ($script:ChromaCache.ContainsKey($bmp)) { return $script:ChromaCache[$bmp] }
+  # Matte 실패 시 원본(소프트 알파)을 캐시하면 마젠타 후광이 영구화됨 → null 반환(직전 프레임 유지)
+  $m = $null
+  try { $m = [GPLayer]::Matte($bmp, [byte]110, [byte]255, [byte]0, [byte]255) } catch { return $null }
+  $script:ChromaCache[$bmp] = $m
+  return $m
+}
+
 function Render-Pet($p) {
   $key = "$($p.kind)|$($p.frame)|$($p.facing)"
   $bmp = $Frames[$key]
@@ -379,7 +456,8 @@ function Render-Pet($p) {
     $p.form.Controls.Add($pb2)
     $p.pb = $pb2
   }
-  if ($p.pb.Image -ne $bmp) { $p.pb.Image = $bmp }
+  $cf = Get-ChromaFrame $bmp
+  if ($null -ne $cf -and $p.pb.Image -ne $cf) { $p.pb.Image = $cf }
   $p.form.Left = [int]$p.x; $p.form.Top = [int]$p.y
 }
 
@@ -945,22 +1023,39 @@ function Start-App {
     }
   })
 
-  # ULW(픽셀 알파) 사전 테스트 — 실패 시 처음부터 크로마 모드로 생성
+  # ULW(픽셀 알파) 실제 렌더 검증 — 화면 구석에 마젠타를 찍고 되읽어 확인
+  # (일부 PC는 UpdateLayeredWindow가 성공을 반환해도 실제로는 안 그려짐 → 개가 투명하게 안 보임)
+  $script:UseULW = $false
+  $tf = $null; $tb = $null
   try {
-    $tf = New-Object System.Windows.Forms.Form
-    $tf.FormBorderStyle='None'; $tf.ShowInTaskbar=$false; $tf.StartPosition='Manual'
-    $tf.Left=-2000; $tf.Top=-2000; $tf.Width=8; $tf.Height=8
+    $pw = [System.Windows.Forms.Screen]::PrimaryScreen.WorkingArea
+    $px = $pw.Left + 3; $py = $pw.Top + 3
+    $tf = New-Object GPQuietForm
+    $tf.FormBorderStyle='None'; $tf.ShowInTaskbar=$false; $tf.TopMost=$true; $tf.StartPosition='Manual'
+    $tf.Left=$px; $tf.Top=$py; $tf.Width=10; $tf.Height=10
     $null = $tf.Handle
     [GPWin]::MakeLayered($tf.Handle)
-    $tb = New-Object System.Drawing.Bitmap(8,8,[System.Drawing.Imaging.PixelFormat]::Format32bppPArgb)
+    $tb = New-Object System.Drawing.Bitmap(10,10,[System.Drawing.Imaging.PixelFormat]::Format32bppPArgb)
+    for ($yy=0; $yy -lt 10; $yy++) { for ($xx=0; $xx -lt 10; $xx++) { $tb.SetPixel($xx,$yy,[System.Drawing.Color]::FromArgb(255,255,0,255)) } }
     $tf.Show()
-    [GPLayer]::Draw($tf.Handle, $tb, -2000, -2000)
-    $tf.Close(); $tb.Dispose()
-    $script:UseULW = $true
-    ELog "ULW 테스트 OK (픽셀 알파 모드)"
+    [void][GPLayer]::Draw($tf.Handle, $tb, $px, $py)
+    [System.Windows.Forms.Application]::DoEvents()
+    [System.Threading.Thread]::Sleep(90)
+    [System.Windows.Forms.Application]::DoEvents()
+    $c = [GPWin]::ScreenPixel($px+4, $py+4)
+    $rr = $c -band 0xFF; $gg = ($c -shr 8) -band 0xFF; $bb = ($c -shr 16) -band 0xFF
+    if ($rr -gt 200 -and $bb -gt 200 -and $gg -lt 90) {
+      $script:UseULW = $true
+      ELog "ULW 검증 성공 (픽셀 알파 모드) — readback rgb=$rr,$gg,$bb"
+    } else {
+      ELog "ULW 화면에 안 찍힘 → 크로마 모드로 전환 — readback rgb=$rr,$gg,$bb"
+    }
   } catch {
-    $script:UseULW = $false
-    ELog ("ULW 실패 → 크로마 모드: " + $_.Exception.Message)
+    ELog ("ULW 테스트 예외 → 크로마 모드: " + $_.Exception.Message)
+  } finally {
+    # 예외가 나도 시험용 마젠타 점이 화면에 남지 않게
+    if ($null -ne $tf) { try { $tf.Close() } catch {} }
+    if ($null -ne $tb) { try { $tb.Dispose() } catch {} }
   }
 
   $sw = [System.Diagnostics.Stopwatch]::StartNew()
