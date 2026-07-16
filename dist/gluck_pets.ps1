@@ -470,13 +470,21 @@ function Render-Pet($p) {
   # 단, 같은 동작의 사이클 프레임(walk1→walk2 등)과 시퀀스 재생 중엔 페이드 금지 —
   # 진짜 애니메이션에 반투명 겹침이 매 프레임 걸리면 잔상이 반짝거림 (v17 실기 보고)
   if ($p.lastKey -ne $key) {
-    $ob = $p.lastKey -replace '[1-9]\|', '|'
-    $nb = $key -replace '[1-9]\|', '|'
+    # 이제 포즈 전환은 전용 보간 프레임이 담당 → 반투명 섞기(잔상 반짝임)는
+    # 좌우 반전과 드래그 시선 단계 전환에만 사용
+    $of = $p.lastKey.Substring($p.lastKey.LastIndexOf('|') + 1)
+    $nf2 = $key.Substring($key.LastIndexOf('|') + 1)
+    $fadeOk = ($of -ne $nf2)
+    if ($p.state -eq 'drag') {
+      $ob = $p.lastKey -replace '[1-9]\|', '|'
+      $nb = $key -replace '[1-9]\|', '|'
+      $fadeOk = ($ob -ne $nb)
+    }
     $noFadeState = @('seqplay','landing','jump','jumpprep','fall') -contains $p.state
-    if ($null -ne $p.lastBmp -and $p.lastBmp -ne $bmp -and $ob -ne $nb -and -not $noFadeState) {
+    if ($null -ne $p.lastBmp -and $p.lastBmp -ne $bmp -and $fadeOk -and -not $noFadeState) {
       $p.fadeFrom = $p.lastBmp; $p.fade = $FADE_TICKS
     } else {
-      $p.fade = 0; $p.fadeFrom = $null    # 사이클 진행 중엔 진행 중이던 페이드도 끊음 (잔상 제거)
+      $p.fade = 0; $p.fadeFrom = $null
     }
     $p.lastKey = $key; $p.lastBmp = $bmp
   }
@@ -848,10 +856,11 @@ function Decide($p) {
     }
   }
   $r = $rng.NextDouble()
-  if (-not $busy -and $null -ne $o -and (Interruptible $o) -and (Interruptible $p)) {
+  if ($null -ne $o -and (Interruptible $o) -and (Interruptible $p)) {
     $bothGround = ($null -eq $p.platform -and $null -eq $o.platform)
+    $dxo = [Math]::Abs((Cx $p) - (Cx $o))
     # 인사/코비비기: 가까이 있을 때 마주보며 (히든연출 — 반대편은 좌우반전으로 마주봄)
-    if ($bothGround -and [Math]::Abs((Cx $p)-(Cx $o)) -lt ($SPR*1.25) -and $r -lt 0.10 -and (F $p.kind 'side_greeting1') -and (F $o.kind 'side_greeting1')) {
+    if ($bothGround -and $dxo -lt ($SPR*1.6) -and $r -lt 0.14 -and (F $p.kind 'side_greeting1') -and (F $o.kind 'side_greeting1')) {
       $sg = 'greeting'
       if ((F $p.kind 'side_nuzzle1') -and (F $o.kind 'side_nuzzle1') -and $rng.NextDouble() -lt 0.5) { $sg = 'nuzzle' }
       $p.facing = Sign1 ((Cx $o) -gt (Cx $p))
@@ -863,7 +872,9 @@ function Decide($p) {
       ELog ("히든연출: " + $sg)
       return
     }
-    if ($bothGround -and $r -lt 0.07) {
+    $cchance = 0.10
+    if ($busy) { $cchance = 0.04 }   # 바쁠 땐 줄이되 끄지 않음 (지켜볼 때 안 노는 역설 방지)
+    if ($bothGround -and $r -lt $cchance) {
       # 놀자 초대 → 추격 (초대 컷 있으면 절반 확률)
       if ((F $p.kind 'side_playinvite1') -and $rng.NextDouble() -lt 0.5) {
         $p.facing = Sign1 ((Cx $o) -gt (Cx $p))
@@ -875,7 +886,13 @@ function Decide($p) {
       }
       Start-Chase $p $o; return
     }
-    if ((On-GroundLevel $p) -and (On-GroundLevel $o) -and [Math]::Abs((Cx $p)-(Cx $o)) -lt ($SPR*1.3) -and $r -lt 0.14) { Start-Ride $p $o; return }
+    if ((On-GroundLevel $p) -and (On-GroundLevel $o) -and $dxo -lt ($SPR*1.3) -and $r -lt 0.17) { Start-Ride $p $o; return }
+    # 다가가기: 멀리 떨어져 있으면 친구 쪽으로 걸어감 → 근접 상호작용(인사·등타기)이 자연히 늘어남
+    if ($bothGround -and $dxo -gt ($SPR*2.2) -and $r -lt 0.30) {
+      $p.state = 'walk'; $p.facing = Sign1 ((Cx $o) -gt (Cx $p))
+      $p.timer = [int]([Math]::Min(260, [Math]::Max(30, ($dxo - $SPR*1.2) / $WALK_SPEED)))
+      return
+    }
   }
   $jchance = 0.13
   if ($busy) { $jchance = 0.04 } elseif ($App.away) { $jchance = 0.2 }
