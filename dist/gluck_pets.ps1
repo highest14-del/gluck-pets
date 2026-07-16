@@ -1019,14 +1019,27 @@ function Start-App {
     $script:BootWC = New-Object System.Net.WebClient
     $script:BootWC.DownloadFileAsync(
       (New-Object Uri('https://raw.githubusercontent.com/highest14-del/gluck-pets/AI%EA%B4%80%EC%A0%9C/dist/bootstrap.ps1')),
-      (Join-Path (Join-Path $env:LocalAppData 'GLUCK_PETS') 'bootstrap.ps1'))
-    ELog "부트스트랩 자기 갱신 시작(비동기)"
+      (Join-Path $HomeDir 'bootstrap.ps1.tmp'))
+    ELog "부트스트랩 자기 갱신 시작(비동기, tmp)"
   } catch { ELog ("부트스트랩 갱신 실패(무시): " + $_.Exception.Message) }
 
   $script:Timer = New-Object System.Windows.Forms.Timer
   $script:Timer.Interval = $TICK_MS
   $script:Timer.add_Tick({
     $App.tick++
+    if ($App.tick -eq 500) {
+      # 부트스트랩 tmp 검증 → 마커 있으면 원자 교체, 아니면 폐기 (반쪽 파일 벽돌 방지)
+      try {
+        $bTmp = Join-Path $HomeDir 'bootstrap.ps1.tmp'
+        if (Test-Path $bTmp) {
+          $bTail = Get-Content $bTmp -Tail 3 -Encoding UTF8
+          if ($bTail -match 'GLUCK-PETS-EOF') {
+            Move-Item -Force $bTmp (Join-Path $HomeDir 'bootstrap.ps1')
+            ELog "부트스트랩 자기 갱신 완료(검증됨)"
+          } else { Remove-Item $bTmp -Force; ELog "부트스트랩 tmp 폐기(불완전)" }
+        }
+      } catch { ELog ("부트스트랩 교체 실패(무시): " + $_.Exception.Message) }
+    }
     if (($App.tick % 16) -eq 1) { Refresh-Platforms }
     foreach ($p in $App.pets) { Update-Pet $p }
     $dead = New-Object System.Collections.ArrayList
@@ -1051,3 +1064,4 @@ function Start-App {
 try { Start-App } catch {
   [System.Windows.Forms.MessageBox]::Show(("GLUCK 펫 실행 오류:`n" + $_.Exception.Message + "`n`n" + $_.ScriptStackTrace), "GLUCK 펫", 'OK', 'Error') | Out-Null
 }
+# GLUCK-PETS-EOF

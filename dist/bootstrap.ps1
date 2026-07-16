@@ -57,8 +57,17 @@ if ($null -ne $remote -and [int]$remote.version -gt [int]$localVer) {
   try {
     Splash '새 버전 다운로드 중... (최대 1분)'
     WLog "업데이트 시작 → v$($remote.version)"
-    $wc.DownloadFile("$Base/gluck_pets.ps1", (Join-Path $Home_ 'gluck_pets.ps1'))
-    $wc.DownloadFile("$Base/manifest.json", (Join-Path $Assets 'manifest.json'))
+    # 엔진: 임시 파일 + EOF 마커 검증 후에만 교체 (반쪽 파일 벽돌 방지)
+    $engTmp = Join-Path $Home_ 'gluck_pets.ps1.tmp'
+    $wc.DownloadFile("$Base/gluck_pets.ps1", $engTmp)
+    $tail = Get-Content $engTmp -Tail 3 -Encoding UTF8
+    if (-not ($tail -match 'GLUCK-PETS-EOF')) { throw '엔진 다운로드 불완전 (마커 없음)' }
+    Move-Item -Force $engTmp (Join-Path $Home_ 'gluck_pets.ps1')
+    # 매니페스트: JSON 파싱 검증 후 교체
+    $manTmp = Join-Path $Assets 'manifest.json.tmp'
+    $wc.DownloadFile("$Base/manifest.json", $manTmp)
+    $null = (Get-Content $manTmp -Raw -Encoding UTF8).TrimStart([char]0xFEFF) | ConvertFrom-Json
+    Move-Item -Force $manTmp (Join-Path $Assets 'manifest.json')
     $man = Get-Content (Join-Path $Assets 'manifest.json') -Raw -Encoding UTF8 | ConvertFrom-Json
     $n = 0
     foreach ($im in $man.images) {
@@ -110,3 +119,4 @@ try {
   [System.Windows.Forms.MessageBox]::Show(("GLUCK 펫 실행 오류:`n" + $_.Exception.Message + "`n`n로그: " + $Log), "GLUCK 펫", 'OK', 'Error') | Out-Null
 }
 try { if (-not $splash.IsDisposed) { $splash.Close() } } catch {}
+# GLUCK-PETS-EOF
