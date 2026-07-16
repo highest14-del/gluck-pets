@@ -47,6 +47,16 @@ public class GPWin {
     int ex = GetWindowLong(h, -20);
     SetWindowLong(h, -20, (ex & ~0x80000) | 0x80);
   }
+  [StructLayout(LayoutKind.Sequential)] public struct PT { public int x, y; }
+  [DllImport("user32.dll")] static extern IntPtr WindowFromPoint(PT p);
+  [DllImport("user32.dll")] static extern IntPtr GetAncestor(IntPtr h, int flags);
+  [DllImport("gdi32.dll")] public static extern IntPtr CreateRoundRectRgn(int a, int b, int c, int d, int e, int f);
+  public static long TopWindowAt(int x, int y) {
+    PT p; p.x = x; p.y = y;
+    IntPtr h = WindowFromPoint(p);
+    if (h == IntPtr.Zero) return 0;
+    return GetAncestor(h, 2).ToInt64();   // GA_ROOT
+  }
   public static List<long[]> Platforms(long[] exclude, int workTop) {
     var res = new List<long[]>();
     EnumWindows(delegate(IntPtr h, IntPtr l) {
@@ -188,6 +198,21 @@ function Build-Frames {
 }
 
 function F($kind, $frame) { return $HasFrame.ContainsKey("$kind|$frame") }
+
+$script:WalkCyc = @{}
+$script:RunCyc = @{}
+function Build-Cycles {
+  foreach ($kind in @('nana','momo')) {
+    $wc = @()
+    foreach ($n in @('side_walk1','side_walk2','side_walk3','side_walk4')) { if (F $kind $n) { $wc += $n } }
+    if ($wc.Count -ge 2) { $script:WalkCyc[$kind] = $wc }         # 진짜 보행 사이클 (발 교차)
+    else { $script:WalkCyc[$kind] = @('side_walk','side_trot') }  # 폴백: 걷기/종종걸음 교대
+    $rc = @()
+    foreach ($n in @('side_run1','side_run2','side_run3')) { if (F $kind $n) { $rc += $n } }
+    if ($rc.Count -ge 2) { $script:RunCyc[$kind] = $rc }
+    else { $script:RunCyc[$kind] = @('side_run') }
+  }
+}
 function Pick($kind, $frames) {
   $ok = @($frames | Where-Object { F $kind $_ })
   if ($ok.Count -eq 0) { return 'side_stand' }
@@ -208,6 +233,9 @@ function Refresh-Platforms {
   $wins = New-Object System.Collections.ArrayList
   foreach ($w in $raw) { [void]$wins.Add(@{ id=$w[0]; left=[int]$w[1]; top=[int]$w[2]; right=[int]$w[3] }) }
   $App.plat.windows = $wins
+  $own = @{}
+  foreach ($h in $ex) { $own[[long]$h] = $true }
+  $App.plat.own = $own
 }
 
 function Foot($p) { $k = "$($p.kind)|$($p.frame)"; if ($FootPad.ContainsKey($k)) { return $FootPad[$k] } return 4 }
@@ -218,11 +246,26 @@ function Feet($p) { return $p.y + $SPR - (Foot $p) }
 function Cx($p) { return $p.x + $SPR / 2 }
 function Other-Pet($p) { foreach ($q in $App.pets) { if ($q.id -ne $p.id) { return $q } } return $null }
 
+function Plat-Visible($plat, $cx) {
+  # 창 상단이 다른 창에 가려졌는지 — 펫 좌우 바깥 두 지점에서 최상위 창을 조회
+  $y = [int]($plat.top + 8)
+  foreach ($px in @(($cx - $SPR * 0.75), ($cx + $SPR * 0.75))) {
+    if ($px -lt ($plat.left + 6) -or $px -gt ($plat.right - 6)) { continue }
+    $h = [GPWin]::TopWindowAt([int]$px, $y)
+    if ($h -eq $plat.id) { return $true }
+    if ($App.plat.own.ContainsKey([long]$h)) { return $true }   # 우리 펫/말풍선이 덮은 지점
+  }
+  # 두 지점 모두 span 밖(좁은 창 가장자리)이면 중앙 한 점으로 판정
+  $cxc = [Math]::Max($plat.left + 6, [Math]::Min($plat.right - 6, $cx))
+  $h2 = [GPWin]::TopWindowAt([int]$cxc, $y)
+  return ($h2 -eq $plat.id -or $App.plat.own.ContainsKey([long]$h2))
+}
+
 function Landing($cx, $prevFeet, $newFeet) {
   $best = $null
   foreach ($w in $App.plat.windows) {
     if (($w.left+8) -le $cx -and $cx -le ($w.right-8) -and $prevFeet -le $w.top -and $w.top -le $newFeet) {
-      if ($null -eq $best -or $w.top -lt $best.top) { $best = $w }
+      if (($null -eq $best -or $w.top -lt $best.top) -and (Plat-Visible $w $cx)) { $best = $w }
     }
   }
   if ($null -ne $best) { return $best }
@@ -231,13 +274,44 @@ function Landing($cx, $prevFeet, $newFeet) {
 }
 
 # ---------------------------------------------------------------- 렌더
+$script:FadeCM = New-Object System.Drawing.Imaging.ColorMatrix
+$script:FadeIA = New-Object System.Drawing.Imaging.ImageAttributes
+$FADE_TICKS = 5   # 프레임 전환 크로스페이드 길이 (5틱 = 150ms)
+
 function Render-Pet($p) {
-  $bmp = $Frames["$($p.kind)|$($p.frame)|$($p.facing)"]
+  $key = "$($p.kind)|$($p.frame)|$($p.facing)"
+  $bmp = $Frames[$key]
   if ($null -eq $bmp) { $bmp = $Frames["$($p.kind)|side_stand|$($p.facing)"] }
   if ($null -eq $bmp) { return }
+  # 프레임 전환 감지 → 페이드 시작
+  if ($p.lastKey -ne $key) {
+    if ($null -ne $p.lastBmp -and $p.lastBmp -ne $bmp) { $p.fadeFrom = $p.lastBmp; $p.fade = $FADE_TICKS }
+    $p.lastKey = $key; $p.lastBmp = $bmp
+  }
   if ($script:UseULW) {
+    $draw = $bmp
+    if ($p.fade -gt 0 -and $null -ne $p.fadeFrom) {
+      # 이전/새 프레임 알파 블렌드 (스크래치 비트맵 재사용)
+      if ($null -eq $p.scratch) {
+        $p.scratch = New-Object System.Drawing.Bitmap($SPR, $SPR, [System.Drawing.Imaging.PixelFormat]::Format32bppPArgb)
+        $p.scratchG = [System.Drawing.Graphics]::FromImage($p.scratch)
+      }
+      $t = 1.0 - ($p.fade / [double]$FADE_TICKS)
+      $g = $p.scratchG
+      $g.Clear([System.Drawing.Color]::FromArgb(0,0,0,0))
+      $rect = New-Object System.Drawing.Rectangle(0, 0, $SPR, $SPR)
+      $script:FadeCM.Matrix33 = [float](1.0 - $t)
+      $script:FadeIA.SetColorMatrix($script:FadeCM)
+      $g.DrawImage($p.fadeFrom, $rect, 0, 0, $SPR, $SPR, [System.Drawing.GraphicsUnit]::Pixel, $script:FadeIA)
+      $script:FadeCM.Matrix33 = [float]$t
+      $script:FadeIA.SetColorMatrix($script:FadeCM)
+      $g.DrawImage($bmp, $rect, 0, 0, $SPR, $SPR, [System.Drawing.GraphicsUnit]::Pixel, $script:FadeIA)
+      $p.fade--
+      if ($p.fade -le 0) { $p.fadeFrom = $null }
+      $draw = $p.scratch
+    }
     $ok = $false
-    try { $ok = [GPLayer]::Draw($p.form.Handle, $bmp, [int]$p.x, [int]$p.y) } catch {}
+    try { $ok = [GPLayer]::Draw($p.form.Handle, $draw, [int]$p.x, [int]$p.y) } catch {}
     if ($ok) { return }
     $script:UseULW = $false
     ELog "ULW 실패(FALSE/예외) → 크로마 폴백 전환"
@@ -294,20 +368,38 @@ function Position-Speech($sp) {
   $sp.form.Top = [int]($p.y + (($CANVAS - 1) * $SC * 0.08) - $sp.form.Height - 2)
 }
 
+function Style-Bubble($form) {
+  # 라운드 코너 — 크기 바뀔 때마다 다시 적용
+  try {
+    $r = [GPWin]::CreateRoundRectRgn(0, 0, $form.Width + 1, $form.Height + 1, 18, 18)
+    $form.Region = [System.Drawing.Region]::FromHrgn($r)
+  } catch {}
+}
+
 function Say($p, $text, $life=95) {
   foreach ($s in $App.speeches) { if ($s.pet.id -eq $p.id) { return } }
+  # 개별 파스텔: 나나=크림, 모모=연핑크
+  if ($p.kind -eq 'momo') {
+    $bg = [System.Drawing.Color]::FromArgb(255,255,233,239)
+    $fg = [System.Drawing.Color]::FromArgb(255,150,84,100)
+  } else {
+    $bg = [System.Drawing.Color]::FromArgb(255,255,243,214)
+    $fg = [System.Drawing.Color]::FromArgb(255,122,88,50)
+  }
   $bf = New-Object GPQuietForm
   $bf.FormBorderStyle='None'; $bf.ShowInTaskbar=$false; $bf.TopMost=$true; $bf.StartPosition='Manual'
+  $bf.BackColor = $bg
   $lbl = New-Object System.Windows.Forms.Label
   $lbl.AutoSize=$true; $lbl.Text=$text
-  $lbl.Font=New-Object System.Drawing.Font('Malgun Gothic', 10)
-  $lbl.BackColor=[System.Drawing.Color]::FromArgb(255,255,252,240)
-  $lbl.ForeColor=[System.Drawing.Color]::FromArgb(255,60,50,45)
-  $lbl.BorderStyle='FixedSingle'
-  $lbl.Padding=(New-Object System.Windows.Forms.Padding(8,5,8,5))
+  $lbl.Font=New-Object System.Drawing.Font('Malgun Gothic', 10, [System.Drawing.FontStyle]::Bold)
+  $lbl.BackColor=$bg
+  $lbl.ForeColor=$fg
+  $lbl.BorderStyle='None'
+  $lbl.Padding=(New-Object System.Windows.Forms.Padding(12,7,12,8))
   $bf.Controls.Add($lbl)
   $sz = $lbl.PreferredSize
   $bf.ClientSize = New-Object System.Drawing.Size($sz.Width, $sz.Height)
+  Style-Bubble $bf
   $sp = @{ form=$bf; pet=$p; life=$life }
   [void]$App.speeches.Add($sp)
   Position-Speech $sp
@@ -357,8 +449,8 @@ function Pet-Head($p) {
 # ---------------------------------------------------------------- 드래그 (4단계 시선)
 function On-Grab($p) {
   Detach-Social $p; $p.state='drag'; $p.platform=$null; $p.jump=$null
-  $cur = [System.Windows.Forms.Cursor]::Position
-  $p.dragOff = @(($cur.X - $p.x), ($cur.Y - $p.y))
+  # 커서가 목덜미(상단 중앙)를 잡은 것처럼 — 클릭 지점과 무관
+  $p.dragOff = @(($SPR * 0.5), ($SPR * 0.10))
   $p.trail.Clear()
   $p.dragStage = 3; $p.dragHold = 0; $p.dragWant = 3
 }
@@ -397,7 +489,7 @@ function Drag-Frame($p) {
   if ([Math]::Abs($dx) -gt 3) { $p.facing = Sign1 ($dx -gt 0) }
   $stages = @('side_hang90','side_hang60','side_hang30','front_hang0')
   $f = $stages[$p.dragStage]
-  if (F $p.kind $f) { return $f }
+  if (F $p.kind $f) { return (AF $p $f 7) }
   if ($p.dragStage -ge 2 -and (F $p.kind 'front_scared')) { return 'front_scared' }
   if (F $p.kind 'side_startle') { return 'side_startle' }
   return 'side_stand'
@@ -442,6 +534,7 @@ function Plan-Jump($p) {
     if (($w.right - $w.left) -lt ($SPR*1.6)) { continue }
     $lx = [Math]::Max($w.left + $SPR*0.6, [Math]::Min($w.right - $SPR*1.6, $p.x))
     if ([Math]::Abs($lx - $p.x) -gt 760) { continue }
+    if (-not (Plat-Visible $w ($lx + $SPR*0.5))) { continue }   # 가려진 창 제외
     [void]$options.Add(@($w, $lx))
   }
   if ($options.Count -eq 0) { return $false }
@@ -529,6 +622,9 @@ function Update-Pet($p) {
     $p.platLeft = $w.left; $p.platform = $w
     $mycx = Cx $p
     if ($mycx -lt $w.left -or $mycx -gt $w.right) { $p.platform=$null; $p.state='fall'; $p.vy=0; return }
+    if ((($App.tick + $p.id * 4) % 8) -eq 0 -and -not (Plat-Visible $w $mycx)) {
+      $p.platform=$null; $p.state='fall'; $p.vy=0; return   # 창이 다른 창에 가려짐 → 낙하
+    }
     $p.y = Stand-Y $p $w
     $leftLim = $w.left + 4; $rightLim = $w.right - $SPR - 4
     if ($leftLim -gt $rightLim) { $leftLim = $w.left; $rightLim = $w.right - $SPR }
@@ -543,14 +639,27 @@ function Update-Pet($p) {
     $speed = $WALK_SPEED
     $frame = 'side_walk'
     switch ($st) {
-      'walk'    { $speed=$WALK_SPEED;      $frame = @('side_walk','side_trot')[([int]([Math]::Floor($p.anim/8)) % 2)] }
-      'run'     { $speed=$RUN_SPEED;       $frame='side_run' }
-      'chase'   { $speed=$RUN_SPEED*1.2;   $frame='side_run' }
-      'flee'    { $speed=$RUN_SPEED*0.85;  $frame='side_run' }
-      'carry'   { $speed=$WALK_SPEED*0.6;  $frame='side_walk' }
-      'zoomies' { $speed=$RUN_SPEED*1.5;   $frame='side_run' }
-      'sniff'   { $speed=$WALK_SPEED*0.4;  $frame='side_sniff' }
-      'sneak'   { $speed=$WALK_SPEED*0.45; $frame='side_sneak' }
+      'walk'    { $speed=$WALK_SPEED
+                  $cyc = $script:WalkCyc[$p.kind]
+                  $per = if ($cyc.Count -ge 3) { 5 } else { 8 }
+                  $frame = $cyc[([int]([Math]::Floor($p.anim / $per))) % $cyc.Count] }
+      'run'     { $speed=$RUN_SPEED
+                  $cyc = $script:RunCyc[$p.kind]
+                  $frame = $cyc[([int]([Math]::Floor($p.anim / 4))) % $cyc.Count] }
+      'chase'   { $speed=$RUN_SPEED*1.2
+                  $cyc = $script:RunCyc[$p.kind]
+                  $frame = $cyc[([int]([Math]::Floor($p.anim / 4))) % $cyc.Count] }
+      'flee'    { $speed=$RUN_SPEED*0.85
+                  $cyc = $script:RunCyc[$p.kind]
+                  $frame = $cyc[([int]([Math]::Floor($p.anim / 4))) % $cyc.Count] }
+      'carry'   { $speed=$WALK_SPEED*0.6
+                  $cyc = $script:WalkCyc[$p.kind]
+                  $frame = $cyc[([int]([Math]::Floor($p.anim / 8))) % $cyc.Count] }
+      'zoomies' { $speed=$RUN_SPEED*1.5
+                  $cyc = $script:RunCyc[$p.kind]
+                  $frame = $cyc[([int]([Math]::Floor($p.anim / 4))) % $cyc.Count] }
+      'sniff'   { $speed=$WALK_SPEED*0.4;  $frame = AF $p 'side_sniff' 7 }
+      'sneak'   { $speed=$WALK_SPEED*0.45; $frame = AF $p 'side_sneak' 7 }
     }
     if ($st -eq 'zoomies') {
       if ($p.skid -gt 0) { $p.skid--; $frame='side_skid'; $speed=$speed*0.3 }
@@ -586,69 +695,69 @@ function Update-Pet($p) {
     $p.frame = $frame
   }
   elseif ($st -eq 'pounce') {
-    $p.frame = @('side_crouch','side_pounce')[([int]($p.seq / 8)) % 2]
+    $p.frame = AF $p (@('side_crouch','side_pounce')[([int]($p.seq / 8)) % 2]) 5
     $p.seq++
     if ($p.timer -le 0) { $p.state='facecam'; $p.timer=50; $p.camframe = Pick $p.kind @('front_laugh','front_happy') }
   }
   elseif ($st -eq 'caught') {
-    $p.frame = 'side_startle'
+    $p.frame = AF $p 'side_startle' 6
     if ($p.timer -le 0) { $p.state='facecam'; $p.timer=40; $p.camframe='front_happy' }
   }
   elseif ($st -eq 'landing') {
-    $p.frame = 'side_land'
+    $p.frame = AF $p 'side_land' 4
     if ($p.timer -le 0) {
       if ($rng.NextDouble() -lt 0.3) { $p.state='shakeoff'; $p.timer=26 } else { $p.state='idle'; $p.timer=$rng.Next(25,70) }
     }
   }
   elseif ($st -eq 'shakeoff') {
-    $p.frame = 'side_shake'
+    $p.frame = AF $p 'side_shake' 3
     if ($p.timer -le 0) { $p.state='idle'; $p.timer=$rng.Next(30,80) }
   }
   elseif ($st -eq 'groom') {
     $stagesG = @('side_scratch','side_lickpaw','side_licknose')
-    $p.frame = $stagesG[[Math]::Min(2, [int]($p.seq / 70))]
+    $p.frame = AF $p ($stagesG[[Math]::Min(2, [int]($p.seq / 70))]) 6
     $p.seq++
   }
   elseif ($st -eq 'rollplay') {
     $stagesR = @('side_roll','side_belly')
-    $p.frame = $stagesR[[Math]::Min(1, [int]($p.seq / 60))]
+    $p.frame = AF $p ($stagesR[[Math]::Min(1, [int]($p.seq / 60))]) 6
     $p.seq++
   }
   elseif ($st -eq 'stretchy') {
     $stagesS = @('side_stretch','side_yawn')
-    $p.frame = $stagesS[[Math]::Min(1, [int]($p.seq / 55))]
+    $p.frame = AF $p ($stagesS[[Math]::Min(1, [int]($p.seq / 55))]) 6
     $p.seq++
   }
   elseif ($st -eq 'lookaround') {
     $opts = @('side_lookback','side_lookup','side_lookdown','side_stand')
-    $p.frame = $opts[([int]([Math]::Floor($p.anim/22))) % $opts.Count]
+    $p.frame = AF $p ($opts[([int]([Math]::Floor($p.anim/22))) % $opts.Count]) 8
     if (($p.anim % 22) -eq 0 -and $rng.NextDouble() -lt 0.4) { $p.facing = -$p.facing }
   }
   elseif ($st -eq 'facecam') {
-    $p.frame = $p.camframe
+    $p.frame = AF $p $p.camframe 8
   }
   elseif ($st -eq 'wallstand') {
-    $p.frame = 'side_wallstand'
+    $p.frame = AF $p 'side_wallstand' 8
   }
   elseif ($st -eq 'exhausted') {
-    $p.frame = 'side_tired'
+    $p.frame = AF $p 'side_tired' 10
   }
   elseif ($st -eq 'sit') {
-    $p.frame = 'side_sit'
-    if ($rng.NextDouble() -lt 0.004) { $p.frame='side_yawn' }
+    $p.frame = AF $p 'side_sit' 20
+    if ($rng.NextDouble() -lt 0.004) { $p.frame = AF $p 'side_yawn' 6 }
   }
   elseif ($st -eq 'sleep') {
-    $p.frame = 'side_sleep'
+    $p.frame = AF $p 'side_sleep' 22
     $p.zseq++
     if (($p.zseq % 40) -eq 0) {
       $zt = @('z','z Z','z Z Z')[([int]($p.zseq / 40)) % 3]
-      foreach ($s in $App.speeches) { if ($s.pet.id -eq $p.id) { $s.form.Controls[0].Text = $zt; $s.form.ClientSize = $s.form.Controls[0].PreferredSize; $s.life = 45; Position-Speech $s; $zt=$null; break } }
+      foreach ($s in $App.speeches) { if ($s.pet.id -eq $p.id) { $s.form.Controls[0].Text = $zt; $s.form.ClientSize = $s.form.Controls[0].PreferredSize; Style-Bubble $s.form; $s.life = 45; Position-Speech $s; $zt=$null; break } }
       if ($zt) { Say $p $zt 45 }
     }
   }
   else { # idle — 서기 변주
     $opts = @('side_stand','side_proud','side_pawup')
-    $p.frame = $opts[([int]([Math]::Floor($p.anim/45))) % $opts.Count]
+    $p.frame = AF $p ($opts[([int]([Math]::Floor($p.anim/45))) % $opts.Count]) 10
   }
 
   # 프레임 확정 후 y 재계산 — 프레임 간 발높이(FootPad) 차이로 인한 떨림 방지
@@ -682,7 +791,8 @@ function New-Pet($id, $name, $kind, $x) {
           timer=$rng.Next(30,90); anim=0; platform=$null; platLeft=0; jump=$null;
           partner=$null; dragOff=@(0,0); trail=(New-Object System.Collections.ArrayList);
           frame='side_stand'; seq=0; zseq=0; skid=0; camframe='front_happy';
-          dragStage=3; dragHold=0; dragWant=3 }
+          dragStage=3; dragHold=0; dragWant=3;
+          lastKey=''; lastBmp=$null; fadeFrom=$null; fade=0; scratch=$null; scratchG=$null }
   $p.y = [double](Ground-Y $p)
 
   $menu = New-Object System.Windows.Forms.ContextMenuStrip
@@ -754,7 +864,8 @@ function Start-App {
 
   $sw = [System.Diagnostics.Stopwatch]::StartNew()
   Build-Frames
-  ELog ("프레임 로드: " + $Frames.Count + "개, " + [int]$sw.Elapsed.TotalSeconds + "s")
+  Build-Cycles
+  ELog ("프레임 로드: " + $Frames.Count + "개, " + [int]$sw.Elapsed.TotalSeconds + "s / 걷기사이클 nana=" + $script:WalkCyc['nana'].Count + " momo=" + $script:WalkCyc['momo'].Count)
   if ($Frames.Count -eq 0) {
     [System.Windows.Forms.MessageBox]::Show(("assets 폴더에 이미지가 없습니다:`n" + $AssetDir), "GLUCK 펫", 'OK', 'Warning') | Out-Null
     return
