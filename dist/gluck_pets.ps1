@@ -4,9 +4,14 @@
 #  설치 불필요. assets/ 의 실사 PNG + manifest.json 로드.
 #  ※ gen_ps1_photo.py 가 생성. 직접 수정 금지.
 # ================================================================
+param($SplashForm = $null)
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
+
+$script:LogFile = Join-Path (Join-Path $env:LocalAppData 'GLUCK_PETS') 'log.txt'
+function ELog($m) { try { Add-Content -Path $script:LogFile -Value ((Get-Date -Format 'HH:mm:ss.f') + " [pet] " + $m) -Encoding UTF8 } catch {} }
+ELog "엔진 시작"
 
 Add-Type @"
 using System;
@@ -35,6 +40,10 @@ public class GPWin {
   public static void MakeLayered(IntPtr h) {
     int ex = GetWindowLong(h, -20);
     SetWindowLong(h, -20, ex | 0x80000 | 0x80);
+  }
+  public static void UnLayer(IntPtr h) {
+    int ex = GetWindowLong(h, -20);
+    SetWindowLong(h, -20, (ex & ~0x80000) | 0x80);
   }
   public static List<long[]> Platforms(long[] exclude, int workTop) {
     var res = new List<long[]>();
@@ -88,6 +97,7 @@ public class GPLayer {
 "@
 
 [void][GPWin]::SetProcessDPIAware()
+ELog "Add-Type OK"
 
 # ---------------------------------------------------------------- 설정
 $PET_H = 250            # 화면상 펫 캔버스 높이(px) — 200~340 취향껏
@@ -117,9 +127,12 @@ function Sign1($c) { if ($c) { return 1 } else { return -1 } }
 
 # ---------------------------------------------------------------- 에셋 로드
 function Build-Frames {
+  $cnt = 0
   foreach ($im in $Manifest.images) {
+    $cnt++
+    if (($cnt % 10) -eq 0) { [System.Windows.Forms.Application]::DoEvents() }
     $path = Join-Path $AssetDir ($im.file -replace '/', '\')
-    if (-not (Test-Path $path)) { continue }
+    if (-not (Test-Path $path)) { ELog ("누락: " + $im.file); continue }
     $srcImg = [System.Drawing.Image]::FromFile($path)
     $bmp = New-Object System.Drawing.Bitmap($SPR, $SPR, [System.Drawing.Imaging.PixelFormat]::Format32bppPArgb)
     $g = [System.Drawing.Graphics]::FromImage($bmp)
@@ -192,7 +205,8 @@ function Render-Pet($p) {
     try { [GPLayer]::Draw($p.form.Handle, $bmp, [int]$p.x, [int]$p.y); return } catch { $script:UseULW = $false }
   }
   if ($null -eq $p.pb) {
-    # ULW 실패 시 크로마키 폴백을 즉석 구성
+    # ULW 실패 시 크로마키 폴백을 즉석 구성 (레이어드 속성 제거 필수)
+    try { [GPWin]::UnLayer($p.form.Handle) } catch {}
     $p.form.BackColor = $CHROMA; $p.form.TransparencyKey = $CHROMA
     $pb2 = New-Object System.Windows.Forms.PictureBox
     $pb2.Width=$SPR; $pb2.Height=$SPR; $pb2.BackColor=$CHROMA; $pb2.SizeMode='Zoom'
@@ -655,18 +669,43 @@ function New-Pet($id, $name, $kind, $x) {
 function Start-App {
   $createdNew = $false
   $script:Mutex = New-Object System.Threading.Mutex($true, 'GLUCK_PETS_NANA_MOMO_SINGLE', [ref]$createdNew)
-  if (-not $createdNew) { return }
+  if (-not $createdNew) {
+    ELog "이미 실행 중 (뮤텍스) — 종료"
+    [System.Windows.Forms.MessageBox]::Show("나나·모모가 이미 실행 중이에요!`n안 보이면 작업관리자에서 'Windows PowerShell'을 종료 후 다시 실행해 주세요.", "GLUCK 펫", 'OK', 'Information') | Out-Null
+    return
+  }
 
   [System.Windows.Forms.Application]::SetUnhandledExceptionMode([System.Windows.Forms.UnhandledExceptionMode]::CatchException)
   [System.Windows.Forms.Application]::add_ThreadException({
     param($s,$e)
+    ELog ("틱 오류: " + $e.Exception.Message)
     [System.Windows.Forms.MessageBox]::Show(("GLUCK 펫 오류:`n" + $e.Exception.Message + "`n`n" + $e.Exception.StackTrace), "GLUCK 펫", 'OK', 'Error') | Out-Null
     [System.Windows.Forms.Application]::Exit()
   })
 
+  # ULW(픽셀 알파) 사전 테스트 — 실패 시 처음부터 크로마 모드로 생성
+  try {
+    $tf = New-Object System.Windows.Forms.Form
+    $tf.FormBorderStyle='None'; $tf.ShowInTaskbar=$false; $tf.StartPosition='Manual'
+    $tf.Left=-2000; $tf.Top=-2000; $tf.Width=8; $tf.Height=8
+    $null = $tf.Handle
+    [GPWin]::MakeLayered($tf.Handle)
+    $tb = New-Object System.Drawing.Bitmap(8,8,[System.Drawing.Imaging.PixelFormat]::Format32bppPArgb)
+    $tf.Show()
+    [GPLayer]::Draw($tf.Handle, $tb, -2000, -2000)
+    $tf.Close(); $tb.Dispose()
+    $script:UseULW = $true
+    ELog "ULW 테스트 OK (픽셀 알파 모드)"
+  } catch {
+    $script:UseULW = $false
+    ELog ("ULW 실패 → 크로마 모드: " + $_.Exception.Message)
+  }
+
+  $sw = [System.Diagnostics.Stopwatch]::StartNew()
   Build-Frames
+  ELog ("프레임 로드: " + $Frames.Count + "개, " + [int]$sw.Elapsed.TotalSeconds + "s")
   if ($Frames.Count -eq 0) {
-    [System.Windows.Forms.MessageBox]::Show("assets 폴더에 이미지가 없습니다. 설치 폴더를 확인해 주세요.", "GLUCK 펫", 'OK', 'Warning') | Out-Null
+    [System.Windows.Forms.MessageBox]::Show(("assets 폴더에 이미지가 없습니다:`n" + $AssetDir), "GLUCK 펫", 'OK', 'Warning') | Out-Null
     return
   }
   Refresh-Platforms
@@ -681,6 +720,17 @@ function Start-App {
     $i++
   }
   Refresh-Platforms
+  ELog ("펫 " + $App.pets.Count + "마리 표시 완료 (ULW=" + $script:UseULW + ")")
+  if ($null -ne $SplashForm) { try { $SplashForm.Close() } catch {} }
+
+  # 부트스트랩 자기 갱신 (펫 표시 후 조용히 — 다음 실행부터 새 부트스트랩 적용)
+  try {
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+    $bwc = New-Object System.Net.WebClient
+    $bwc.DownloadFile('https://raw.githubusercontent.com/highest14-del/gluck-pets/AI%EA%B4%80%EC%A0%9C/dist/bootstrap.ps1',
+      (Join-Path (Join-Path $env:LocalAppData 'GLUCK_PETS') 'bootstrap.ps1'))
+    ELog "부트스트랩 자기 갱신 OK"
+  } catch { ELog ("부트스트랩 갱신 실패(무시): " + $_.Exception.Message) }
 
   $timer = New-Object System.Windows.Forms.Timer
   $timer.Interval = $TICK_MS

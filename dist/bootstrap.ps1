@@ -1,16 +1,34 @@
 ﻿
 # ================================================================
-#  GLUCK PETS 부트스트랩 — 자동 업데이트 후 실행
-#  공개 저장소(dist/version.json)에서 최신 엔진·이미지를 받아온다.
-#  인터넷이 없으면 로컬 캐시로 그냥 실행.
+#  GLUCK PETS 부트스트랩 — 자동 업데이트 + 로딩표시 + 로그 후 실행
 # ================================================================
-$ErrorActionPreference = 'SilentlyContinue'
+$ErrorActionPreference = 'Continue'
+Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName System.Drawing
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 $Base = 'https://raw.githubusercontent.com/highest14-del/gluck-pets/AI%EA%B4%80%EC%A0%9C/dist'
 $Home_ = Join-Path $env:LocalAppData 'GLUCK_PETS'
 $Assets = Join-Path $Home_ 'assets'
 New-Item -ItemType Directory -Force -Path $Assets | Out-Null
+$Log = Join-Path $Home_ 'log.txt'
+function WLog($m) { try { Add-Content -Path $Log -Value ((Get-Date -Format 'HH:mm:ss.f') + " [boot] " + $m) -Encoding UTF8 } catch {} }
+Set-Content -Path $Log -Value ((Get-Date -Format 'yyyy-MM-dd HH:mm:ss') + " ---- GLUCK PETS 시작 ----") -Encoding UTF8
+
+# 로딩 표시 (작은 안내창)
+$splash = New-Object System.Windows.Forms.Form
+$splash.FormBorderStyle='None'; $splash.ShowInTaskbar=$false; $splash.TopMost=$true
+$splash.StartPosition='Manual'; $splash.BackColor=[System.Drawing.Color]::FromArgb(255,255,250,235)
+$sl = New-Object System.Windows.Forms.Label
+$sl.AutoSize=$true; $sl.Font=New-Object System.Drawing.Font('Malgun Gothic',11)
+$sl.ForeColor=[System.Drawing.Color]::FromArgb(255,90,70,50)
+$sl.Padding=(New-Object System.Windows.Forms.Padding(16,10,16,10))
+$sl.Text='GLUCK 펫 준비 중...'
+$splash.Controls.Add($sl); $splash.ClientSize=$sl.PreferredSize
+$wa=[System.Windows.Forms.Screen]::PrimaryScreen.WorkingArea
+$splash.Left=$wa.Right-$splash.Width-24; $splash.Top=$wa.Bottom-$splash.Height-24
+$splash.Show(); [System.Windows.Forms.Application]::DoEvents()
+function Splash($t) { $sl.Text=$t; $splash.ClientSize=$sl.PreferredSize; [System.Windows.Forms.Application]::DoEvents() }
 
 $wc = New-Object System.Net.WebClient
 $wc.Encoding = [System.Text.Encoding]::UTF8
@@ -20,35 +38,51 @@ $localVer = -1
 if (Test-Path $localVerFile) {
   try { $localVer = (Get-Content $localVerFile -Raw | ConvertFrom-Json).version } catch {}
 }
+WLog "로컬 버전: $localVer"
 
 $remote = $null
-try { $remote = $wc.DownloadString("$Base/version.json") | ConvertFrom-Json } catch {}
+try { $remote = $wc.DownloadString("$Base/version.json") | ConvertFrom-Json; WLog ("원격 버전: " + $remote.version) }
+catch { WLog ("버전 확인 실패(오프라인?): " + $_.Exception.Message) }
 
 if ($null -ne $remote -and [int]$remote.version -gt [int]$localVer) {
   try {
-    # 엔진 + 매니페스트
+    Splash '새 버전 다운로드 중... (최대 1분)'
+    WLog "업데이트 시작 → v$($remote.version)"
     $wc.DownloadFile("$Base/gluck_pets.ps1", (Join-Path $Home_ 'gluck_pets.ps1'))
     $wc.DownloadFile("$Base/manifest.json", (Join-Path $Assets 'manifest.json'))
-    # 이미지 (버전 오를 때만 전체 동기화)
     $man = Get-Content (Join-Path $Assets 'manifest.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+    $n = 0
     foreach ($im in $man.images) {
       $rel = $im.file -replace '/', '\'
       $dst = Join-Path $Assets $rel
       New-Item -ItemType Directory -Force -Path (Split-Path $dst) | Out-Null
-      $url = "$Base/" + $im.file
-      if (-not (Test-Path $dst) -or $remote.force) { $wc.DownloadFile($url, $dst) }
+      if (-not (Test-Path $dst) -or $remote.force) { $wc.DownloadFile(("$Base/" + $im.file), $dst) }
+      $n++
+      if (($n % 12) -eq 0) { Splash ("이미지 받는 중... " + $n + "/" + $man.images.Count); }
     }
     Set-Content -Path $localVerFile -Value ($remote | ConvertTo-Json) -Encoding UTF8
-  } catch {}
+    WLog "업데이트 완료 ($n개 확인)"
+  } catch { WLog ("업데이트 실패: " + $_.Exception.Message) }
 }
 
 $engine = Join-Path $Home_ 'gluck_pets.ps1'
 if (-not (Test-Path $engine)) {
-  # 최초 설치: 배포 zip 폴더의 파일을 로컬로 복사
+  WLog "최초 설치: zip 폴더에서 복사"
   $here = Split-Path -Parent $MyInvocation.MyCommand.Path
   Copy-Item (Join-Path $here 'gluck_pets.ps1') $engine -Force
   if (Test-Path (Join-Path $here 'assets')) {
     Copy-Item (Join-Path $here 'assets\*') $Assets -Recurse -Force
   }
 }
-& $engine
+
+Splash '나나·모모 부르는 중...'
+WLog "엔진 실행"
+try {
+  & $engine -SplashForm $splash
+  WLog "엔진 정상 종료"
+} catch {
+  WLog ("엔진 오류: " + $_.Exception.Message + " || " + $_.ScriptStackTrace)
+  try { $splash.Close() } catch {}
+  [System.Windows.Forms.MessageBox]::Show(("GLUCK 펫 실행 오류:`n" + $_.Exception.Message + "`n`n로그: " + $Log), "GLUCK 펫", 'OK', 'Error') | Out-Null
+}
+try { if (-not $splash.IsDisposed) { $splash.Close() } } catch {}
