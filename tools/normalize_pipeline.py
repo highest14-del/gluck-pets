@@ -112,6 +112,14 @@ def process(job):
         for i in range(0, W * H * 4, 4):
             if rgba[i + 3]:
                 rgba[i] = lut[rgba[i]]; rgba[i + 1] = lut[rgba[i + 1]]; rgba[i + 2] = lut[rgba[i + 2]]
+    # 혀 복구 (v24): 마젠타 매팅이 깎아낸 '반투명 분홍' 픽셀의 알파를 1.9배 복원
+    # (곱셈이라 가장자리 AA 경사는 부드럽게 유지, 혀 본체는 불투명 복귀)
+    for i in range(3, W * H * 4, 4):
+        a = rgba[i]
+        if 25 <= a <= 215:
+            r, g, b = rgba[i - 3], rgba[i - 2], rgba[i - 1]
+            if r > 120 and r > g + 25 and b > g - 30 and b < r + 40 and g < 170:
+                rgba[i] = min(255, int(a * 1.9))
     bb = bbox_alpha(W, H, rgba)
     # 세로로 긴 포즈(대롱대롱·두발서기·정면 등)가 캔버스를 넘으면 머리가 잘림 → 다 들어가게 축소
     bh = bb[3] - bb[1]
@@ -168,23 +176,69 @@ if __name__ == "__main__":
     #  - 정면: 몸이 짧아 면적↓ → 과대 확대. 목표 = side_sit 출력 높이 (같은 앉은 자세의 회전일 뿐)
     #  - 눕기·잠·배: 웅크려 면적↓ → 과대 확대 + 좌우 잘림. 목표 폭 = 서기 폭 (코~꼬리 길이 보존)
     #  - 엎드리기: 스핑크스 = 서기 폭의 1.05배 (앞발이 앞으로 나옴)
-    LY_FLAT = {"sleep", "sleep1", "sleep2", "liedown1", "liedown2", "liedown3", "belly"}
-    LY_PRONE = {"prone1", "prone2", "prone3"}
+    out_stand_h = {d: (bb[3] - bb[1]) * base for d, bb in stand_bb.items()}
+    # v24 자세 분류 (정면 시트 육안 검수 결과):
+    #  - 앉은 정면 → sit 높이 / 선 정면 → 서기 높이×1.04 / 웅크림 → 서기×0.85
+    #  - 매달림(대롱대롱): 몸길이 = 서있는 몸길이 (세로 bbox = stand 폭×1.05) — 드래그 시 작아짐 해결
+    #  - 대각(카메라전환·헤어짐): 선 자세 회전 → 서기×1.03
+    import re as _re0
+    FRONT_SIT = {"beg", "tongue", "wink", "sleepy", "bored"}
+    FRONT_CROUCH = {"scared", "startle"}
+    LY_FLAT = {"sleep", "liedown", "belly"}
+    LY_PRONE = {"prone"}
+    HANG_SIDE = {"hang90", "hang60", "hang30"}
     jobs = []
     for fname in files:
         dog, view, pose, _ = parse(fname)
         bb = stats[fname][1]
+        m0 = _re0.match(r"(.+?)[1-9]$", pose)
+        fb = m0.group(1) if m0 else pose
+        bh = bb[3] - bb[1]
+        bw = bb[2] - bb[0]
         if view == "front":
-            scale = sit_ref[dog] / (bb[3] - bb[1])
-        elif pose in LY_FLAT:
-            scale = out_stand_w[dog] / (bb[2] - bb[0])
-        elif pose in LY_PRONE:
-            scale = out_stand_w[dog] * 1.05 / (bb[2] - bb[0])
+            if fb == "hang0":
+                scale = out_stand_w[dog] * 1.05 / bh
+            elif fb in FRONT_SIT:
+                scale = sit_ref[dog] / bh
+            elif fb in FRONT_CROUCH:
+                scale = out_stand_h[dog] * 0.85 / bh
+            else:
+                scale = out_stand_h[dog] * 1.04 / bh
+        elif view in ("diag60", "diag30"):
+            scale = out_stand_h[dog] * 1.03 / bh
+        elif fb in HANG_SIDE:
+            scale = out_stand_w[dog] * 1.05 / bh
+        elif fb in LY_FLAT:
+            scale = out_stand_w[dog] / bw
+        elif fb in LY_PRONE:
+            scale = out_stand_w[dog] * 1.05 / bw
         else:
             f = anchors[dog] / math.sqrt(stats[fname][0])
             f = max(CLAMP[0], min(CLAMP[1], f))
             scale = base * f
         jobs.append((fname, scale))
+
+    # 시퀀스 공통 스케일 (지시서 §6.5): 같은 (강아지, 뷰, 동작가족)은 하나의 scale 공유
+    # → 프레임 간 몸 크기 펌핑 방지. 가족 scale = min(중앙값, 가족 전원의 잘림 한계)
+    import re as _re
+    fam = {}
+    for fname, scale in jobs:
+        dog, view, pose, _ = parse(fname)
+        m = _re.match(r"(.+?)[1-9]$", pose)
+        fbase = m.group(1) if m else pose
+        bb = stats[fname][1]
+        fit_h = (ANCHOR_Y - 6.0) / (bb[3] - bb[1])
+        fit_w = (TARGET - 10.0) / (bb[2] - bb[0])
+        fam.setdefault((dog, view, fbase), []).append((fname, scale, min(fit_h, fit_w)))
+    jobs = []
+    for key, lst in fam.items():
+        if len(lst) >= 2:
+            scales = sorted(s for _, s, _ in lst)
+            fs = min(scales[len(scales) // 2], min(c for _, _, c in lst))
+            for fname, _, _ in lst:
+                jobs.append((fname, fs))
+        else:
+            jobs.append((lst[0][0], lst[0][1]))
     with Pool(4) as pool:
         recs = []
         for i, rec in enumerate(pool.imap_unordered(process, jobs)):

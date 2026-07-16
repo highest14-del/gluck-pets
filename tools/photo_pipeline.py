@@ -19,7 +19,7 @@ QA = "/tmp/claude-0/-home-user-gluck-hr/d9f4f73a-7338-571c-8913-82b01575717c/scr
 TARGET = 384
 
 DOG = {"나나": "nana", "모모": "momo"}
-VIEW = {"옆": "side", "정면": "front"}
+VIEW = {"옆": "side", "정면": "front", "대각60": "diag60", "대각30": "diag30"}
 POSE = {
     "걷기": "walk", "걷기1": "walk1", "걷기2": "walk2", "걷기3": "walk3", "걷기4": "walk4",
     "달리기1": "run1", "달리기2": "run2", "달리기3": "run3", "구르기": "roll", "귀긁기": "scratch", "급정지": "skid",
@@ -33,6 +33,11 @@ POSE = {
     "자기": "sleep", "재채기": "sneeze", "점프": "jump", "종종걸음": "trot",
     "지침": "tired", "착지": "land", "코핥기": "licknose", "하품": "yawn",
     "엎드리기": "prone", "눕기": "liedown", "일어나기": "rise", "주저앉기": "sitdown",
+    "심심호소": "bored", "카메라전환": "camturn", "헤어짐아쉬움": "farewell",
+    "시선추적": "gaze", "인사하기": "greeting", "질투반응": "jealous",
+    "코비비기": "nuzzle", "앞발인사": "pawgreet", "쓰다듬기": "pet",
+    "놀자초대": "playinvite", "칭찬세리머니": "praise", "톡건드리기": "tap",
+    "창문두드리기": "windowknock", "창가올라보기": "windowpeek",
     "겁먹음": "scared", "궁금": "curious", "메롱": "tongue", "슬픔": "sad",
     "애원": "beg", "윙크": "wink", "졸림": "sleepy", "집중": "focus",
     "크게웃기": "laugh", "행복": "happy", "화남": "angry",

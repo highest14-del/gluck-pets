@@ -10,16 +10,16 @@
    "kor": "카메라전환3",
    "file": "img/momo/diag30_camturn3.png",
    "bbox": [
-    80,
-    32,
-    304,
+    102,
+    94,
+    282,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 123816
+   "size": 85157
   },
   {
    "key": "momo_diag30_camturn4",
@@ -29,16 +29,16 @@
    "kor": "카메라전환4",
    "file": "img/momo/diag30_camturn4.png",
    "bbox": [
-    107,
-    14,
-    277,
+    123,
+    80,
+    261,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 109056
+   "size": 74685
   },
   {
    "key": "momo_diag30_farewell3",
@@ -48,16 +48,16 @@
    "kor": "헤어짐아쉬움3",
    "file": "img/momo/diag30_farewell3.png",
    "bbox": [
-    82,
-    47,
-    302,
+    99,
+    94,
+    285,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 105050
+   "size": 78513
   },
   {
    "key": "momo_diag60_camturn1",
@@ -67,16 +67,16 @@
    "kor": "카메라전환1",
    "file": "img/momo/diag60_camturn1.png",
    "bbox": [
-    50,
-    101,
-    334,
+    46,
+    94,
+    338,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 106820
+   "size": 112253
   },
   {
    "key": "momo_diag60_camturn2",
@@ -86,16 +86,16 @@
    "kor": "카메라전환2",
    "file": "img/momo/diag60_camturn2.png",
    "bbox": [
-    54,
-    82,
-    330,
+    50,
+    74,
+    334,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 111430
+   "size": 117522
   },
   {
    "key": "momo_diag60_farewell2",
@@ -105,16 +105,16 @@
    "kor": "헤어짐아쉬움2",
    "file": "img/momo/diag60_farewell2.png",
    "bbox": [
-    76,
-    55,
-    309,
+    91,
+    94,
+    294,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 110152
+   "size": 86522
   },
   {
    "key": "momo_front_angry",
@@ -124,16 +124,16 @@
    "kor": "화남",
    "file": "img/momo/front_angry.png",
    "bbox": [
-    113,
-    37,
-    271,
+    126,
+    91,
+    257,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 99635
+   "size": 71687
   },
   {
    "key": "momo_front_beg",
@@ -152,7 +152,7 @@
     1024,
     1024
    ],
-   "size": 90557
+   "size": 90554
   },
   {
    "key": "momo_front_bored1",
@@ -171,7 +171,7 @@
     1024,
     1024
    ],
-   "size": 86592
+   "size": 86588
   },
   {
    "key": "momo_front_bored2",
@@ -190,7 +190,7 @@
     1024,
     1024
    ],
-   "size": 108093
+   "size": 108094
   },
   {
    "key": "momo_front_bored3",
@@ -209,7 +209,7 @@
     1024,
     1024
    ],
-   "size": 101076
+   "size": 101075
   },
   {
    "key": "momo_front_bored4",
@@ -228,7 +228,7 @@
     1024,
     1024
    ],
-   "size": 94821
+   "size": 94820
   },
   {
    "key": "momo_front_bored5",
@@ -247,7 +247,7 @@
     1024,
     1024
    ],
-   "size": 128863
+   "size": 128852
   },
   {
    "key": "momo_front_curious",
@@ -257,16 +257,16 @@
    "kor": "궁금",
    "file": "img/momo/front_curious.png",
    "bbox": [
-    121,
-    37,
-    263,
+    133,
+    91,
+    251,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 87416
+   "size": 62613
   },
   {
    "key": "momo_front_farewell4",
@@ -276,16 +276,16 @@
    "kor": "헤어짐아쉬움4",
    "file": "img/momo/front_farewell4.png",
    "bbox": [
-    115,
-    37,
-    269,
+    128,
+    91,
+    256,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 97208
+   "size": 69518
   },
   {
    "key": "momo_front_focus",
@@ -295,16 +295,16 @@
    "kor": "집중",
    "file": "img/momo/front_focus.png",
    "bbox": [
-    122,
-    37,
-    262,
+    134,
+    91,
+    250,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 85736
+   "size": 61803
   },
   {
    "key": "momo_front_gaze1",
@@ -314,16 +314,16 @@
    "kor": "시선추적1",
    "file": "img/momo/front_gaze1.png",
    "bbox": [
-    117,
-    42,
-    267,
+    130,
+    96,
+    254,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 84965
+   "size": 60767
   },
   {
    "key": "momo_front_gaze2",
@@ -333,16 +333,16 @@
    "kor": "시선추적2",
    "file": "img/momo/front_gaze2.png",
    "bbox": [
-    121,
-    37,
-    264,
+    133,
+    91,
+    251,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 84153
+   "size": 60412
   },
   {
    "key": "momo_front_gaze3",
@@ -352,16 +352,16 @@
    "kor": "시선추적3",
    "file": "img/momo/front_gaze3.png",
    "bbox": [
-    121,
-    36,
-    263,
+    134,
+    91,
+    251,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 86690
+   "size": 62356
   },
   {
    "key": "momo_front_gaze4",
@@ -371,16 +371,16 @@
    "kor": "시선추적4",
    "file": "img/momo/front_gaze4.png",
    "bbox": [
-    118,
-    39,
-    266,
+    131,
+    93,
+    253,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 85059
+   "size": 61055
   },
   {
    "key": "momo_front_gaze5",
@@ -390,16 +390,16 @@
    "kor": "시선추적5",
    "file": "img/momo/front_gaze5.png",
    "bbox": [
-    116,
-    32,
-    268,
+    129,
+    88,
+    255,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 85434
+   "size": 61267
   },
   {
    "key": "momo_front_gaze6",
@@ -409,16 +409,16 @@
    "kor": "시선추적6",
    "file": "img/momo/front_gaze6.png",
    "bbox": [
-    106,
-    32,
-    278,
+    120,
+    88,
+    263,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 93305
+   "size": 67104
   },
   {
    "key": "momo_front_hang0",
@@ -428,16 +428,16 @@
    "kor": "대롱대롱",
    "file": "img/momo/front_hang0.png",
    "bbox": [
-    139,
-    37,
-    245,
+    136,
+    18,
+    248,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 68431
+   "size": 75706
   },
   {
    "key": "momo_front_happy",
@@ -447,16 +447,16 @@
    "kor": "행복",
    "file": "img/momo/front_happy.png",
    "bbox": [
-    104,
-    37,
-    281,
+    119,
+    91,
+    265,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 109129
+   "size": 77804
   },
   {
    "key": "momo_front_jealous1",
@@ -466,16 +466,16 @@
    "kor": "질투반응1",
    "file": "img/momo/front_jealous1.png",
    "bbox": [
-    108,
-    18,
-    277,
+    122,
+    75,
+    262,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 97392
+   "size": 70210
   },
   {
    "key": "momo_front_jealous2",
@@ -485,16 +485,16 @@
    "kor": "질투반응2",
    "file": "img/momo/front_jealous2.png",
    "bbox": [
-    114,
-    30,
-    269,
+    128,
+    86,
+    256,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 101188
+   "size": 73120
   },
   {
    "key": "momo_front_jealous3",
@@ -504,16 +504,16 @@
    "kor": "질투반응3",
    "file": "img/momo/front_jealous3.png",
    "bbox": [
-    109,
-    44,
-    276,
+    123,
+    97,
+    261,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 101865
+   "size": 73071
   },
   {
    "key": "momo_front_jealous4",
@@ -523,16 +523,16 @@
    "kor": "질투반응4",
    "file": "img/momo/front_jealous4.png",
    "bbox": [
-    120,
-    49,
-    264,
+    133,
+    101,
+    252,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 85741
+   "size": 62028
   },
   {
    "key": "momo_front_jealous5",
@@ -542,16 +542,16 @@
    "kor": "질투반응5",
    "file": "img/momo/front_jealous5.png",
    "bbox": [
-    121,
-    37,
-    263,
+    133,
+    91,
+    251,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 90108
+   "size": 65092
   },
   {
    "key": "momo_front_laugh",
@@ -561,16 +561,16 @@
    "kor": "크게웃기",
    "file": "img/momo/front_laugh.png",
    "bbox": [
-    112,
-    37,
-    272,
+    126,
+    91,
+    258,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 93278
+   "size": 67296
   },
   {
    "key": "momo_front_pet1",
@@ -580,16 +580,16 @@
    "kor": "쓰다듬기1",
    "file": "img/momo/front_pet1.png",
    "bbox": [
-    126,
-    43,
-    258,
+    138,
+    97,
+    247,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 85002
+   "size": 61043
   },
   {
    "key": "momo_front_pet2",
@@ -599,16 +599,16 @@
    "kor": "쓰다듬기2",
    "file": "img/momo/front_pet2.png",
    "bbox": [
-    123,
-    37,
-    262,
+    135,
+    91,
+    250,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 82520
+   "size": 59188
   },
   {
    "key": "momo_front_pet3",
@@ -618,16 +618,16 @@
    "kor": "쓰다듬기3",
    "file": "img/momo/front_pet3.png",
    "bbox": [
-    120,
-    32,
-    264,
+    133,
+    87,
+    251,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 85585
+   "size": 61487
   },
   {
    "key": "momo_front_pet4",
@@ -637,16 +637,16 @@
    "kor": "쓰다듬기4",
    "file": "img/momo/front_pet4.png",
    "bbox": [
-    113,
-    50,
-    271,
+    126,
+    102,
+    258,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 92861
+   "size": 66922
   },
   {
    "key": "momo_front_pet5",
@@ -656,16 +656,16 @@
    "kor": "쓰다듬기5",
    "file": "img/momo/front_pet5.png",
    "bbox": [
-    121,
-    31,
-    263,
+    133,
+    87,
+    251,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 88814
+   "size": 64090
   },
   {
    "key": "momo_front_pet6",
@@ -675,16 +675,16 @@
    "kor": "쓰다듬기6",
    "file": "img/momo/front_pet6.png",
    "bbox": [
-    123,
-    33,
-    261,
+    135,
+    88,
+    249,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 87873
+   "size": 63912
   },
   {
    "key": "momo_front_praise1",
@@ -694,16 +694,16 @@
    "kor": "칭찬세리머니1",
    "file": "img/momo/front_praise1.png",
    "bbox": [
-    122,
-    37,
-    262,
+    134,
+    92,
+    250,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 97190
+   "size": 69616
   },
   {
    "key": "momo_front_praise2",
@@ -713,16 +713,16 @@
    "kor": "칭찬세리머니2",
    "file": "img/momo/front_praise2.png",
    "bbox": [
-    115,
-    25,
-    269,
+    128,
+    82,
+    255,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 99909
+   "size": 71494
   },
   {
    "key": "momo_front_praise3",
@@ -732,16 +732,16 @@
    "kor": "칭찬세리머니3",
    "file": "img/momo/front_praise3.png",
    "bbox": [
-    124,
-    59,
-    259,
+    136,
+    109,
+    248,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 88829
+   "size": 63560
   },
   {
    "key": "momo_front_praise4",
@@ -751,16 +751,16 @@
    "kor": "칭찬세리머니4",
    "file": "img/momo/front_praise4.png",
    "bbox": [
-    103,
-    18,
-    281,
+    118,
+    76,
+    265,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 111490
+   "size": 79668
   },
   {
    "key": "momo_front_sad",
@@ -770,16 +770,16 @@
    "kor": "슬픔",
    "file": "img/momo/front_sad.png",
    "bbox": [
-    106,
-    37,
-    278,
+    121,
+    91,
+    263,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 105104
+   "size": 75665
   },
   {
    "key": "momo_front_scared",
@@ -789,16 +789,16 @@
    "kor": "겁먹음",
    "file": "img/momo/front_scared.png",
    "bbox": [
-    82,
-    37,
-    302,
+    117,
+    139,
+    266,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 140694
+   "size": 69948
   },
   {
    "key": "momo_front_sleepy",
@@ -827,16 +827,16 @@
    "kor": "빤히보기",
    "file": "img/momo/front_stare.png",
    "bbox": [
-    123,
-    37,
-    261,
+    135,
+    91,
+    249,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 85600
+   "size": 61749
   },
   {
    "key": "momo_front_startle",
@@ -846,16 +846,16 @@
    "kor": "놀람",
    "file": "img/momo/front_startle.png",
    "bbox": [
-    109,
-    37,
-    275,
+    136,
+    139,
+    248,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 107879
+   "size": 54042
   },
   {
    "key": "momo_front_tap1",
@@ -865,16 +865,16 @@
    "kor": "톡건드리기1",
    "file": "img/momo/front_tap1.png",
    "bbox": [
-    121,
-    37,
-    263,
+    133,
+    91,
+    251,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 88556
+   "size": 63981
   },
   {
    "key": "momo_front_tap2",
@@ -884,16 +884,16 @@
    "kor": "톡건드리기2",
    "file": "img/momo/front_tap2.png",
    "bbox": [
-    102,
-    30,
-    282,
+    118,
+    86,
+    267,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 111164
+   "size": 79478
   },
   {
    "key": "momo_front_tap3",
@@ -903,16 +903,16 @@
    "kor": "톡건드리기3",
    "file": "img/momo/front_tap3.png",
    "bbox": [
-    115,
-    21,
-    268,
+    129,
+    78,
+    255,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 101002
+   "size": 72014
   },
   {
    "key": "momo_front_tap4",
@@ -922,16 +922,16 @@
    "kor": "톡건드리기4",
    "file": "img/momo/front_tap4.png",
    "bbox": [
-    120,
-    39,
-    263,
+    133,
+    93,
+    251,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 92715
+   "size": 66688
   },
   {
    "key": "momo_front_tongue",
@@ -950,7 +950,7 @@
     1024,
     1024
    ],
-   "size": 93436
+   "size": 93437
   },
   {
    "key": "momo_front_wink",
@@ -969,7 +969,7 @@
     1024,
     1024
    ],
-   "size": 94062
+   "size": 94069
   },
   {
    "key": "momo_side_belly",
@@ -988,7 +988,7 @@
     1024,
     1024
    ],
-   "size": 70479
+   "size": 70472
   },
   {
    "key": "momo_side_crouch",
@@ -1007,7 +1007,7 @@
     1024,
     1024
    ],
-   "size": 114925
+   "size": 114905
   },
   {
    "key": "momo_side_excited",
@@ -1026,7 +1026,7 @@
     1024,
     1024
    ],
-   "size": 115793
+   "size": 115755
   },
   {
    "key": "momo_side_excited1",
@@ -1045,7 +1045,7 @@
     1024,
     1024
    ],
-   "size": 110711
+   "size": 110708
   },
   {
    "key": "momo_side_excited2",
@@ -1064,7 +1064,7 @@
     1024,
     1024
    ],
-   "size": 111756
+   "size": 111759
   },
   {
    "key": "momo_side_excited3",
@@ -1083,7 +1083,7 @@
     1024,
     1024
    ],
-   "size": 111721
+   "size": 111717
   },
   {
    "key": "momo_side_excited4",
@@ -1102,7 +1102,7 @@
     1024,
     1024
    ],
-   "size": 108831
+   "size": 108824
   },
   {
    "key": "momo_side_excited5",
@@ -1140,7 +1140,7 @@
     1024,
     1024
    ],
-   "size": 111555
+   "size": 111557
   },
   {
    "key": "momo_side_farewell1",
@@ -1178,7 +1178,7 @@
     1024,
     1024
    ],
-   "size": 113773
+   "size": 113760
   },
   {
    "key": "momo_side_greeting2",
@@ -1197,7 +1197,7 @@
     1024,
     1024
    ],
-   "size": 110440
+   "size": 110431
   },
   {
    "key": "momo_side_greeting3",
@@ -1216,7 +1216,7 @@
     1024,
     1024
    ],
-   "size": 110376
+   "size": 110372
   },
   {
    "key": "momo_side_greeting4",
@@ -1235,7 +1235,7 @@
     1024,
     1024
    ],
-   "size": 119777
+   "size": 119761
   },
   {
    "key": "momo_side_greeting5",
@@ -1254,7 +1254,7 @@
     1024,
     1024
    ],
-   "size": 105847
+   "size": 105833
   },
   {
    "key": "momo_side_greeting6",
@@ -1273,7 +1273,7 @@
     1024,
     1024
    ],
-   "size": 115830
+   "size": 115836
   },
   {
    "key": "momo_side_growl",
@@ -1285,14 +1285,14 @@
    "bbox": [
     36,
     79,
-    347,
+    348,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 115305
+   "size": 115293
   },
   {
    "key": "momo_side_hang30",
@@ -1302,16 +1302,16 @@
    "kor": "대롱대롱",
    "file": "img/momo/side_hang30.png",
    "bbox": [
-    125,
-    6,
-    259,
+    128,
+    18,
+    257,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 85318,
+   "size": 79980,
    "facing": "L"
   },
   {
@@ -1322,16 +1322,16 @@
    "kor": "대롱대롱",
    "file": "img/momo/side_hang60.png",
    "bbox": [
-    104,
-    6,
-    280,
+    107,
+    18,
+    277,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 93780,
+   "size": 87912,
    "facing": "L"
   },
   {
@@ -1342,16 +1342,16 @@
    "kor": "대롱대롱",
    "file": "img/momo/side_hang90.png",
    "bbox": [
-    91,
-    7,
-    293,
+    95,
+    19,
+    290,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 99045,
+   "size": 92723,
    "facing": "L"
   },
   {
@@ -1371,7 +1371,7 @@
     1024,
     1024
    ],
-   "size": 110306
+   "size": 110284
   },
   {
    "key": "momo_side_jump1",
@@ -1390,7 +1390,7 @@
     1024,
     1024
    ],
-   "size": 108015
+   "size": 108018
   },
   {
    "key": "momo_side_jump2",
@@ -1409,7 +1409,7 @@
     1024,
     1024
    ],
-   "size": 102581
+   "size": 102566
   },
   {
    "key": "momo_side_jump3",
@@ -1428,7 +1428,7 @@
     1024,
     1024
    ],
-   "size": 85007
+   "size": 85001
   },
   {
    "key": "momo_side_jump4",
@@ -1447,7 +1447,7 @@
     1024,
     1024
    ],
-   "size": 124860
+   "size": 124861
   },
   {
    "key": "momo_side_jump5",
@@ -1466,7 +1466,7 @@
     1024,
     1024
    ],
-   "size": 98765
+   "size": 98760
   },
   {
    "key": "momo_side_jump6",
@@ -1485,7 +1485,7 @@
     1024,
     1024
    ],
-   "size": 84826
+   "size": 84817
   },
   {
    "key": "momo_side_jump7",
@@ -1504,7 +1504,7 @@
     1024,
     1024
    ],
-   "size": 86534
+   "size": 86531
   },
   {
    "key": "momo_side_jump8",
@@ -1523,7 +1523,7 @@
     1024,
     1024
    ],
-   "size": 112403
+   "size": 112390
   },
   {
    "key": "momo_side_land",
@@ -1542,7 +1542,7 @@
     1024,
     1024
    ],
-   "size": 112586
+   "size": 112557
   },
   {
    "key": "momo_side_land1",
@@ -1561,7 +1561,7 @@
     1024,
     1024
    ],
-   "size": 94356
+   "size": 94357
   },
   {
    "key": "momo_side_land2",
@@ -1580,7 +1580,7 @@
     1024,
     1024
    ],
-   "size": 107169
+   "size": 107164
   },
   {
    "key": "momo_side_land3",
@@ -1599,7 +1599,7 @@
     1024,
     1024
    ],
-   "size": 95751
+   "size": 95744
   },
   {
    "key": "momo_side_land4",
@@ -1618,7 +1618,7 @@
     1024,
     1024
    ],
-   "size": 107788
+   "size": 107784
   },
   {
    "key": "momo_side_licknose",
@@ -1637,7 +1637,7 @@
     1024,
     1024
    ],
-   "size": 114080
+   "size": 114058
   },
   {
    "key": "momo_side_lickpaw",
@@ -1656,7 +1656,7 @@
     1024,
     1024
    ],
-   "size": 111181
+   "size": 111177
   },
   {
    "key": "momo_side_liedown1",
@@ -1666,16 +1666,16 @@
    "kor": "눕기1",
    "file": "img/momo/side_liedown1.png",
    "bbox": [
-    9,
-    173,
-    375,
+    29,
+    192,
+    355,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 107227
+   "size": 87277
   },
   {
    "key": "momo_side_liedown2",
@@ -1685,16 +1685,16 @@
    "kor": "눕기2",
    "file": "img/momo/side_liedown2.png",
    "bbox": [
-    8,
-    223,
-    376,
+    28,
+    237,
+    356,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 89098
+   "size": 72520
   },
   {
    "key": "momo_side_liedown3",
@@ -1704,16 +1704,16 @@
    "kor": "눕기3",
    "file": "img/momo/side_liedown3.png",
    "bbox": [
-    14,
-    210,
-    370,
+    34,
+    226,
+    351,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 93015
+   "size": 75707
   },
   {
    "key": "momo_side_liedown4",
@@ -1723,16 +1723,16 @@
    "kor": "눕기4",
    "file": "img/momo/side_liedown4.png",
    "bbox": [
-    14,
-    169,
-    371,
+    33,
+    189,
+    352,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 105593
+   "size": 86141
   },
   {
    "key": "momo_side_liedown5",
@@ -1742,16 +1742,16 @@
    "kor": "눕기5",
    "file": "img/momo/side_liedown5.png",
    "bbox": [
-    10,
-    171,
-    374,
+    30,
+    190,
+    354,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 107560
+   "size": 87334
   },
   {
    "key": "momo_side_liedown6",
@@ -1761,16 +1761,16 @@
    "kor": "눕기6",
    "file": "img/momo/side_liedown6.png",
    "bbox": [
-    16,
-    226,
-    369,
+    35,
+    239,
+    350,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 87353
+   "size": 71116
   },
   {
    "key": "momo_side_lookback",
@@ -1789,7 +1789,7 @@
     1024,
     1024
    ],
-   "size": 107514
+   "size": 107504
   },
   {
    "key": "momo_side_lookdown",
@@ -1808,7 +1808,7 @@
     1024,
     1024
    ],
-   "size": 105923
+   "size": 105924
   },
   {
    "key": "momo_side_lookup",
@@ -1827,7 +1827,7 @@
     1024,
     1024
    ],
-   "size": 105713
+   "size": 105707
   },
   {
    "key": "momo_side_nuzzle1",
@@ -1865,7 +1865,7 @@
     1024,
     1024
    ],
-   "size": 104389
+   "size": 104398
   },
   {
    "key": "momo_side_nuzzle3",
@@ -1884,7 +1884,7 @@
     1024,
     1024
    ],
-   "size": 117336
+   "size": 117334
   },
   {
    "key": "momo_side_nuzzle4",
@@ -1903,7 +1903,7 @@
     1024,
     1024
    ],
-   "size": 105026
+   "size": 105023
   },
   {
    "key": "momo_side_nuzzle5",
@@ -1922,7 +1922,7 @@
     1024,
     1024
    ],
-   "size": 100716
+   "size": 100717
   },
   {
    "key": "momo_side_nuzzle6",
@@ -1941,7 +1941,7 @@
     1024,
     1024
    ],
-   "size": 117595
+   "size": 117591
   },
   {
    "key": "momo_side_pawgreet1",
@@ -1960,7 +1960,7 @@
     1024,
     1024
    ],
-   "size": 106862
+   "size": 106854
   },
   {
    "key": "momo_side_pawgreet2",
@@ -1979,7 +1979,7 @@
     1024,
     1024
    ],
-   "size": 112253
+   "size": 112251
   },
   {
    "key": "momo_side_pawgreet3",
@@ -2017,7 +2017,7 @@
     1024,
     1024
    ],
-   "size": 127448
+   "size": 127452
   },
   {
    "key": "momo_side_pawgreet5",
@@ -2036,7 +2036,7 @@
     1024,
     1024
    ],
-   "size": 119330
+   "size": 119319
   },
   {
    "key": "momo_side_pawup",
@@ -2055,7 +2055,7 @@
     1024,
     1024
    ],
-   "size": 115065
+   "size": 115063
   },
   {
    "key": "momo_side_playinvite1",
@@ -2074,7 +2074,7 @@
     1024,
     1024
    ],
-   "size": 105625
+   "size": 105614
   },
   {
    "key": "momo_side_playinvite2",
@@ -2093,7 +2093,7 @@
     1024,
     1024
    ],
-   "size": 130608
+   "size": 130604
   },
   {
    "key": "momo_side_playinvite3",
@@ -2112,7 +2112,7 @@
     1024,
     1024
    ],
-   "size": 110845
+   "size": 110835
   },
   {
    "key": "momo_side_playinvite4",
@@ -2131,7 +2131,7 @@
     1024,
     1024
    ],
-   "size": 114814
+   "size": 114812
   },
   {
    "key": "momo_side_playinvite5",
@@ -2150,7 +2150,7 @@
     1024,
     1024
    ],
-   "size": 124497
+   "size": 124492
   },
   {
    "key": "momo_side_pounce",
@@ -2169,7 +2169,7 @@
     1024,
     1024
    ],
-   "size": 108809
+   "size": 108781
   },
   {
    "key": "momo_side_prone1",
@@ -2179,16 +2179,16 @@
    "kor": "엎드리기1",
    "file": "img/momo/side_prone1.png",
    "bbox": [
-    23,
-    144,
-    361,
+    24,
+    145,
+    360,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 107954
+   "size": 106875
   },
   {
    "key": "momo_side_prone2",
@@ -2198,8 +2198,8 @@
    "kor": "엎드리기2",
    "file": "img/momo/side_prone2.png",
    "bbox": [
-    24,
-    173,
+    25,
+    174,
     360,
     353
    ],
@@ -2207,7 +2207,7 @@
     1024,
     1024
    ],
-   "size": 110270
+   "size": 109305
   },
   {
    "key": "momo_side_prone3",
@@ -2217,16 +2217,16 @@
    "kor": "엎드리기3",
    "file": "img/momo/side_prone3.png",
    "bbox": [
-    19,
-    175,
-    365,
+    20,
+    176,
+    364,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 97620
+   "size": 96669
   },
   {
    "key": "momo_side_prone4",
@@ -2236,16 +2236,16 @@
    "kor": "엎드리기4",
    "file": "img/momo/side_prone4.png",
    "bbox": [
-    25,
-    144,
-    360,
+    26,
+    145,
+    359,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 107011
+   "size": 105758
   },
   {
    "key": "momo_side_prone5",
@@ -2255,16 +2255,16 @@
    "kor": "엎드리기5",
    "file": "img/momo/side_prone5.png",
    "bbox": [
-    22,
-    148,
-    362,
+    23,
+    149,
+    361,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 109246
+   "size": 108277
   },
   {
    "key": "momo_side_prone6",
@@ -2274,8 +2274,8 @@
    "kor": "엎드리기6",
    "file": "img/momo/side_prone6.png",
    "bbox": [
-    24,
-    162,
+    25,
+    163,
     360,
     353
    ],
@@ -2283,7 +2283,7 @@
     1024,
     1024
    ],
-   "size": 110236
+   "size": 109196
   },
   {
    "key": "momo_side_proud",
@@ -2302,7 +2302,7 @@
     1024,
     1024
    ],
-   "size": 113448
+   "size": 113447
   },
   {
    "key": "momo_side_rise1",
@@ -2321,7 +2321,7 @@
     1024,
     1024
    ],
-   "size": 108227
+   "size": 108206
   },
   {
    "key": "momo_side_rise2",
@@ -2340,7 +2340,7 @@
     1024,
     1024
    ],
-   "size": 111789
+   "size": 111771
   },
   {
    "key": "momo_side_rise3",
@@ -2359,7 +2359,7 @@
     1024,
     1024
    ],
-   "size": 94991
+   "size": 94994
   },
   {
    "key": "momo_side_rise4",
@@ -2378,7 +2378,7 @@
     1024,
     1024
    ],
-   "size": 109651
+   "size": 109647
   },
   {
    "key": "momo_side_rise5",
@@ -2397,7 +2397,7 @@
     1024,
     1024
    ],
-   "size": 107875
+   "size": 107881
   },
   {
    "key": "momo_side_rise6",
@@ -2416,7 +2416,7 @@
     1024,
     1024
    ],
-   "size": 110531
+   "size": 110533
   },
   {
    "key": "momo_side_roll",
@@ -2435,7 +2435,7 @@
     1024,
     1024
    ],
-   "size": 111108
+   "size": 111078
   },
   {
    "key": "momo_side_run",
@@ -2454,7 +2454,7 @@
     1024,
     1024
    ],
-   "size": 86938
+   "size": 86931
   },
   {
    "key": "momo_side_run1",
@@ -2473,7 +2473,7 @@
     1024,
     1024
    ],
-   "size": 80764
+   "size": 80749
   },
   {
    "key": "momo_side_run2",
@@ -2492,7 +2492,7 @@
     1024,
     1024
    ],
-   "size": 82121
+   "size": 82097
   },
   {
    "key": "momo_side_run3",
@@ -2511,7 +2511,7 @@
     1024,
     1024
    ],
-   "size": 91350
+   "size": 91347
   },
   {
    "key": "momo_side_run4",
@@ -2530,7 +2530,7 @@
     1024,
     1024
    ],
-   "size": 91315
+   "size": 91303
   },
   {
    "key": "momo_side_run5",
@@ -2549,7 +2549,7 @@
     1024,
     1024
    ],
-   "size": 81268
+   "size": 81250
   },
   {
    "key": "momo_side_run6",
@@ -2568,7 +2568,7 @@
     1024,
     1024
    ],
-   "size": 85639
+   "size": 85632
   },
   {
    "key": "momo_side_run7",
@@ -2587,7 +2587,7 @@
     1024,
     1024
    ],
-   "size": 81555
+   "size": 81538
   },
   {
    "key": "momo_side_run8",
@@ -2606,7 +2606,7 @@
     1024,
     1024
    ],
-   "size": 91775
+   "size": 91745
   },
   {
    "key": "momo_side_scratch",
@@ -2625,7 +2625,7 @@
     1024,
     1024
    ],
-   "size": 134039
+   "size": 134027
   },
   {
    "key": "momo_side_scratch1",
@@ -2644,7 +2644,7 @@
     1024,
     1024
    ],
-   "size": 109054
+   "size": 109044
   },
   {
    "key": "momo_side_scratch2",
@@ -2663,7 +2663,7 @@
     1024,
     1024
    ],
-   "size": 127700
+   "size": 127703
   },
   {
    "key": "momo_side_scratch3",
@@ -2682,7 +2682,7 @@
     1024,
     1024
    ],
-   "size": 111749
+   "size": 111744
   },
   {
    "key": "momo_side_scratch4",
@@ -2701,7 +2701,7 @@
     1024,
     1024
    ],
-   "size": 109534
+   "size": 109531
   },
   {
    "key": "momo_side_scratch5",
@@ -2720,7 +2720,7 @@
     1024,
     1024
    ],
-   "size": 108580
+   "size": 108574
   },
   {
    "key": "momo_side_scratch6",
@@ -2739,7 +2739,7 @@
     1024,
     1024
    ],
-   "size": 110310
+   "size": 110299
   },
   {
    "key": "momo_side_shake",
@@ -2758,7 +2758,7 @@
     1024,
     1024
    ],
-   "size": 139320
+   "size": 139317
   },
   {
    "key": "momo_side_shake1",
@@ -2777,7 +2777,7 @@
     1024,
     1024
    ],
-   "size": 111244
+   "size": 111237
   },
   {
    "key": "momo_side_shake2",
@@ -2796,7 +2796,7 @@
     1024,
     1024
    ],
-   "size": 123717
+   "size": 123719
   },
   {
    "key": "momo_side_shake3",
@@ -2815,7 +2815,7 @@
     1024,
     1024
    ],
-   "size": 121222
+   "size": 121230
   },
   {
    "key": "momo_side_shake4",
@@ -2834,7 +2834,7 @@
     1024,
     1024
    ],
-   "size": 110269
+   "size": 110267
   },
   {
    "key": "momo_side_shake5",
@@ -2872,7 +2872,7 @@
     1024,
     1024
    ],
-   "size": 113883
+   "size": 113878
   },
   {
    "key": "momo_side_shake7",
@@ -2891,7 +2891,7 @@
     1024,
     1024
    ],
-   "size": 114941
+   "size": 114942
   },
   {
    "key": "momo_side_shake8",
@@ -2910,7 +2910,7 @@
     1024,
     1024
    ],
-   "size": 118651
+   "size": 118649
   },
   {
    "key": "momo_side_sit",
@@ -2929,7 +2929,7 @@
     1024,
     1024
    ],
-   "size": 104193
+   "size": 104192
   },
   {
    "key": "momo_side_sitdown1",
@@ -2948,7 +2948,7 @@
     1024,
     1024
    ],
-   "size": 101951
+   "size": 101946
   },
   {
    "key": "momo_side_sitdown2",
@@ -2967,7 +2967,7 @@
     1024,
     1024
    ],
-   "size": 110929
+   "size": 110926
   },
   {
    "key": "momo_side_sitdown3",
@@ -2986,7 +2986,7 @@
     1024,
     1024
    ],
-   "size": 103268
+   "size": 103262
   },
   {
    "key": "momo_side_sitdown4",
@@ -3024,7 +3024,7 @@
     1024,
     1024
    ],
-   "size": 111652
+   "size": 111667
   },
   {
    "key": "momo_side_sitdown6",
@@ -3043,7 +3043,7 @@
     1024,
     1024
    ],
-   "size": 115150
+   "size": 115156
   },
   {
    "key": "momo_side_skid",
@@ -3062,7 +3062,7 @@
     1024,
     1024
    ],
-   "size": 113628
+   "size": 113587
   },
   {
    "key": "momo_side_sleep",
@@ -3072,16 +3072,16 @@
    "kor": "자기",
    "file": "img/momo/side_sleep.png",
    "bbox": [
-    33,
-    208,
-    351,
+    32,
+    207,
+    352,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 94631
+   "size": 95576
   },
   {
    "key": "momo_side_sleep1",
@@ -3091,16 +3091,16 @@
    "kor": "자기1",
    "file": "img/momo/side_sleep1.png",
    "bbox": [
-    34,
-    187,
-    350,
+    33,
+    186,
+    352,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 108636
+   "size": 110442
   },
   {
    "key": "momo_side_sleep2",
@@ -3110,16 +3110,16 @@
    "kor": "자기2",
    "file": "img/momo/side_sleep2.png",
    "bbox": [
-    34,
-    184,
-    350,
+    33,
+    183,
+    351,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 112645
+   "size": 113957
   },
   {
    "key": "momo_side_sleep3",
@@ -3129,16 +3129,16 @@
    "kor": "자기3",
    "file": "img/momo/side_sleep3.png",
    "bbox": [
-    34,
-    190,
-    350,
+    33,
+    189,
+    351,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 110763
+   "size": 112212
   },
   {
    "key": "momo_side_sleep4",
@@ -3148,16 +3148,16 @@
    "kor": "자기4",
    "file": "img/momo/side_sleep4.png",
    "bbox": [
-    34,
-    186,
-    350,
+    33,
+    185,
+    351,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 113071
+   "size": 114477
   },
   {
    "key": "momo_side_slide",
@@ -3176,7 +3176,7 @@
     1024,
     1024
    ],
-   "size": 113082
+   "size": 113068
   },
   {
    "key": "momo_side_sneak",
@@ -3195,7 +3195,7 @@
     1024,
     1024
    ],
-   "size": 110153
+   "size": 110119
   },
   {
    "key": "momo_side_sneeze",
@@ -3214,7 +3214,7 @@
     1024,
     1024
    ],
-   "size": 111466
+   "size": 111448
   },
   {
    "key": "momo_side_sniff",
@@ -3233,7 +3233,7 @@
     1024,
     1024
    ],
-   "size": 102943
+   "size": 102935
   },
   {
    "key": "momo_side_stand",
@@ -3252,7 +3252,7 @@
     1024,
     1024
    ],
-   "size": 109554
+   "size": 109510
   },
   {
    "key": "momo_side_standup",
@@ -3271,7 +3271,7 @@
     1024,
     1024
    ],
-   "size": 70487
+   "size": 70491
   },
   {
    "key": "momo_side_startle",
@@ -3290,7 +3290,7 @@
     1024,
     1024
    ],
-   "size": 109493
+   "size": 109495
   },
   {
    "key": "momo_side_stretch",
@@ -3309,7 +3309,7 @@
     1024,
     1024
    ],
-   "size": 109352
+   "size": 109340
   },
   {
    "key": "momo_side_sulk",
@@ -3328,7 +3328,7 @@
     1024,
     1024
    ],
-   "size": 106823
+   "size": 106817
   },
   {
    "key": "momo_side_tiptoe",
@@ -3347,7 +3347,7 @@
     1024,
     1024
    ],
-   "size": 116650
+   "size": 116631
   },
   {
    "key": "momo_side_tired",
@@ -3366,7 +3366,7 @@
     1024,
     1024
    ],
-   "size": 110178
+   "size": 110173
   },
   {
    "key": "momo_side_trot",
@@ -3385,7 +3385,7 @@
     1024,
     1024
    ],
-   "size": 117078
+   "size": 117079
   },
   {
    "key": "momo_side_trot1",
@@ -3397,14 +3397,14 @@
    "bbox": [
     10,
     103,
-    373,
+    374,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 117157
+   "size": 117150
   },
   {
    "key": "momo_side_trot2",
@@ -3423,7 +3423,7 @@
     1024,
     1024
    ],
-   "size": 111855
+   "size": 111862
   },
   {
    "key": "momo_side_trot3",
@@ -3442,7 +3442,7 @@
     1024,
     1024
    ],
-   "size": 116029
+   "size": 116015
   },
   {
    "key": "momo_side_trot4",
@@ -3461,7 +3461,7 @@
     1024,
     1024
    ],
-   "size": 126765
+   "size": 126761
   },
   {
    "key": "momo_side_trot5",
@@ -3480,7 +3480,7 @@
     1024,
     1024
    ],
-   "size": 112801
+   "size": 112786
   },
   {
    "key": "momo_side_trot6",
@@ -3499,7 +3499,7 @@
     1024,
     1024
    ],
-   "size": 112550
+   "size": 112531
   },
   {
    "key": "momo_side_trot7",
@@ -3575,7 +3575,7 @@
     1024,
     1024
    ],
-   "size": 117423
+   "size": 117416
   },
   {
    "key": "momo_side_walk2",
@@ -3594,7 +3594,7 @@
     1024,
     1024
    ],
-   "size": 120832
+   "size": 120834
   },
   {
    "key": "momo_side_walk3",
@@ -3613,7 +3613,7 @@
     1024,
     1024
    ],
-   "size": 110988
+   "size": 110981
   },
   {
    "key": "momo_side_walk4",
@@ -3632,7 +3632,7 @@
     1024,
     1024
    ],
-   "size": 110951
+   "size": 110948
   },
   {
    "key": "momo_side_walk5",
@@ -3651,7 +3651,7 @@
     1024,
     1024
    ],
-   "size": 116381
+   "size": 116382
   },
   {
    "key": "momo_side_walk6",
@@ -3670,7 +3670,7 @@
     1024,
     1024
    ],
-   "size": 115567
+   "size": 115549
   },
   {
    "key": "momo_side_walk7",
@@ -3689,7 +3689,7 @@
     1024,
     1024
    ],
-   "size": 110455
+   "size": 110454
   },
   {
    "key": "momo_side_walk8",
@@ -3708,7 +3708,7 @@
     1024,
     1024
    ],
-   "size": 116978
+   "size": 116981
   },
   {
    "key": "momo_side_wallstand",
@@ -3727,7 +3727,7 @@
     1024,
     1024
    ],
-   "size": 86824
+   "size": 86823
   },
   {
    "key": "momo_side_windowknock1",
@@ -3746,7 +3746,7 @@
     1024,
     1024
    ],
-   "size": 86321
+   "size": 86322
   },
   {
    "key": "momo_side_windowknock2",
@@ -3765,7 +3765,7 @@
     1024,
     1024
    ],
-   "size": 82735
+   "size": 82739
   },
   {
    "key": "momo_side_windowknock3",
@@ -3784,7 +3784,7 @@
     1024,
     1024
    ],
-   "size": 86504
+   "size": 86501
   },
   {
    "key": "momo_side_windowknock4",
@@ -3803,7 +3803,7 @@
     1024,
     1024
    ],
-   "size": 87155
+   "size": 87153
   },
   {
    "key": "momo_side_windowpeek1",
@@ -3822,7 +3822,7 @@
     1024,
     1024
    ],
-   "size": 124513
+   "size": 124519
   },
   {
    "key": "momo_side_windowpeek2",
@@ -3841,7 +3841,7 @@
     1024,
     1024
    ],
-   "size": 96247
+   "size": 96234
   },
   {
    "key": "momo_side_windowpeek3",
@@ -3860,7 +3860,7 @@
     1024,
     1024
    ],
-   "size": 86476
+   "size": 86475
   },
   {
    "key": "momo_side_windowpeek4",
@@ -3879,7 +3879,7 @@
     1024,
     1024
    ],
-   "size": 82860
+   "size": 82861
   },
   {
    "key": "momo_side_windowpeek5",
@@ -3898,7 +3898,7 @@
     1024,
     1024
    ],
-   "size": 84645
+   "size": 84649
   },
   {
    "key": "momo_side_windowpeek6",
@@ -3917,7 +3917,7 @@
     1024,
     1024
    ],
-   "size": 105112
+   "size": 105110
   },
   {
    "key": "momo_side_wobble",
@@ -3936,7 +3936,7 @@
     1024,
     1024
    ],
-   "size": 114124
+   "size": 114122
   },
   {
    "key": "momo_side_yawn",
@@ -3955,7 +3955,7 @@
     1024,
     1024
    ],
-   "size": 110495
+   "size": 110479
   },
   {
    "key": "nana_diag30_camturn3",
@@ -3965,16 +3965,16 @@
    "kor": "카메라전환3",
    "file": "img/nana/diag30_camturn3.png",
    "bbox": [
-    70,
-    41,
-    314,
+    85,
+    79,
+    299,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 133209
+   "size": 105848
   },
   {
    "key": "nana_diag30_camturn4",
@@ -3984,16 +3984,16 @@
    "kor": "카메라전환4",
    "file": "img/nana/diag30_camturn4.png",
    "bbox": [
-    94,
-    41,
-    290,
+    106,
+    78,
+    278,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 125048
+   "size": 99314
   },
   {
    "key": "nana_diag30_farewell3",
@@ -4003,16 +4003,16 @@
    "kor": "헤어짐아쉬움3",
    "file": "img/nana/diag30_farewell3.png",
    "bbox": [
-    101,
-    49,
-    283,
+    110,
+    79,
+    274,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 121037
+   "size": 100693
   },
   {
    "key": "nana_diag60_camturn1",
@@ -4022,16 +4022,16 @@
    "kor": "카메라전환1",
    "file": "img/nana/diag60_camturn1.png",
    "bbox": [
-    45,
-    88,
-    339,
+    40,
+    78,
+    344,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 112438
+   "size": 120104
   },
   {
    "key": "nana_diag60_camturn2",
@@ -4041,16 +4041,16 @@
    "kor": "카메라전환2",
    "file": "img/nana/diag60_camturn2.png",
    "bbox": [
-    63,
-    52,
-    321,
+    59,
+    41,
+    326,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 134095
+   "size": 142939
   },
   {
    "key": "nana_diag60_farewell2",
@@ -4060,16 +4060,16 @@
    "kor": "헤어짐아쉬움2",
    "file": "img/nana/diag60_farewell2.png",
    "bbox": [
-    54,
-    112,
-    330,
+    35,
+    78,
+    349,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 110038
+   "size": 139583
   },
   {
    "key": "nana_front_angry",
@@ -4079,16 +4079,16 @@
    "kor": "화남",
    "file": "img/nana/front_angry.png",
    "bbox": [
-    123,
-    50,
-    261,
+    129,
+    76,
+    255,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 98093
+   "size": 83265
   },
   {
    "key": "nana_front_beg",
@@ -4107,7 +4107,7 @@
     1024,
     1024
    ],
-   "size": 91031
+   "size": 91027
   },
   {
    "key": "nana_front_bored1",
@@ -4126,7 +4126,7 @@
     1024,
     1024
    ],
-   "size": 97037
+   "size": 97043
   },
   {
    "key": "nana_front_bored2",
@@ -4145,7 +4145,7 @@
     1024,
     1024
    ],
-   "size": 123177
+   "size": 123179
   },
   {
    "key": "nana_front_bored3",
@@ -4164,7 +4164,7 @@
     1024,
     1024
    ],
-   "size": 119724
+   "size": 119725
   },
   {
    "key": "nana_front_bored4",
@@ -4202,7 +4202,7 @@
     1024,
     1024
    ],
-   "size": 120549
+   "size": 120548
   },
   {
    "key": "nana_front_curious",
@@ -4212,16 +4212,16 @@
    "kor": "궁금",
    "file": "img/nana/front_curious.png",
    "bbox": [
-    124,
-    50,
-    260,
+    130,
+    76,
+    254,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 89987
+   "size": 76216
   },
   {
    "key": "nana_front_farewell4",
@@ -4231,16 +4231,16 @@
    "kor": "헤어짐아쉬움4",
    "file": "img/nana/front_farewell4.png",
    "bbox": [
-    107,
-    50,
-    277,
+    115,
+    76,
+    270,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 113280
+   "size": 96426
   },
   {
    "key": "nana_front_focus",
@@ -4250,16 +4250,16 @@
    "kor": "집중",
    "file": "img/nana/front_focus.png",
    "bbox": [
-    128,
-    50,
-    256,
+    134,
+    76,
+    250,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 86234
+   "size": 73503
   },
   {
    "key": "nana_front_gaze1",
@@ -4269,16 +4269,16 @@
    "kor": "시선추적1",
    "file": "img/nana/front_gaze1.png",
    "bbox": [
-    111,
-    57,
-    272,
+    118,
+    83,
+    266,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 95590
+   "size": 81324
   },
   {
    "key": "nana_front_gaze2",
@@ -4288,16 +4288,16 @@
    "kor": "시선추적2",
    "file": "img/nana/front_gaze2.png",
    "bbox": [
-    129,
-    47,
-    255,
+    135,
+    73,
+    250,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 87212
+   "size": 74275
   },
   {
    "key": "nana_front_gaze3",
@@ -4307,16 +4307,16 @@
    "kor": "시선추적3",
    "file": "img/nana/front_gaze3.png",
    "bbox": [
-    130,
-    52,
-    254,
+    135,
+    78,
+    249,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 84725
+   "size": 72173
   },
   {
    "key": "nana_front_gaze4",
@@ -4326,16 +4326,16 @@
    "kor": "시선추적4",
    "file": "img/nana/front_gaze4.png",
    "bbox": [
-    127,
-    50,
-    257,
+    133,
+    76,
+    251,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 87324
+   "size": 74456
   },
   {
    "key": "nana_front_gaze5",
@@ -4345,16 +4345,16 @@
    "kor": "시선추적5",
    "file": "img/nana/front_gaze5.png",
    "bbox": [
-    126,
-    43,
-    258,
+    132,
+    70,
+    252,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 87728
+   "size": 74554
   },
   {
    "key": "nana_front_gaze6",
@@ -4364,16 +4364,16 @@
    "kor": "시선추적6",
    "file": "img/nana/front_gaze6.png",
    "bbox": [
-    105,
-    41,
-    279,
+    113,
+    67,
+    271,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 101429
+   "size": 86005
   },
   {
    "key": "nana_front_hang0",
@@ -4383,16 +4383,16 @@
    "kor": "대롱대롱",
    "file": "img/nana/front_hang0.png",
    "bbox": [
-    144,
-    50,
-    240,
+    139,
+    16,
+    245,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 70367
+   "size": 85152
   },
   {
    "key": "nana_front_happy",
@@ -4402,16 +4402,16 @@
    "kor": "행복",
    "file": "img/nana/front_happy.png",
    "bbox": [
-    111,
-    50,
-    272,
+    118,
+    76,
+    266,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 111559
+   "size": 94962
   },
   {
    "key": "nana_front_jealous1",
@@ -4421,16 +4421,16 @@
    "kor": "질투반응1",
    "file": "img/nana/front_jealous1.png",
    "bbox": [
-    126,
-    50,
-    259,
+    131,
+    76,
+    253,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 95520
+   "size": 81253
   },
   {
    "key": "nana_front_jealous2",
@@ -4440,16 +4440,16 @@
    "kor": "질투반응2",
    "file": "img/nana/front_jealous2.png",
    "bbox": [
-    109,
-    44,
-    275,
+    116,
+    71,
+    268,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 106362
+   "size": 90434
   },
   {
    "key": "nana_front_jealous3",
@@ -4459,16 +4459,16 @@
    "kor": "질투반응3",
    "file": "img/nana/front_jealous3.png",
    "bbox": [
-    107,
-    48,
-    276,
+    115,
+    74,
+    269,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 99727
+   "size": 84549
   },
   {
    "key": "nana_front_jealous4",
@@ -4478,16 +4478,16 @@
    "kor": "질투반응4",
    "file": "img/nana/front_jealous4.png",
    "bbox": [
-    99,
-    55,
-    285,
+    107,
+    81,
+    278,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 118860
+   "size": 100822
   },
   {
    "key": "nana_front_jealous5",
@@ -4497,16 +4497,16 @@
    "kor": "질투반응5",
    "file": "img/nana/front_jealous5.png",
    "bbox": [
-    125,
-    50,
-    259,
+    131,
+    76,
+    253,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 91230
+   "size": 77736
   },
   {
    "key": "nana_front_laugh",
@@ -4516,16 +4516,16 @@
    "kor": "크게웃기",
    "file": "img/nana/front_laugh.png",
    "bbox": [
-    122,
-    50,
-    262,
+    128,
+    76,
+    256,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 97160
+   "size": 82761
   },
   {
    "key": "nana_front_pet1",
@@ -4535,16 +4535,16 @@
    "kor": "쓰다듬기1",
    "file": "img/nana/front_pet1.png",
    "bbox": [
-    118,
-    48,
-    266,
+    124,
+    74,
+    260,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 104844
+   "size": 89079
   },
   {
    "key": "nana_front_pet2",
@@ -4554,16 +4554,16 @@
    "kor": "쓰다듬기2",
    "file": "img/nana/front_pet2.png",
    "bbox": [
-    118,
-    68,
-    266,
+    124,
+    92,
+    260,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 84266
+   "size": 71948
   },
   {
    "key": "nana_front_pet3",
@@ -4573,16 +4573,16 @@
    "kor": "쓰다듬기3",
    "file": "img/nana/front_pet3.png",
    "bbox": [
-    112,
-    37,
-    271,
+    119,
+    64,
+    264,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 109606
+   "size": 93118
   },
   {
    "key": "nana_front_pet4",
@@ -4592,16 +4592,16 @@
    "kor": "쓰다듬기4",
    "file": "img/nana/front_pet4.png",
    "bbox": [
-    110,
-    50,
-    274,
+    117,
+    76,
+    267,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 91630
+   "size": 77999
   },
   {
    "key": "nana_front_pet5",
@@ -4611,16 +4611,16 @@
    "kor": "쓰다듬기5",
    "file": "img/nana/front_pet5.png",
    "bbox": [
-    115,
-    50,
-    269,
+    121,
+    76,
+    263,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 108859
+   "size": 92425
   },
   {
    "key": "nana_front_pet6",
@@ -4630,16 +4630,16 @@
    "kor": "쓰다듬기6",
    "file": "img/nana/front_pet6.png",
    "bbox": [
-    119,
-    48,
-    265,
+    125,
+    74,
+    259,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 106345
+   "size": 90289
   },
   {
    "key": "nana_front_praise1",
@@ -4649,16 +4649,16 @@
    "kor": "칭찬세리머니1",
    "file": "img/nana/front_praise1.png",
    "bbox": [
-    105,
-    52,
-    279,
+    112,
+    76,
+    272,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 118510
+   "size": 101965
   },
   {
    "key": "nana_front_praise2",
@@ -4668,16 +4668,16 @@
    "kor": "칭찬세리머니2",
    "file": "img/nana/front_praise2.png",
    "bbox": [
-    114,
-    32,
-    270,
+    121,
+    58,
+    264,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 107693
+   "size": 92541
   },
   {
    "key": "nana_front_praise3",
@@ -4687,16 +4687,16 @@
    "kor": "칭찬세리머니3",
    "file": "img/nana/front_praise3.png",
    "bbox": [
-    107,
-    59,
-    277,
+    114,
+    82,
+    270,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 117714
+   "size": 101280
   },
   {
    "key": "nana_front_praise4",
@@ -4706,16 +4706,16 @@
    "kor": "칭찬세리머니4",
    "file": "img/nana/front_praise4.png",
    "bbox": [
-    101,
-    6,
-    283,
+    109,
+    34,
+    275,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 148771
+   "size": 127581
   },
   {
    "key": "nana_front_sad",
@@ -4725,16 +4725,16 @@
    "kor": "슬픔",
    "file": "img/nana/front_sad.png",
    "bbox": [
-    102,
-    50,
-    282,
+    110,
+    76,
+    274,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 119244
+   "size": 101421
   },
   {
    "key": "nana_front_scared",
@@ -4744,16 +4744,16 @@
    "kor": "겁먹음",
    "file": "img/nana/front_scared.png",
    "bbox": [
-    47,
-    50,
-    336,
+    83,
+    127,
+    300,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 147456
+   "size": 87344
   },
   {
    "key": "nana_front_sleepy",
@@ -4772,7 +4772,7 @@
     1024,
     1024
    ],
-   "size": 114694
+   "size": 114691
   },
   {
    "key": "nana_front_stare",
@@ -4782,16 +4782,16 @@
    "kor": "빤히보기",
    "file": "img/nana/front_stare.png",
    "bbox": [
-    126,
-    50,
-    258,
+    131,
+    76,
+    253,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 92140
+   "size": 78530
   },
   {
    "key": "nana_front_startle",
@@ -4801,16 +4801,16 @@
    "kor": "놀람",
    "file": "img/nana/front_startle.png",
    "bbox": [
-    120,
-    50,
-    264,
+    138,
+    127,
+    246,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 106049
+   "size": 62980
   },
   {
    "key": "nana_front_tap1",
@@ -4820,16 +4820,16 @@
    "kor": "톡건드리기1",
    "file": "img/nana/front_tap1.png",
    "bbox": [
-    123,
-    50,
-    261,
+    129,
+    76,
+    255,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 97448
+   "size": 82510
   },
   {
    "key": "nana_front_tap2",
@@ -4839,16 +4839,16 @@
    "kor": "톡건드리기2",
    "file": "img/nana/front_tap2.png",
    "bbox": [
-    116,
-    53,
-    268,
+    123,
+    78,
+    261,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 108953
+   "size": 92569
   },
   {
    "key": "nana_front_tap3",
@@ -4858,16 +4858,16 @@
    "kor": "톡건드리기3",
    "file": "img/nana/front_tap3.png",
    "bbox": [
-    113,
-    46,
-    271,
+    120,
+    73,
+    264,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 99495
+   "size": 84404
   },
   {
    "key": "nana_front_tap4",
@@ -4877,16 +4877,16 @@
    "kor": "톡건드리기4",
    "file": "img/nana/front_tap4.png",
    "bbox": [
-    124,
-    46,
-    259,
+    130,
+    73,
+    253,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 103084
+   "size": 87267
   },
   {
    "key": "nana_front_tongue",
@@ -4905,7 +4905,7 @@
     1024,
     1024
    ],
-   "size": 104431
+   "size": 104434
   },
   {
    "key": "nana_front_wink",
@@ -4924,7 +4924,7 @@
     1024,
     1024
    ],
-   "size": 98908
+   "size": 98931
   },
   {
    "key": "nana_side_belly",
@@ -4943,7 +4943,7 @@
     1024,
     1024
    ],
-   "size": 108837
+   "size": 108863
   },
   {
    "key": "nana_side_crouch",
@@ -4962,7 +4962,7 @@
     1024,
     1024
    ],
-   "size": 120637
+   "size": 120639
   },
   {
    "key": "nana_side_excited",
@@ -4981,7 +4981,7 @@
     1024,
     1024
    ],
-   "size": 119441
+   "size": 119450
   },
   {
    "key": "nana_side_excited1",
@@ -5000,7 +5000,7 @@
     1024,
     1024
    ],
-   "size": 113011
+   "size": 112994
   },
   {
    "key": "nana_side_excited2",
@@ -5019,7 +5019,7 @@
     1024,
     1024
    ],
-   "size": 114658
+   "size": 114666
   },
   {
    "key": "nana_side_excited3",
@@ -5038,7 +5038,7 @@
     1024,
     1024
    ],
-   "size": 113935
+   "size": 113942
   },
   {
    "key": "nana_side_excited4",
@@ -5057,7 +5057,7 @@
     1024,
     1024
    ],
-   "size": 112180
+   "size": 112176
   },
   {
    "key": "nana_side_excited5",
@@ -5076,7 +5076,7 @@
     1024,
     1024
    ],
-   "size": 111512
+   "size": 111510
   },
   {
    "key": "nana_side_excited6",
@@ -5114,7 +5114,7 @@
     1024,
     1024
    ],
-   "size": 103935
+   "size": 103928
   },
   {
    "key": "nana_side_greeting1",
@@ -5133,7 +5133,7 @@
     1024,
     1024
    ],
-   "size": 102959
+   "size": 102962
   },
   {
    "key": "nana_side_greeting2",
@@ -5152,7 +5152,7 @@
     1024,
     1024
    ],
-   "size": 91068
+   "size": 91070
   },
   {
    "key": "nana_side_greeting3",
@@ -5171,7 +5171,7 @@
     1024,
     1024
    ],
-   "size": 109865
+   "size": 109857
   },
   {
    "key": "nana_side_greeting4",
@@ -5190,7 +5190,7 @@
     1024,
     1024
    ],
-   "size": 108207
+   "size": 108205
   },
   {
    "key": "nana_side_greeting5",
@@ -5209,7 +5209,7 @@
     1024,
     1024
    ],
-   "size": 113025
+   "size": 113022
   },
   {
    "key": "nana_side_greeting6",
@@ -5228,7 +5228,7 @@
     1024,
     1024
    ],
-   "size": 113591
+   "size": 113590
   },
   {
    "key": "nana_side_growl",
@@ -5247,7 +5247,7 @@
     1024,
     1024
    ],
-   "size": 117994
+   "size": 117993
   },
   {
    "key": "nana_side_hang30",
@@ -5257,16 +5257,16 @@
    "kor": "대롱대롱",
    "file": "img/nana/side_hang30.png",
    "bbox": [
-    128,
-    6,
-    256,
+    130,
+    16,
+    254,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 89683,
+   "size": 84907,
    "facing": "L"
   },
   {
@@ -5277,16 +5277,16 @@
    "kor": "대롱대롱",
    "file": "img/nana/side_hang60.png",
    "bbox": [
-    98,
-    6,
-    286,
+    101,
+    16,
+    283,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 91663,
+   "size": 86860,
    "facing": "L"
   },
   {
@@ -5297,16 +5297,16 @@
    "kor": "대롱대롱",
    "file": "img/nana/side_hang90.png",
    "bbox": [
-    92,
-    6,
-    292,
+    95,
+    16,
+    290,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 91555,
+   "size": 86936,
    "facing": "L"
   },
   {
@@ -5326,7 +5326,7 @@
     1024,
     1024
    ],
-   "size": 124472
+   "size": 124477
   },
   {
    "key": "nana_side_jump1",
@@ -5345,7 +5345,7 @@
     1024,
     1024
    ],
-   "size": 103100
+   "size": 103108
   },
   {
    "key": "nana_side_jump2",
@@ -5364,7 +5364,7 @@
     1024,
     1024
    ],
-   "size": 107061
+   "size": 107066
   },
   {
    "key": "nana_side_jump3",
@@ -5383,7 +5383,7 @@
     1024,
     1024
    ],
-   "size": 95004
+   "size": 94998
   },
   {
    "key": "nana_side_jump4",
@@ -5402,7 +5402,7 @@
     1024,
     1024
    ],
-   "size": 105452
+   "size": 105439
   },
   {
    "key": "nana_side_jump5",
@@ -5421,7 +5421,7 @@
     1024,
     1024
    ],
-   "size": 103455
+   "size": 103457
   },
   {
    "key": "nana_side_jump6",
@@ -5440,7 +5440,7 @@
     1024,
     1024
    ],
-   "size": 92262
+   "size": 92254
   },
   {
    "key": "nana_side_jump7",
@@ -5459,7 +5459,7 @@
     1024,
     1024
    ],
-   "size": 95242
+   "size": 95243
   },
   {
    "key": "nana_side_jump8",
@@ -5478,7 +5478,7 @@
     1024,
     1024
    ],
-   "size": 96904
+   "size": 96906
   },
   {
    "key": "nana_side_land",
@@ -5497,7 +5497,7 @@
     1024,
     1024
    ],
-   "size": 106489
+   "size": 106495
   },
   {
    "key": "nana_side_land1",
@@ -5516,7 +5516,7 @@
     1024,
     1024
    ],
-   "size": 113328
+   "size": 113329
   },
   {
    "key": "nana_side_land2",
@@ -5535,7 +5535,7 @@
     1024,
     1024
    ],
-   "size": 103970
+   "size": 103964
   },
   {
    "key": "nana_side_land3",
@@ -5573,7 +5573,7 @@
     1024,
     1024
    ],
-   "size": 112725
+   "size": 112723
   },
   {
    "key": "nana_side_licknose",
@@ -5592,7 +5592,7 @@
     1024,
     1024
    ],
-   "size": 121777
+   "size": 121782
   },
   {
    "key": "nana_side_lickpaw",
@@ -5611,7 +5611,7 @@
     1024,
     1024
    ],
-   "size": 119619
+   "size": 119636
   },
   {
    "key": "nana_side_liedown1",
@@ -5621,16 +5621,16 @@
    "kor": "눕기1",
    "file": "img/nana/side_liedown1.png",
    "bbox": [
-    22,
-    155,
-    362,
+    36,
+    171,
+    349,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 99168
+   "size": 84609
   },
   {
    "key": "nana_side_liedown2",
@@ -5640,16 +5640,16 @@
    "kor": "눕기2",
    "file": "img/nana/side_liedown2.png",
    "bbox": [
-    17,
-    151,
-    367,
+    31,
+    167,
+    353,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 113123
+   "size": 97076
   },
   {
    "key": "nana_side_liedown3",
@@ -5659,16 +5659,16 @@
    "kor": "눕기3",
    "file": "img/nana/side_liedown3.png",
    "bbox": [
-    6,
-    214,
-    379,
+    21,
+    225,
+    364,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 103109
+   "size": 88403
   },
   {
    "key": "nana_side_liedown4",
@@ -5678,16 +5678,16 @@
    "kor": "눕기4",
    "file": "img/nana/side_liedown4.png",
    "bbox": [
-    15,
-    159,
-    370,
+    29,
+    175,
+    355,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 98065
+   "size": 83810
   },
   {
    "key": "nana_side_liedown5",
@@ -5697,16 +5697,16 @@
    "kor": "눕기5",
    "file": "img/nana/side_liedown5.png",
    "bbox": [
-    18,
-    147,
-    367,
+    32,
+    164,
+    353,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 109191
+   "size": 93541
   },
   {
    "key": "nana_side_liedown6",
@@ -5716,16 +5716,16 @@
    "kor": "눕기6",
    "file": "img/nana/side_liedown6.png",
    "bbox": [
-    19,
-    152,
-    366,
+    33,
+    168,
+    352,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 112167
+   "size": 96182
   },
   {
    "key": "nana_side_lookback",
@@ -5744,7 +5744,7 @@
     1024,
     1024
    ],
-   "size": 109053
+   "size": 109090
   },
   {
    "key": "nana_side_lookdown",
@@ -5763,7 +5763,7 @@
     1024,
     1024
    ],
-   "size": 116366
+   "size": 116376
   },
   {
    "key": "nana_side_lookup",
@@ -5782,7 +5782,7 @@
     1024,
     1024
    ],
-   "size": 113289
+   "size": 113292
   },
   {
    "key": "nana_side_nuzzle1",
@@ -5820,7 +5820,7 @@
     1024,
     1024
    ],
-   "size": 116256
+   "size": 116263
   },
   {
    "key": "nana_side_nuzzle3",
@@ -5839,7 +5839,7 @@
     1024,
     1024
    ],
-   "size": 109846
+   "size": 109841
   },
   {
    "key": "nana_side_nuzzle4",
@@ -5849,7 +5849,7 @@
    "kor": "코비비기4",
    "file": "img/nana/side_nuzzle4.png",
    "bbox": [
-    19,
+    18,
     121,
     366,
     353
@@ -5858,7 +5858,7 @@
     1024,
     1024
    ],
-   "size": 110312
+   "size": 110319
   },
   {
    "key": "nana_side_nuzzle5",
@@ -5877,7 +5877,7 @@
     1024,
     1024
    ],
-   "size": 109890
+   "size": 109889
   },
   {
    "key": "nana_side_nuzzle6",
@@ -5896,7 +5896,7 @@
     1024,
     1024
    ],
-   "size": 112051
+   "size": 112054
   },
   {
    "key": "nana_side_pawgreet1",
@@ -5915,7 +5915,7 @@
     1024,
     1024
    ],
-   "size": 101436
+   "size": 101442
   },
   {
    "key": "nana_side_pawgreet2",
@@ -5934,7 +5934,7 @@
     1024,
     1024
    ],
-   "size": 111722
+   "size": 111714
   },
   {
    "key": "nana_side_pawgreet3",
@@ -5953,7 +5953,7 @@
     1024,
     1024
    ],
-   "size": 122272
+   "size": 122278
   },
   {
    "key": "nana_side_pawgreet4",
@@ -5972,7 +5972,7 @@
     1024,
     1024
    ],
-   "size": 122505
+   "size": 122503
   },
   {
    "key": "nana_side_pawgreet5",
@@ -5991,7 +5991,7 @@
     1024,
     1024
    ],
-   "size": 108224
+   "size": 108220
   },
   {
    "key": "nana_side_pawup",
@@ -6010,7 +6010,7 @@
     1024,
     1024
    ],
-   "size": 118702
+   "size": 118704
   },
   {
    "key": "nana_side_playinvite1",
@@ -6029,7 +6029,7 @@
     1024,
     1024
    ],
-   "size": 116036
+   "size": 116034
   },
   {
    "key": "nana_side_playinvite2",
@@ -6048,7 +6048,7 @@
     1024,
     1024
    ],
-   "size": 116849
+   "size": 116845
   },
   {
    "key": "nana_side_playinvite3",
@@ -6067,7 +6067,7 @@
     1024,
     1024
    ],
-   "size": 121505
+   "size": 121520
   },
   {
    "key": "nana_side_playinvite4",
@@ -6086,7 +6086,7 @@
     1024,
     1024
    ],
-   "size": 95605
+   "size": 95614
   },
   {
    "key": "nana_side_playinvite5",
@@ -6105,7 +6105,7 @@
     1024,
     1024
    ],
-   "size": 125737
+   "size": 125740
   },
   {
    "key": "nana_side_pounce",
@@ -6124,7 +6124,7 @@
     1024,
     1024
    ],
-   "size": 104672
+   "size": 104675
   },
   {
    "key": "nana_side_prone1",
@@ -6134,16 +6134,16 @@
    "kor": "엎드리기1",
    "file": "img/nana/side_prone1.png",
    "bbox": [
-    24,
-    131,
-    361,
+    22,
+    128,
+    363,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 111267
+   "size": 114284
   },
   {
    "key": "nana_side_prone2",
@@ -6153,16 +6153,16 @@
    "kor": "엎드리기2",
    "file": "img/nana/side_prone2.png",
    "bbox": [
-    20,
-    166,
-    364,
+    17,
+    163,
+    367,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 98347
+   "size": 100899
   },
   {
    "key": "nana_side_prone3",
@@ -6172,16 +6172,16 @@
    "kor": "엎드리기3",
    "file": "img/nana/side_prone3.png",
    "bbox": [
-    27,
-    174,
-    358,
+    24,
+    171,
+    360,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 90355
+   "size": 92883
   },
   {
    "key": "nana_side_prone4",
@@ -6191,16 +6191,16 @@
    "kor": "엎드리기4",
    "file": "img/nana/side_prone4.png",
    "bbox": [
-    26,
-    127,
-    358,
+    24,
+    123,
+    361,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 113265
+   "size": 116417
   },
   {
    "key": "nana_side_prone5",
@@ -6210,16 +6210,16 @@
    "kor": "엎드리기5",
    "file": "img/nana/side_prone5.png",
    "bbox": [
-    27,
-    136,
-    357,
+    25,
+    133,
+    359,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 110177
+   "size": 113447
   },
   {
    "key": "nana_side_prone6",
@@ -6229,16 +6229,16 @@
    "kor": "엎드리기6",
    "file": "img/nana/side_prone6.png",
    "bbox": [
-    23,
-    168,
-    361,
+    20,
+    165,
+    364,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 100818
+   "size": 103478
   },
   {
    "key": "nana_side_proud",
@@ -6257,7 +6257,7 @@
     1024,
     1024
    ],
-   "size": 119211
+   "size": 119221
   },
   {
    "key": "nana_side_rise1",
@@ -6276,7 +6276,7 @@
     1024,
     1024
    ],
-   "size": 110127
+   "size": 110116
   },
   {
    "key": "nana_side_rise2",
@@ -6314,7 +6314,7 @@
     1024,
     1024
    ],
-   "size": 113341
+   "size": 113343
   },
   {
    "key": "nana_side_rise4",
@@ -6333,7 +6333,7 @@
     1024,
     1024
    ],
-   "size": 109354
+   "size": 109348
   },
   {
    "key": "nana_side_rise5",
@@ -6352,7 +6352,7 @@
     1024,
     1024
    ],
-   "size": 116481
+   "size": 116484
   },
   {
    "key": "nana_side_rise6",
@@ -6371,7 +6371,7 @@
     1024,
     1024
    ],
-   "size": 115188
+   "size": 115180
   },
   {
    "key": "nana_side_roll",
@@ -6390,7 +6390,7 @@
     1024,
     1024
    ],
-   "size": 124280
+   "size": 124301
   },
   {
    "key": "nana_side_run",
@@ -6409,7 +6409,7 @@
     1024,
     1024
    ],
-   "size": 88637
+   "size": 88642
   },
   {
    "key": "nana_side_run1",
@@ -6428,7 +6428,7 @@
     1024,
     1024
    ],
-   "size": 98088
+   "size": 98082
   },
   {
    "key": "nana_side_run2",
@@ -6447,7 +6447,7 @@
     1024,
     1024
    ],
-   "size": 77935
+   "size": 77931
   },
   {
    "key": "nana_side_run3",
@@ -6466,7 +6466,7 @@
     1024,
     1024
    ],
-   "size": 97327
+   "size": 97324
   },
   {
    "key": "nana_side_run4",
@@ -6485,7 +6485,7 @@
     1024,
     1024
    ],
-   "size": 86858
+   "size": 86857
   },
   {
    "key": "nana_side_run5",
@@ -6504,7 +6504,7 @@
     1024,
     1024
    ],
-   "size": 71679
+   "size": 71677
   },
   {
    "key": "nana_side_run6",
@@ -6523,7 +6523,7 @@
     1024,
     1024
    ],
-   "size": 82237
+   "size": 82238
   },
   {
    "key": "nana_side_run7",
@@ -6542,7 +6542,7 @@
     1024,
     1024
    ],
-   "size": 75050
+   "size": 75038
   },
   {
    "key": "nana_side_run8",
@@ -6561,7 +6561,7 @@
     1024,
     1024
    ],
-   "size": 101193
+   "size": 101196
   },
   {
    "key": "nana_side_scratch",
@@ -6580,7 +6580,7 @@
     1024,
     1024
    ],
-   "size": 135577
+   "size": 135579
   },
   {
    "key": "nana_side_scratch1",
@@ -6599,7 +6599,7 @@
     1024,
     1024
    ],
-   "size": 122990
+   "size": 122987
   },
   {
    "key": "nana_side_scratch2",
@@ -6618,7 +6618,7 @@
     1024,
     1024
    ],
-   "size": 117758
+   "size": 117754
   },
   {
    "key": "nana_side_scratch3",
@@ -6637,7 +6637,7 @@
     1024,
     1024
    ],
-   "size": 115691
+   "size": 115687
   },
   {
    "key": "nana_side_scratch4",
@@ -6656,7 +6656,7 @@
     1024,
     1024
    ],
-   "size": 125871
+   "size": 125873
   },
   {
    "key": "nana_side_scratch5",
@@ -6675,7 +6675,7 @@
     1024,
     1024
    ],
-   "size": 118081
+   "size": 118066
   },
   {
    "key": "nana_side_scratch6",
@@ -6694,7 +6694,7 @@
     1024,
     1024
    ],
-   "size": 124782
+   "size": 124773
   },
   {
    "key": "nana_side_shake",
@@ -6713,7 +6713,7 @@
     1024,
     1024
    ],
-   "size": 124111
+   "size": 124106
   },
   {
    "key": "nana_side_shake1",
@@ -6732,7 +6732,7 @@
     1024,
     1024
    ],
-   "size": 127996
+   "size": 127973
   },
   {
    "key": "nana_side_shake2",
@@ -6751,7 +6751,7 @@
     1024,
     1024
    ],
-   "size": 120889
+   "size": 120890
   },
   {
    "key": "nana_side_shake3",
@@ -6789,7 +6789,7 @@
     1024,
     1024
    ],
-   "size": 118673
+   "size": 118669
   },
   {
    "key": "nana_side_shake5",
@@ -6808,7 +6808,7 @@
     1024,
     1024
    ],
-   "size": 112455
+   "size": 112462
   },
   {
    "key": "nana_side_shake6",
@@ -6827,7 +6827,7 @@
     1024,
     1024
    ],
-   "size": 105246
+   "size": 105249
   },
   {
    "key": "nana_side_shake7",
@@ -6846,7 +6846,7 @@
     1024,
     1024
    ],
-   "size": 102264
+   "size": 102263
   },
   {
    "key": "nana_side_shake8",
@@ -6865,7 +6865,7 @@
     1024,
     1024
    ],
-   "size": 124854
+   "size": 124853
   },
   {
    "key": "nana_side_sit",
@@ -6884,7 +6884,7 @@
     1024,
     1024
    ],
-   "size": 108757
+   "size": 108770
   },
   {
    "key": "nana_side_sitdown1",
@@ -6903,7 +6903,7 @@
     1024,
     1024
    ],
-   "size": 115316
+   "size": 115314
   },
   {
    "key": "nana_side_sitdown2",
@@ -6922,7 +6922,7 @@
     1024,
     1024
    ],
-   "size": 114217
+   "size": 114206
   },
   {
    "key": "nana_side_sitdown3",
@@ -6941,7 +6941,7 @@
     1024,
     1024
    ],
-   "size": 111320
+   "size": 111324
   },
   {
    "key": "nana_side_sitdown4",
@@ -6960,7 +6960,7 @@
     1024,
     1024
    ],
-   "size": 115410
+   "size": 115414
   },
   {
    "key": "nana_side_sitdown5",
@@ -6979,7 +6979,7 @@
     1024,
     1024
    ],
-   "size": 113629
+   "size": 113622
   },
   {
    "key": "nana_side_sitdown6",
@@ -6998,7 +6998,7 @@
     1024,
     1024
    ],
-   "size": 122471
+   "size": 122470
   },
   {
    "key": "nana_side_skid",
@@ -7017,7 +7017,7 @@
     1024,
     1024
    ],
-   "size": 116728
+   "size": 116742
   },
   {
    "key": "nana_side_sleep",
@@ -7027,16 +7027,16 @@
    "kor": "자기",
    "file": "img/nana/side_sleep.png",
    "bbox": [
-    28,
-    215,
-    357,
+    29,
+    216,
+    355,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 93097
+   "size": 91354
   },
   {
    "key": "nana_side_sleep1",
@@ -7046,16 +7046,16 @@
    "kor": "자기1",
    "file": "img/nana/side_sleep1.png",
    "bbox": [
-    29,
-    178,
-    356,
+    30,
+    180,
+    354,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 112975
+   "size": 110713
   },
   {
    "key": "nana_side_sleep2",
@@ -7065,16 +7065,16 @@
    "kor": "자기2",
    "file": "img/nana/side_sleep2.png",
    "bbox": [
-    32,
-    204,
-    353,
+    33,
+    206,
+    351,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 99378
+   "size": 97385
   },
   {
    "key": "nana_side_sleep3",
@@ -7084,16 +7084,16 @@
    "kor": "자기3",
    "file": "img/nana/side_sleep3.png",
    "bbox": [
-    31,
-    208,
-    353,
+    33,
+    209,
+    351,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 99589
+   "size": 97487
   },
   {
    "key": "nana_side_sleep4",
@@ -7103,16 +7103,16 @@
    "kor": "자기4",
    "file": "img/nana/side_sleep4.png",
    "bbox": [
-    30,
-    205,
-    354,
+    32,
+    207,
+    353,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 102522
+   "size": 100479
   },
   {
    "key": "nana_side_slide",
@@ -7131,7 +7131,7 @@
     1024,
     1024
    ],
-   "size": 119850
+   "size": 119843
   },
   {
    "key": "nana_side_sneak",
@@ -7150,7 +7150,7 @@
     1024,
     1024
    ],
-   "size": 115164
+   "size": 115169
   },
   {
    "key": "nana_side_sneeze",
@@ -7169,7 +7169,7 @@
     1024,
     1024
    ],
-   "size": 120002
+   "size": 120018
   },
   {
    "key": "nana_side_sniff",
@@ -7188,7 +7188,7 @@
     1024,
     1024
    ],
-   "size": 106520
+   "size": 106525
   },
   {
    "key": "nana_side_stand",
@@ -7207,7 +7207,7 @@
     1024,
     1024
    ],
-   "size": 107157
+   "size": 107168
   },
   {
    "key": "nana_side_standup",
@@ -7226,7 +7226,7 @@
     1024,
     1024
    ],
-   "size": 74459
+   "size": 74462
   },
   {
    "key": "nana_side_startle",
@@ -7245,7 +7245,7 @@
     1024,
     1024
    ],
-   "size": 109716
+   "size": 109732
   },
   {
    "key": "nana_side_stretch",
@@ -7264,7 +7264,7 @@
     1024,
     1024
    ],
-   "size": 108435
+   "size": 108442
   },
   {
    "key": "nana_side_sulk",
@@ -7283,7 +7283,7 @@
     1024,
     1024
    ],
-   "size": 114470
+   "size": 114467
   },
   {
    "key": "nana_side_tiptoe",
@@ -7302,7 +7302,7 @@
     1024,
     1024
    ],
-   "size": 120056
+   "size": 120053
   },
   {
    "key": "nana_side_tired",
@@ -7321,7 +7321,7 @@
     1024,
     1024
    ],
-   "size": 119642
+   "size": 119647
   },
   {
    "key": "nana_side_trot",
@@ -7340,7 +7340,7 @@
     1024,
     1024
    ],
-   "size": 116213
+   "size": 116210
   },
   {
    "key": "nana_side_trot1",
@@ -7359,7 +7359,7 @@
     1024,
     1024
    ],
-   "size": 116232
+   "size": 116234
   },
   {
    "key": "nana_side_trot2",
@@ -7378,7 +7378,7 @@
     1024,
     1024
    ],
-   "size": 117161
+   "size": 117143
   },
   {
    "key": "nana_side_trot3",
@@ -7397,7 +7397,7 @@
     1024,
     1024
    ],
-   "size": 113883
+   "size": 113889
   },
   {
    "key": "nana_side_trot4",
@@ -7416,7 +7416,7 @@
     1024,
     1024
    ],
-   "size": 120047
+   "size": 120039
   },
   {
    "key": "nana_side_trot5",
@@ -7435,7 +7435,7 @@
     1024,
     1024
    ],
-   "size": 118468
+   "size": 118460
   },
   {
    "key": "nana_side_trot6",
@@ -7454,7 +7454,7 @@
     1024,
     1024
    ],
-   "size": 115926
+   "size": 115928
   },
   {
    "key": "nana_side_trot7",
@@ -7492,7 +7492,7 @@
     1024,
     1024
    ],
-   "size": 115113
+   "size": 115118
   },
   {
    "key": "nana_side_walk",
@@ -7511,7 +7511,7 @@
     1024,
     1024
    ],
-   "size": 106738
+   "size": 106749
   },
   {
    "key": "nana_side_walk1",
@@ -7530,7 +7530,7 @@
     1024,
     1024
    ],
-   "size": 109961
+   "size": 109958
   },
   {
    "key": "nana_side_walk2",
@@ -7549,7 +7549,7 @@
     1024,
     1024
    ],
-   "size": 124692
+   "size": 124685
   },
   {
    "key": "nana_side_walk3",
@@ -7568,7 +7568,7 @@
     1024,
     1024
    ],
-   "size": 110844
+   "size": 110837
   },
   {
    "key": "nana_side_walk4",
@@ -7587,7 +7587,7 @@
     1024,
     1024
    ],
-   "size": 126069
+   "size": 126055
   },
   {
    "key": "nana_side_walk5",
@@ -7606,7 +7606,7 @@
     1024,
     1024
    ],
-   "size": 118488
+   "size": 118489
   },
   {
    "key": "nana_side_walk6",
@@ -7625,7 +7625,7 @@
     1024,
     1024
    ],
-   "size": 115463
+   "size": 115465
   },
   {
    "key": "nana_side_walk7",
@@ -7663,7 +7663,7 @@
     1024,
     1024
    ],
-   "size": 120425
+   "size": 120413
   },
   {
    "key": "nana_side_wallstand",
@@ -7701,7 +7701,7 @@
     1024,
     1024
    ],
-   "size": 84986
+   "size": 84990
   },
   {
    "key": "nana_side_windowknock2",
@@ -7720,7 +7720,7 @@
     1024,
     1024
    ],
-   "size": 84594
+   "size": 84598
   },
   {
    "key": "nana_side_windowknock3",
@@ -7758,7 +7758,7 @@
     1024,
     1024
    ],
-   "size": 85274
+   "size": 85271
   },
   {
    "key": "nana_side_windowpeek1",
@@ -7777,7 +7777,7 @@
     1024,
     1024
    ],
-   "size": 125982
+   "size": 125974
   },
   {
    "key": "nana_side_windowpeek2",
@@ -7796,7 +7796,7 @@
     1024,
     1024
    ],
-   "size": 116190
+   "size": 116188
   },
   {
    "key": "nana_side_windowpeek3",
@@ -7815,7 +7815,7 @@
     1024,
     1024
    ],
-   "size": 84392
+   "size": 84391
   },
   {
    "key": "nana_side_windowpeek4",
@@ -7834,7 +7834,7 @@
     1024,
     1024
    ],
-   "size": 77721
+   "size": 77723
   },
   {
    "key": "nana_side_windowpeek5",
@@ -7853,7 +7853,7 @@
     1024,
     1024
    ],
-   "size": 83207
+   "size": 83211
   },
   {
    "key": "nana_side_windowpeek6",
@@ -7872,7 +7872,7 @@
     1024,
     1024
    ],
-   "size": 108827
+   "size": 108833
   },
   {
    "key": "nana_side_wobble",
@@ -7891,7 +7891,7 @@
     1024,
     1024
    ],
-   "size": 123798
+   "size": 123787
   },
   {
    "key": "nana_side_yawn",
@@ -7910,7 +7910,7 @@
     1024,
     1024
    ],
-   "size": 107350
+   "size": 107362
   }
  ]
 }
