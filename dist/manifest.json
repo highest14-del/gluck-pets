@@ -1,5 +1,5 @@
 {
- "version": 1,
+ "version": 2,
  "canvas": 384,
  "images": [
   {
@@ -10,16 +10,16 @@
    "kor": "화남",
    "file": "img/momo/front_angry.png",
    "bbox": [
-    110,
-    31,
-    272,
-    352
+    107,
+    16,
+    276,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 103858
+   "size": 111577
   },
   {
    "key": "momo_front_beg",
@@ -29,16 +29,16 @@
    "kor": "애원",
    "file": "img/momo/front_beg.png",
    "bbox": [
-    110,
-    31,
-    273,
-    352
+    103,
+    4,
+    280,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 94609
+   "size": 107895
   },
   {
    "key": "momo_front_curious",
@@ -48,16 +48,16 @@
    "kor": "궁금",
    "file": "img/momo/front_curious.png",
    "bbox": [
-    119,
-    31,
-    263,
-    352
+    112,
+    0,
+    272,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 91240
+   "size": 107718
   },
   {
    "key": "momo_front_focus",
@@ -67,16 +67,16 @@
    "kor": "집중",
    "file": "img/momo/front_focus.png",
    "bbox": [
-    120,
-    31,
-    262,
-    352
+    110,
+    0,
+    273,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 89212
+   "size": 110569
   },
   {
    "key": "momo_front_hang0",
@@ -86,16 +86,16 @@
    "kor": "대롱대롱",
    "file": "img/momo/front_hang0.png",
    "bbox": [
-    138,
-    31,
-    245,
+    123,
+    0,
+    261,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 71248
+   "size": 95590
   },
   {
    "key": "momo_front_happy",
@@ -105,16 +105,16 @@
    "kor": "행복",
    "file": "img/momo/front_happy.png",
    "bbox": [
-    102,
-    31,
-    282,
-    352
+    106,
+    44,
+    279,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 114801
+   "size": 104915
   },
   {
    "key": "momo_front_laugh",
@@ -124,16 +124,16 @@
    "kor": "크게웃기",
    "file": "img/momo/front_laugh.png",
    "bbox": [
-    110,
-    31,
-    274,
-    352
+    105,
+    12,
+    279,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 97193
+   "size": 106322
   },
   {
    "key": "momo_front_sad",
@@ -143,16 +143,16 @@
    "kor": "슬픔",
    "file": "img/momo/front_sad.png",
    "bbox": [
-    104,
-    31,
+    105,
+    32,
     279,
-    352
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 110356
+   "size": 107588
   },
   {
    "key": "momo_front_scared",
@@ -162,16 +162,16 @@
    "kor": "겁먹음",
    "file": "img/momo/front_scared.png",
    "bbox": [
-    79,
-    31,
-    304,
-    352
+    95,
+    74,
+    289,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 147737
+   "size": 112033
   },
   {
    "key": "momo_front_sleepy",
@@ -181,16 +181,16 @@
    "kor": "졸림",
    "file": "img/momo/front_sleepy.png",
    "bbox": [
-    105,
-    31,
+    109,
+    40,
     275,
-    352
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 111311
+   "size": 103949
   },
   {
    "key": "momo_front_stare",
@@ -200,16 +200,16 @@
    "kor": "빤히보기",
    "file": "img/momo/front_stare.png",
    "bbox": [
-    122,
-    31,
-    262,
+    114,
+    0,
+    271,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 89179
+   "size": 106483
   },
   {
    "key": "momo_front_startle",
@@ -219,16 +219,16 @@
    "kor": "놀람",
    "file": "img/momo/front_startle.png",
    "bbox": [
-    106,
-    31,
-    276,
-    352
+    109,
+    39,
+    275,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 112748
+   "size": 106292
   },
   {
    "key": "momo_front_tongue",
@@ -238,16 +238,16 @@
    "kor": "메롱",
    "file": "img/momo/front_tongue.png",
    "bbox": [
-    110,
-    31,
-    273,
+    106,
+    15,
+    278,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 98213
+   "size": 104778
   },
   {
    "key": "momo_front_wink",
@@ -257,16 +257,16 @@
    "kor": "윙크",
    "file": "img/momo/front_wink.png",
    "bbox": [
-    105,
-    31,
-    278,
-    352
+    100,
+    13,
+    284,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 98141
+   "size": 106630
   },
   {
    "key": "momo_side_belly",
@@ -276,16 +276,16 @@
    "kor": "배보이기",
    "file": "img/momo/side_belly.png",
    "bbox": [
-    31,
-    126,
-    353,
-    257
+    0,
+    188,
+    383,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 72353
+   "size": 105959
   },
   {
    "key": "momo_side_crouch",
@@ -295,16 +295,16 @@
    "kor": "덮치기준비",
    "file": "img/momo/side_crouch.png",
    "bbox": [
-    31,
-    59,
-    353,
-    324
+    38,
+    98,
+    347,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 124421
+   "size": 114925
   },
   {
    "key": "momo_side_excited",
@@ -314,16 +314,16 @@
    "kor": "신남",
    "file": "img/momo/side_excited.png",
    "bbox": [
-    31,
-    67,
-    352,
-    316
+    30,
+    102,
+    354,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 107209
+   "size": 107816
   },
   {
    "key": "momo_side_growl",
@@ -333,16 +333,16 @@
    "kor": "으르렁",
    "file": "img/momo/side_growl.png",
    "bbox": [
-    31,
-    50,
-    353,
-    333
+    36,
+    79,
+    347,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 123541
+   "size": 115305
   },
   {
    "key": "momo_side_hang30",
@@ -352,17 +352,17 @@
    "kor": "대롱대롱",
    "file": "img/momo/side_hang30.png",
    "bbox": [
-    129,
-    31,
-    254,
+    114,
+    0,
+    270,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "facing": "L",
-   "size": 75079
+   "size": 100338,
+   "facing": "L"
   },
   {
    "key": "momo_side_hang60",
@@ -372,17 +372,17 @@
    "kor": "대롱대롱",
    "file": "img/momo/side_hang60.png",
    "bbox": [
-    110,
-    31,
-    273,
+    93,
+    0,
+    291,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "facing": "L",
-   "size": 82693
+   "size": 107299,
+   "facing": "L"
   },
   {
    "key": "momo_side_hang90",
@@ -392,17 +392,17 @@
    "kor": "대롱대롱",
    "file": "img/momo/side_hang90.png",
    "bbox": [
-    98,
-    31,
-    286,
+    83,
+    0,
+    302,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "facing": "L",
-   "size": 87215
+   "size": 110860,
+   "facing": "L"
   },
   {
    "key": "momo_side_jump",
@@ -412,16 +412,16 @@
    "kor": "점프",
    "file": "img/momo/side_jump.png",
    "bbox": [
-    31,
-    85,
-    352,
-    298
+    20,
+    124,
+    364,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 98130
+   "size": 109378
   },
   {
    "key": "momo_side_land",
@@ -431,16 +431,16 @@
    "kor": "착지",
    "file": "img/momo/side_land.png",
    "bbox": [
-    31,
-    58,
-    353,
-    326
+    39,
+    97,
+    345,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 121687
+   "size": 110497
   },
   {
    "key": "momo_side_licknose",
@@ -450,16 +450,16 @@
    "kor": "코핥기",
    "file": "img/momo/side_licknose.png",
    "bbox": [
-    31,
-    55,
-    353,
-    329
+    38,
+    92,
+    346,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 125357
+   "size": 114080
   },
   {
    "key": "momo_side_lickpaw",
@@ -469,16 +469,16 @@
    "kor": "앞발핥기",
    "file": "img/momo/side_lickpaw.png",
    "bbox": [
-    31,
-    35,
-    353,
-    347
+    49,
+    74,
+    336,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 138155
+   "size": 111181
   },
   {
    "key": "momo_side_lookback",
@@ -488,16 +488,16 @@
    "kor": "뒤돌아보기",
    "file": "img/momo/side_lookback.png",
    "bbox": [
-    32,
-    36,
-    352,
-    348
+    60,
+    94,
+    325,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 153244
+   "size": 107514
   },
   {
    "key": "momo_side_lookdown",
@@ -507,16 +507,16 @@
    "kor": "아래쳐다보기",
    "file": "img/momo/side_lookdown.png",
    "bbox": [
-    31,
-    79,
-    353,
-    305
+    20,
+    111,
+    364,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 94902
+   "size": 105923
   },
   {
    "key": "momo_side_lookup",
@@ -526,16 +526,16 @@
    "kor": "위쳐다보기",
    "file": "img/momo/side_lookup.png",
    "bbox": [
-    31,
-    37,
-    353,
-    346
+    45,
+    72,
+    339,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 126976
+   "size": 105713
   },
   {
    "key": "momo_side_pawup",
@@ -545,16 +545,16 @@
    "kor": "앞발들기",
    "file": "img/momo/side_pawup.png",
    "bbox": [
-    31,
-    52,
-    353,
-    332
+    38,
+    85,
+    346,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 125666
+   "size": 115065
   },
   {
    "key": "momo_side_pounce",
@@ -564,16 +564,16 @@
    "kor": "덮치기",
    "file": "img/momo/side_pounce.png",
    "bbox": [
-    31,
-    100,
-    352,
-    284
+    2,
+    136,
+    382,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 83340
+   "size": 111778
   },
   {
    "key": "momo_side_proud",
@@ -583,16 +583,16 @@
    "kor": "당당함",
    "file": "img/momo/side_proud.png",
    "bbox": [
-    31,
-    35,
-    352,
-    348
+    46,
+    68,
+    338,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 136895
+   "size": 113448
   },
   {
    "key": "momo_side_roll",
@@ -602,16 +602,16 @@
    "kor": "구르기",
    "file": "img/momo/side_roll.png",
    "bbox": [
-    31,
-    45,
-    353,
-    338
+    38,
+    71,
+    347,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 121007
+   "size": 111108
   },
   {
    "key": "momo_side_run",
@@ -621,16 +621,16 @@
    "kor": "달리기",
    "file": "img/momo/side_run.png",
    "bbox": [
-    31,
-    100,
-    352,
-    284
+    0,
+    129,
+    383,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 77890
+   "size": 108968
   },
   {
    "key": "momo_side_scratch",
@@ -640,16 +640,16 @@
    "kor": "귀긁기",
    "file": "img/momo/side_scratch.png",
    "bbox": [
-    39,
-    31,
-    345,
-    352
+    57,
+    67,
+    328,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 141101
+   "size": 112119
   },
   {
    "key": "momo_side_shake",
@@ -659,16 +659,16 @@
    "kor": "몸털기",
    "file": "img/momo/side_shake.png",
    "bbox": [
-    32,
-    58,
-    353,
-    340
+    46,
+    102,
+    338,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 142486
+   "size": 120065
   },
   {
    "key": "momo_side_sit",
@@ -678,16 +678,16 @@
    "kor": "앉기",
    "file": "img/momo/side_sit.png",
    "bbox": [
-    59,
-    31,
-    326,
-    352
+    60,
+    37,
+    324,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 108969
+   "size": 104193
   },
   {
    "key": "momo_side_skid",
@@ -697,16 +697,16 @@
    "kor": "급정지",
    "file": "img/momo/side_skid.png",
    "bbox": [
-    32,
-    49,
-    353,
-    334
+    33,
+    71,
+    352,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 116964
+   "size": 113628
   },
   {
    "key": "momo_side_sleep",
@@ -716,16 +716,16 @@
    "kor": "자기",
    "file": "img/momo/side_sleep.png",
    "bbox": [
-    32,
-    119,
-    352,
-    265
+    25,
+    200,
+    359,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 97066
+   "size": 103553
   },
   {
    "key": "momo_side_slide",
@@ -735,16 +735,16 @@
    "kor": "미끄러짐",
    "file": "img/momo/side_slide.png",
    "bbox": [
-    31,
-    86,
-    353,
-    296
+    11,
+    118,
+    373,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 92430
+   "size": 113082
   },
   {
    "key": "momo_side_sneak",
@@ -754,16 +754,16 @@
    "kor": "살금살금",
    "file": "img/momo/side_sneak.png",
    "bbox": [
-    31,
-    88,
-    353,
-    296
+    19,
+    129,
+    366,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 97237
+   "size": 110153
   },
   {
    "key": "momo_side_sneeze",
@@ -773,16 +773,16 @@
    "kor": "재채기",
    "file": "img/momo/side_sneeze.png",
    "bbox": [
-    31,
-    76,
-    353,
-    308
+    29,
+    117,
+    356,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 109520
+   "size": 111466
   },
   {
    "key": "momo_side_sniff",
@@ -792,16 +792,16 @@
    "kor": "냄새맡기",
    "file": "img/momo/side_sniff.png",
    "bbox": [
-    31,
-    80,
-    352,
-    306
+    33,
+    129,
+    351,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 106582
+   "size": 102943
   },
   {
    "key": "momo_side_stand",
@@ -811,16 +811,16 @@
    "kor": "서기",
    "file": "img/momo/side_stand.png",
    "bbox": [
-    34,
-    66,
+    33,
+    101,
     352,
-    317
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 110829
+   "size": 109554
   },
   {
    "key": "momo_side_standup",
@@ -830,16 +830,16 @@
    "kor": "두발서기",
    "file": "img/momo/side_standup.png",
    "bbox": [
-    128,
-    31,
-    256,
-    352
+    103,
+    0,
+    282,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 62022
+   "size": 88538
   },
   {
    "key": "momo_side_startle",
@@ -849,16 +849,16 @@
    "kor": "놀람",
    "file": "img/momo/side_startle.png",
    "bbox": [
-    31,
-    98,
-    352,
-    289
+    27,
+    156,
+    358,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 105095
+   "size": 109493
   },
   {
    "key": "momo_side_stretch",
@@ -868,16 +868,16 @@
    "kor": "기지개",
    "file": "img/momo/side_stretch.png",
    "bbox": [
-    33,
-    88,
-    352,
-    298
+    23,
+    129,
+    362,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 99065
+   "size": 109352
   },
   {
    "key": "momo_side_sulk",
@@ -887,16 +887,16 @@
    "kor": "시무룩",
    "file": "img/momo/side_sulk.png",
    "bbox": [
-    31,
-    73,
-    353,
-    311
+    28,
+    110,
+    357,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 103137
+   "size": 106823
   },
   {
    "key": "momo_side_tiptoe",
@@ -906,16 +906,16 @@
    "kor": "까치발",
    "file": "img/momo/side_tiptoe.png",
    "bbox": [
-    31,
-    79,
-    352,
-    304
+    22,
+    115,
+    362,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 105798
+   "size": 116650
   },
   {
    "key": "momo_side_tired",
@@ -925,16 +925,16 @@
    "kor": "지침",
    "file": "img/momo/side_tired.png",
    "bbox": [
-    31,
-    65,
-    353,
-    318
+    36,
+    107,
+    349,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 117296
+   "size": 110178
   },
   {
    "key": "momo_side_trot",
@@ -944,16 +944,16 @@
    "kor": "종종걸음",
    "file": "img/momo/side_trot.png",
    "bbox": [
-    31,
-    78,
-    352,
-    305
+    21,
+    111,
+    363,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 102710
+   "size": 113527
   },
   {
    "key": "momo_side_walk",
@@ -963,16 +963,16 @@
    "kor": "걷기",
    "file": "img/momo/side_walk.png",
    "bbox": [
-    31,
-    86,
-    352,
-    298
+    17,
+    121,
+    367,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 94521
+   "size": 109792
   },
   {
    "key": "momo_side_wallstand",
@@ -982,16 +982,16 @@
    "kor": "벽기대서기",
    "file": "img/momo/side_wallstand.png",
    "bbox": [
-    95,
-    31,
-    289,
+    71,
+    0,
+    314,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 76619
+   "size": 105018
   },
   {
    "key": "momo_side_wobble",
@@ -1002,15 +1002,15 @@
    "file": "img/momo/side_wobble.png",
    "bbox": [
     31,
-    67,
-    352,
-    316
+    104,
+    353,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 114237
+   "size": 114124
   },
   {
    "key": "momo_side_yawn",
@@ -1020,16 +1020,16 @@
    "kor": "하품",
    "file": "img/momo/side_yawn.png",
    "bbox": [
-    31,
-    61,
-    352,
-    322
+    29,
+    88,
+    355,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 108619
+   "size": 110495
   },
   {
    "key": "nana_front_angry",
@@ -1039,16 +1039,16 @@
    "kor": "화남",
    "file": "img/nana/front_angry.png",
    "bbox": [
-    119,
-    31,
-    265,
+    113,
+    5,
+    272,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 109369
+   "size": 125748
   },
   {
    "key": "nana_front_beg",
@@ -1058,16 +1058,16 @@
    "kor": "애원",
    "file": "img/nana/front_beg.png",
    "bbox": [
-    114,
-    31,
-    268,
-    352
+    104,
+    0,
+    279,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 101657
+   "size": 125962
   },
   {
    "key": "nana_front_curious",
@@ -1077,16 +1077,16 @@
    "kor": "궁금",
    "file": "img/nana/front_curious.png",
    "bbox": [
-    120,
-    31,
-    263,
-    352
+    112,
+    0,
+    272,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 100223
+   "size": 120734
   },
   {
    "key": "nana_front_focus",
@@ -1096,16 +1096,16 @@
    "kor": "집중",
    "file": "img/nana/front_focus.png",
    "bbox": [
-    124,
-    31,
-    259,
+    114,
+    0,
+    270,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 96571
+   "size": 121646
   },
   {
    "key": "nana_front_hang0",
@@ -1115,16 +1115,16 @@
    "kor": "대롱대롱",
    "file": "img/nana/front_hang0.png",
    "bbox": [
-    141,
-    31,
-    242,
+    125,
+    0,
+    259,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 77842
+   "size": 110724
   },
   {
    "key": "nana_front_happy",
@@ -1134,16 +1134,16 @@
    "kor": "행복",
    "file": "img/nana/front_happy.png",
    "bbox": [
-    106,
-    31,
-    277,
-    352
+    109,
+    39,
+    275,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 125072
+   "size": 119125
   },
   {
    "key": "nana_front_laugh",
@@ -1153,16 +1153,16 @@
    "kor": "크게웃기",
    "file": "img/nana/front_laugh.png",
    "bbox": [
-    116,
-    31,
-    266,
+    111,
+    7,
+    272,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 110886
+   "size": 125795
   },
   {
    "key": "nana_front_sad",
@@ -1172,16 +1172,16 @@
    "kor": "슬픔",
    "file": "img/nana/front_sad.png",
    "bbox": [
-    97,
-    31,
-    287,
-    352
+    102,
+    50,
+    282,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 134368
+   "size": 119545
   },
   {
    "key": "nana_front_scared",
@@ -1191,16 +1191,16 @@
    "kor": "겁먹음",
    "file": "img/nana/front_scared.png",
    "bbox": [
-    37,
-    31,
-    345,
+    62,
+    82,
+    321,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 166073
+   "size": 120508
   },
   {
    "key": "nana_front_sleepy",
@@ -1210,16 +1210,16 @@
    "kor": "졸림",
    "file": "img/nana/front_sleepy.png",
    "bbox": [
-    96,
-    31,
-    286,
-    352
+    102,
+    47,
+    282,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 129240
+   "size": 116273
   },
   {
    "key": "nana_front_stare",
@@ -1229,16 +1229,16 @@
    "kor": "빤히보기",
    "file": "img/nana/front_stare.png",
    "bbox": [
-    121,
-    31,
-    262,
-    352
+    114,
+    0,
+    270,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 102970
+   "size": 123972
   },
   {
    "key": "nana_front_startle",
@@ -1248,16 +1248,16 @@
    "kor": "놀람",
    "file": "img/nana/front_startle.png",
    "bbox": [
-    116,
-    31,
-    267,
-    352
+    114,
+    24,
+    270,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 118720
+   "size": 123930
   },
   {
    "key": "nana_front_tongue",
@@ -1267,16 +1267,16 @@
    "kor": "메롱",
    "file": "img/nana/front_tongue.png",
    "bbox": [
-    104,
-    31,
-    278,
+    101,
+    18,
+    282,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 117288
+   "size": 124970
   },
   {
    "key": "nana_front_wink",
@@ -1286,16 +1286,16 @@
    "kor": "윙크",
    "file": "img/nana/front_wink.png",
    "bbox": [
-    109,
-    31,
-    273,
+    103,
+    7,
+    280,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 111132
+   "size": 125894
   },
   {
    "key": "nana_side_belly",
@@ -1305,16 +1305,16 @@
    "kor": "배보이기",
    "file": "img/nana/side_belly.png",
    "bbox": [
-    31,
-    71,
-    353,
-    310
+    18,
+    94,
+    366,
+    352
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 110192
+   "size": 126667
   },
   {
    "key": "nana_side_crouch",
@@ -1324,16 +1324,16 @@
    "kor": "덮치기준비",
    "file": "img/nana/side_crouch.png",
    "bbox": [
-    32,
-    47,
-    352,
-    337
+    45,
+    88,
+    339,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 143211
+   "size": 120637
   },
   {
    "key": "nana_side_excited",
@@ -1343,16 +1343,16 @@
    "kor": "신남",
    "file": "img/nana/side_excited.png",
    "bbox": [
-    33,
-    58,
-    352,
-    325
+    39,
+    96,
+    345,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 116901
+   "size": 106805
   },
   {
    "key": "nana_side_growl",
@@ -1363,15 +1363,15 @@
    "file": "img/nana/side_growl.png",
    "bbox": [
     31,
-    65,
-    352,
-    318
+    100,
+    353,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 118717
+   "size": 117994
   },
   {
    "key": "nana_side_hang30",
@@ -1381,17 +1381,17 @@
    "kor": "대롱대롱",
    "file": "img/nana/side_hang30.png",
    "bbox": [
-    132,
-    31,
-    251,
+    114,
+    0,
+    269,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "facing": "L",
-   "size": 77945
+   "size": 110033,
+   "facing": "L"
   },
   {
    "key": "nana_side_hang60",
@@ -1401,17 +1401,17 @@
    "kor": "대롱대롱",
    "file": "img/nana/side_hang60.png",
    "bbox": [
-    105,
-    31,
-    279,
+    82,
+    0,
+    302,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "facing": "L",
-   "size": 80121
+   "size": 109485,
+   "facing": "L"
   },
   {
    "key": "nana_side_hang90",
@@ -1421,17 +1421,17 @@
    "kor": "대롱대롱",
    "file": "img/nana/side_hang90.png",
    "bbox": [
-    99,
-    31,
-    284,
+    76,
+    0,
+    309,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "facing": "L",
-   "size": 80412
+   "size": 110065,
+   "facing": "L"
   },
   {
    "key": "nana_side_jump",
@@ -1441,16 +1441,16 @@
    "kor": "점프",
    "file": "img/nana/side_jump.png",
    "bbox": [
-    33,
-    71,
-    352,
-    312
+    39,
+    120,
+    346,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 117077
+   "size": 107552
   },
   {
    "key": "nana_side_land",
@@ -1460,16 +1460,16 @@
    "kor": "착지",
    "file": "img/nana/side_land.png",
    "bbox": [
-    31,
-    82,
-    353,
-    302
+    1,
+    92,
+    383,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 91163
+   "size": 123815
   },
   {
    "key": "nana_side_licknose",
@@ -1479,16 +1479,16 @@
    "kor": "코핥기",
    "file": "img/nana/side_licknose.png",
    "bbox": [
-    31,
-    48,
-    353,
-    336
+    35,
+    73,
+    349,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 129200
+   "size": 121777
   },
   {
    "key": "nana_side_lickpaw",
@@ -1498,16 +1498,16 @@
    "kor": "앞발핥기",
    "file": "img/nana/side_lickpaw.png",
    "bbox": [
-    31,
-    38,
-    353,
-    345
+    48,
+    77,
+    336,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 148355
+   "size": 119619
   },
   {
    "key": "nana_side_lookback",
@@ -1517,16 +1517,16 @@
    "kor": "뒤돌아보기",
    "file": "img/nana/side_lookback.png",
    "bbox": [
-    31,
-    33,
-    352,
-    350
+    65,
+    101,
+    319,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 171649
+   "size": 109053
   },
   {
    "key": "nana_side_lookdown",
@@ -1536,16 +1536,16 @@
    "kor": "아래쳐다보기",
    "file": "img/nana/side_lookdown.png",
    "bbox": [
-    31,
-    69,
-    352,
-    315
+    21,
+    91,
+    363,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 104462
+   "size": 116366
   },
   {
    "key": "nana_side_lookup",
@@ -1555,16 +1555,16 @@
    "kor": "위쳐다보기",
    "file": "img/nana/side_lookup.png",
    "bbox": [
-    37,
-    31,
-    347,
+    47,
+    51,
+    337,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 129440
+   "size": 113289
   },
   {
    "key": "nana_side_pawup",
@@ -1574,16 +1574,16 @@
    "kor": "앞발들기",
    "file": "img/nana/side_pawup.png",
    "bbox": [
-    31,
-    31,
-    352,
+    41,
+    52,
+    342,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 135082
+   "size": 118702
   },
   {
    "key": "nana_side_pounce",
@@ -1593,16 +1593,16 @@
    "kor": "덮치기",
    "file": "img/nana/side_pounce.png",
    "bbox": [
-    31,
-    102,
-    353,
-    281
+    0,
+    125,
+    383,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 79627
+   "size": 121624
   },
   {
    "key": "nana_side_proud",
@@ -1612,16 +1612,16 @@
    "kor": "당당함",
    "file": "img/nana/side_proud.png",
    "bbox": [
-    31,
-    40,
-    352,
-    343
+    37,
+    63,
+    346,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 129788
+   "size": 119211
   },
   {
    "key": "nana_side_roll",
@@ -1631,16 +1631,16 @@
    "kor": "구르기",
    "file": "img/nana/side_roll.png",
    "bbox": [
-    31,
-    49,
-    352,
-    333
+    41,
+    84,
+    343,
+    352
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 139814
+   "size": 124280
   },
   {
    "key": "nana_side_run",
@@ -1650,16 +1650,16 @@
    "kor": "달리기",
    "file": "img/nana/side_run.png",
    "bbox": [
-    31,
-    94,
-    352,
-    289
+    4,
+    124,
+    380,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 83459
+   "size": 110700
   },
   {
    "key": "nana_side_scratch",
@@ -1669,16 +1669,16 @@
    "kor": "귀긁기",
    "file": "img/nana/side_scratch.png",
    "bbox": [
-    31,
-    43,
-    352,
-    340
+    41,
+    73,
+    344,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 144464
+   "size": 128917
   },
   {
    "key": "nana_side_shake",
@@ -1688,16 +1688,16 @@
    "kor": "몸털기",
    "file": "img/nana/side_shake.png",
    "bbox": [
-    33,
-    60,
-    352,
-    325
+    39,
+    98,
+    347,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 131763
+   "size": 122776
   },
   {
    "key": "nana_side_sit",
@@ -1707,16 +1707,16 @@
    "kor": "앉기",
    "file": "img/nana/side_sit.png",
    "bbox": [
-    41,
-    31,
-    345,
-    352
+    49,
+    50,
+    336,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 122800
+   "size": 108757
   },
   {
    "key": "nana_side_skid",
@@ -1726,16 +1726,16 @@
    "kor": "급정지",
    "file": "img/nana/side_skid.png",
    "bbox": [
-    31,
-    66,
-    352,
-    317
+    37,
+    109,
+    347,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 125436
+   "size": 116728
   },
   {
    "key": "nana_side_sleep",
@@ -1745,16 +1745,16 @@
    "kor": "자기",
    "file": "img/nana/side_sleep.png",
    "bbox": [
-    33,
-    125,
-    352,
-    259
+    17,
+    205,
+    368,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 89554
+   "size": 105093
   },
   {
    "key": "nana_side_slide",
@@ -1764,16 +1764,16 @@
    "kor": "미끄러짐",
    "file": "img/nana/side_slide.png",
    "bbox": [
-    31,
-    97,
-    353,
-    286
+    3,
+    132,
+    381,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 91601
+   "size": 121483
   },
   {
    "key": "nana_side_sneak",
@@ -1783,16 +1783,16 @@
    "kor": "살금살금",
    "file": "img/nana/side_sneak.png",
    "bbox": [
-    31,
-    88,
-    353,
-    296
+    22,
+    134,
+    362,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 105255
+   "size": 115164
   },
   {
    "key": "nana_side_sneeze",
@@ -1802,16 +1802,16 @@
    "kor": "재채기",
    "file": "img/nana/side_sneeze.png",
    "bbox": [
-    31,
-    61,
-    350,
-    323
+    40,
+    104,
+    344,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 132939
+   "size": 120002
   },
   {
    "key": "nana_side_sniff",
@@ -1822,15 +1822,15 @@
    "file": "img/nana/side_sniff.png",
    "bbox": [
     33,
-    78,
+    120,
     352,
-    311
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 108133
+   "size": 106520
   },
   {
    "key": "nana_side_stand",
@@ -1841,15 +1841,15 @@
    "file": "img/nana/side_stand.png",
    "bbox": [
     31,
-    58,
-    352,
-    325
+    86,
+    353,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 108416
+   "size": 107157
   },
   {
    "key": "nana_side_standup",
@@ -1859,16 +1859,16 @@
    "kor": "두발서기",
    "file": "img/nana/side_standup.png",
    "bbox": [
-    121,
-    31,
-    262,
+    91,
+    0,
+    277,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 64821
+   "size": 97039
   },
   {
    "key": "nana_side_startle",
@@ -1878,16 +1878,16 @@
    "kor": "놀람",
    "file": "img/nana/side_startle.png",
    "bbox": [
-    31,
-    102,
-    352,
-    284
+    21,
+    159,
+    363,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 98618
+   "size": 109716
   },
   {
    "key": "nana_side_stretch",
@@ -1897,16 +1897,16 @@
    "kor": "기지개",
    "file": "img/nana/side_stretch.png",
    "bbox": [
-    34,
-    90,
-    352,
-    297
+    23,
+    133,
+    361,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 98238
+   "size": 108435
   },
   {
    "key": "nana_side_sulk",
@@ -1916,16 +1916,16 @@
    "kor": "시무룩",
    "file": "img/nana/side_sulk.png",
    "bbox": [
-    32,
-    83,
-    353,
-    301
+    17,
+    114,
+    368,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 97942
+   "size": 114470
   },
   {
    "key": "nana_side_tiptoe",
@@ -1935,16 +1935,16 @@
    "kor": "까치발",
    "file": "img/nana/side_tiptoe.png",
    "bbox": [
-    31,
-    75,
-    353,
-    308
+    25,
+    111,
+    359,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 113111
+   "size": 120056
   },
   {
    "key": "nana_side_tired",
@@ -1954,16 +1954,16 @@
    "kor": "지침",
    "file": "img/nana/side_tired.png",
    "bbox": [
-    31,
-    85,
-    352,
-    299
+    19,
+    123,
+    365,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 106021
+   "size": 119642
   },
   {
    "key": "nana_side_trot",
@@ -1973,16 +1973,16 @@
    "kor": "종종걸음",
    "file": "img/nana/side_trot.png",
    "bbox": [
-    31,
-    67,
-    352,
-    316
+    27,
+    98,
+    356,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 115596
+   "size": 119632
   },
   {
    "key": "nana_side_walk",
@@ -1992,16 +1992,16 @@
    "kor": "걷기",
    "file": "img/nana/side_walk.png",
    "bbox": [
-    31,
-    86,
-    352,
-    297
+    14,
+    118,
+    370,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 94926
+   "size": 114071
   },
   {
    "key": "nana_side_wallstand",
@@ -2011,16 +2011,16 @@
    "kor": "벽기대서기",
    "file": "img/nana/side_wallstand.png",
    "bbox": [
-    86,
-    31,
-    297,
+    62,
+    0,
+    323,
     353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 77364
+   "size": 106945
   },
   {
    "key": "nana_side_wobble",
@@ -2030,16 +2030,16 @@
    "kor": "비틀비틀",
    "file": "img/nana/side_wobble.png",
    "bbox": [
-    31,
-    76,
-    353,
-    308
+    14,
+    96,
+    370,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 103031
+   "size": 123798
   },
   {
    "key": "nana_side_yawn",
@@ -2049,16 +2049,16 @@
    "kor": "하품",
    "file": "img/nana/side_yawn.png",
    "bbox": [
-    34,
-    67,
-    352,
-    316
+    31,
+    101,
+    353,
+    353
    ],
    "src_size": [
     1024,
     1024
    ],
-   "size": 106259
+   "size": 107350
   }
  ]
 }

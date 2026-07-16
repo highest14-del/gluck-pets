@@ -223,8 +223,8 @@ function Build-Cycles {
   foreach ($kind in @('nana','momo')) {
     $wc = @()
     foreach ($n in @('side_walk1','side_walk2','side_walk3','side_walk4')) { if (F $kind $n) { $wc += $n } }
-    if ($wc.Count -ge 2) { $script:WalkCyc[$kind] = $wc }         # 진짜 보행 사이클 (발 교차)
-    else { $script:WalkCyc[$kind] = @('side_walk','side_trot') }  # 폴백: 걷기/종종걸음 교대
+    if ($wc.Count -ge 2) { $script:WalkCyc[$kind] = $wc }   # 진짜 보행 사이클 (발 교차)
+    else { $script:WalkCyc[$kind] = @('side_walk') }         # 폴백: 단일 컷 + 바운스 (사진 교대 반짝임 방지)
     $rc = @()
     foreach ($n in @('side_run1','side_run2','side_run3')) { if (F $kind $n) { $rc += $n } }
     if ($rc.Count -ge 2) { $script:RunCyc[$kind] = $rc }
@@ -782,6 +782,9 @@ function Update-Pet($p) {
   if ($null -ne $p.platform) { $p.y = Stand-Y $p $p.platform } else { $p.y = Ground-Y $p }
   if (@('run','chase','flee','zoomies') -contains $st) {
     $p.y -= [int](([Math]::Abs([Math]::Sin($p.anim*0.5))) * $SPR * 0.03)
+  }
+  elseif (@('walk','carry','sniff','sneak') -contains $st) {
+    $p.y -= [int](([Math]::Abs([Math]::Sin($p.anim*0.3))) * $SPR * 0.012)
   }
 
   if ($p.timer -le 0 -and $st -ne 'landing' -and $st -ne 'pounce' -and $st -ne 'caught' -and $st -ne 'shakeoff') {
