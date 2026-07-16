@@ -6,9 +6,10 @@ $ErrorActionPreference = 'Continue'
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 try {
-  Add-Type -Namespace GPB -Name Dpi -MemberDefinition '[DllImport("user32.dll")] public static extern bool SetProcessDPIAware();'
-  [void][GPB.Dpi]::SetProcessDPIAware()   # 첫 창 생성 전에 (이후엔 변경 불가)
-} catch {}
+  Add-Type -Namespace GPB -Name Dpi -MemberDefinition '[DllImport("user32.dll")] public static extern bool SetProcessDpiAwarenessContext(IntPtr c); [DllImport("user32.dll")] public static extern bool SetProcessDPIAware();'
+  # Per-Monitor V2 우선 (모니터 배율 달라도 OS 강제 확대 없음), 실패 시 시스템 DPI 인식
+  if (-not [GPB.Dpi]::SetProcessDpiAwarenessContext((New-Object IntPtr(-4)))) { [void][GPB.Dpi]::SetProcessDPIAware() }
+} catch { try { [void][GPB.Dpi]::SetProcessDPIAware() } catch {} }
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 $Base = 'https://raw.githubusercontent.com/highest14-del/gluck-pets/AI%EA%B4%80%EC%A0%9C/dist'
