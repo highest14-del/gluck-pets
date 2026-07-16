@@ -412,8 +412,17 @@ function Render-Pet($p) {
   if ($null -eq $bmp) { $bmp = $Frames["$($p.kind)|side_stand|$($p.facing)"] }
   if ($null -eq $bmp) { return }
   # 프레임 전환 감지 → 페이드 시작
+  # 단, 같은 동작의 사이클 프레임(walk1→walk2 등)과 시퀀스 재생 중엔 페이드 금지 —
+  # 진짜 애니메이션에 반투명 겹침이 매 프레임 걸리면 잔상이 반짝거림 (v17 실기 보고)
   if ($p.lastKey -ne $key) {
-    if ($null -ne $p.lastBmp -and $p.lastBmp -ne $bmp) { $p.fadeFrom = $p.lastBmp; $p.fade = $FADE_TICKS }
+    $ob = $p.lastKey -replace '[1-9]\|', '|'
+    $nb = $key -replace '[1-9]\|', '|'
+    $noFadeState = @('seqplay','landing','jump','jumpprep','fall') -contains $p.state
+    if ($null -ne $p.lastBmp -and $p.lastBmp -ne $bmp -and $ob -ne $nb -and -not $noFadeState) {
+      $p.fadeFrom = $p.lastBmp; $p.fade = $FADE_TICKS
+    } else {
+      $p.fade = 0; $p.fadeFrom = $null    # 사이클 진행 중엔 진행 중이던 페이드도 끊음 (잔상 제거)
+    }
     $p.lastKey = $key; $p.lastBmp = $bmp
   }
   if ($script:UseULW) {
