@@ -199,9 +199,27 @@ function Build-Frames {
 
 function F($kind, $frame) { return $HasFrame.ContainsKey("$kind|$frame") }
 
+$script:Cyc = @{}   # "kind|view_pose" -> 정렬된 변형 번호 목록
+function AF($p, $base, $per) {
+  # 포즈 변형(base1..base9)이 있으면 주기 $per 틱으로 순환, 없으면 base 그대로
+  $ck = "$($p.kind)|$base"
+  if ($script:Cyc.ContainsKey($ck)) {
+    $lst = $script:Cyc[$ck]
+    return ($base + $lst[([int][Math]::Floor($p.anim / $per)) % $lst.Count])
+  }
+  return $base
+}
+
 $script:WalkCyc = @{}
 $script:RunCyc = @{}
 function Build-Cycles {
+  foreach ($k in @($HasFrame.Keys)) {
+    if ($k -match '^([a-z]+)\|(.+?)([1-9])$') {
+      $ck = $Matches[1] + '|' + $Matches[2]
+      if (-not $script:Cyc.ContainsKey($ck)) { $script:Cyc[$ck] = @() }
+      $script:Cyc[$ck] = @($script:Cyc[$ck] + [int]$Matches[3] | Sort-Object)
+    }
+  }
   foreach ($kind in @('nana','momo')) {
     $wc = @()
     foreach ($n in @('side_walk1','side_walk2','side_walk3','side_walk4')) { if (F $kind $n) { $wc += $n } }
