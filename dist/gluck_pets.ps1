@@ -242,7 +242,7 @@ $FootPad = @{}     # "kind|frame" -> px (창 하단에서 발바닥까지)
 $BboxX = @{}       # "kind|frame" -> @(좌, 우+1) 스케일된 실루엣 가로 범위 (벽 밀착용)
 $HasFrame = @{}
 $script:UseULW = $true
-$App = @{ pets=(New-Object System.Collections.ArrayList); hearts=(New-Object System.Collections.ArrayList); speeches=(New-Object System.Collections.ArrayList); plat=@{}; tick=0; busy=0.0; away=$false; awayPrev=$false }
+$App = @{ pets=(New-Object System.Collections.ArrayList); hearts=(New-Object System.Collections.ArrayList); speeches=(New-Object System.Collections.ArrayList); plat=@{}; tick=0; busy=0.0; away=$false; awayPrev=$false; hour=12; greetDone=$false; eveDone=$false; nightDone=$false }
 
 function Sign1($c) { if ($c) { return 1 } else { return -1 } }
 
@@ -253,7 +253,15 @@ $script:HDown = { param($s,$e)
   if ($e.Button -ne [System.Windows.Forms.MouseButtons]::Left) { return }
   $pet = $s.Tag
   if ($e.Clicks -ge 2) {
-    if (@('drag','fall') -contains $pet.state) { $pet.state='idle'; $pet.vx=0; $pet.vy=0 }
+    if ($pet.state -eq 'fall') { return }   # 공중 더블클릭 무시 (바닥 순간이동 방지)
+    if ($pet.state -eq 'drag') {
+      # 더블클릭의 첫 클릭이 만든 잡기를 취소하고 쓰다듬기로 (창 위였다면 제자리 복원)
+      if ($null -ne $pet.grabPlat) {
+        $w9 = Find-Plat $pet.grabPlat.id
+        if ($null -ne $w9) { $pet.platform = $w9; $pet.platLeft = $w9.left }
+      }
+      $pet.state = 'idle'; $pet.vx = 0; $pet.vy = 0; $pet.timer = 30
+    }
     Pet-Head $pet
   } else {
     On-Grab $pet
@@ -585,6 +593,23 @@ function On-GroundLevel($p) { return ($null -eq $p.platform -and [Math]::Abs($p.
 function Start-Chase($p,$o) { $p.partner=$o; $o.partner=$p; $p.state='chase'; $o.state='flee'; $t=$rng.Next(120,220); $p.timer=$t; $o.timer=$t }
 function Start-Ride($r,$c) { $r.partner=$c; $c.partner=$r; $r.state='ride'; $c.state='carry'; $t=$rng.Next(150,300); $r.timer=$t; $c.timer=$t }
 
+# 캐릭터별 대사 (v30): 나나=장난꾸러기, 모모=포근이. 없는 키는 공용 SAY 폴백
+$SAY_DOG = @{
+  'nana' = @{
+    'front_happy'   = @('헤헤 신난다!','오늘 뭐 재밌는 거 없나','놀자놀자!')
+    'front_beg'     = @('간식 내놔!','하나만... 딱 하나만!')
+    'front_sleepy'  = @('안 졸려... 안 졸리다구...','흐아암... 5분만')
+    'front_laugh'   = @('캬하하!','완전 웃겨!')
+    'side_excited'  = @('우다다 간다!','월월!!')
+  }
+  'momo' = @{
+    'front_happy'   = @('오늘도 평화롭네요~','히히 좋아라','곁에 있을게요')
+    'front_beg'     = @('간식... 주시면 안 돼요?','조금만 나눠줘요~')
+    'front_sleepy'  = @('스르르... 잘 자요','포근포근...')
+    'front_laugh'   = @('후후 행복해요','기분 좋은 날!')
+    'side_excited'  = @('와아~ 신나요!','같이 놀아요~')
+  }
+}
 $SAY = @{
   'front_happy'   = @('히히','오늘도 좋은 하루!','좋아좋아')
   'front_curious' = @('뭐 해?','그거 뭐야?','응?')
@@ -600,8 +625,16 @@ $SAY = @{
 
 function Position-Speech($sp) {
   $p = $sp.pet
-  $sp.form.Left = [int]((Cx $p) - $sp.form.Width / 2)
-  $sp.form.Top = [int]($p.y + (($CANVAS - 1) * $SC * 0.08) - $sp.form.Height - 2)
+  $lx = [int]((Cx $p) - $sp.form.Width / 2)
+  $ly = [int]($p.y + (($CANVAS - 1) * $SC * 0.08) - $sp.form.Height - 2)
+  # 화면 밖 잘림 방지 (v30): 펫이 있는 화면 안으로 클램프
+  $scr = Screen-Of (Cx $p)
+  if ($null -ne $scr) {
+    $lx = [Math]::Max($scr.left + 4, [Math]::Min($scr.right - $sp.form.Width - 4, $lx))
+    if ($ly -lt ($scr.top + 4)) { $ly = [int]($p.y + $SPR * 0.55) }   # 위가 모자라면 펫 아래로
+  }
+  $sp.form.Left = $lx
+  $sp.form.Top = $ly
 }
 
 $script:FontBubble = New-Object System.Drawing.Font('Malgun Gothic', 10, [System.Drawing.FontStyle]::Bold)
@@ -652,10 +685,11 @@ function Say($p, $text, $life=95) {
 }
 
 function Say-Emotion($p, $frame) {
-  if ($SAY.ContainsKey($frame)) {
-    $arr = $SAY[$frame]
-    Say $p ($arr[$rng.Next($arr.Count)])
-  }
+  $arr = $null
+  $dd = $SAY_DOG[$p.kind]
+  if ($null -ne $dd -and $dd.ContainsKey($frame)) { $arr = $dd[$frame] }
+  elseif ($SAY.ContainsKey($frame)) { $arr = $SAY[$frame] }
+  if ($null -ne $arr) { Say $p ($arr[$rng.Next($arr.Count)]) }
 }
 
 # 직전 정면 포즈 반복 회피 선택
@@ -677,8 +711,8 @@ function Enter-FaceCam($p, $reason, $pose, $ticks) {
   $nf = $App.tick + 333
   if ($p.nextFaceAt -lt $nf) { $p.nextFaceAt = $nf }
   ELog ("정면: " + $p.name + " reason=" + $reason + " pose=" + $pose + " ticks=" + $ticks)
-  # 옆모습에서 정면으로 들어갈 땐 카메라 전환(옆→대각60→대각30→정면)을 먼저 재생
-  if ($p.frame -like 'side_*') {
+  # 옆모습에서 '정면 포즈'로 들어갈 때만 카메라 전환(옆→대각60→대각30→정면) 재생
+  if ($p.frame -like 'side_*' -and $pose -like 'front_*') {
     $ct = @()
     foreach ($n in 1..4) {
       $c = FirstF $p.kind @("diag60_camturn$n", "diag30_camturn$n", "side_camturn$n", "front_camturn$n")
@@ -736,7 +770,7 @@ function Set-PetSize($h) {
 function Force-State($p,$state,$ticks) {
   if (@('drag','jump','fall','ride') -contains $p.state) { return }   # 공중 상태에서 강제 전이 시 순간이동 방지
   Detach-Social $p; $p.state=$state; $p.timer=$ticks; $p.vx=0; $p.seq=0
-  $p.afterFace = ''; $p.afterSeq = ''; $p.yawnHold = 0
+  $p.afterFace = ''; $p.afterSeq = ''; $p.yawnHold = 0; $p.landKind = ''
 }
 function Pet-Head($p) {
   if (@('drag','fall','jump','jumpprep','ride') -contains $p.state) { return }
@@ -746,7 +780,7 @@ function Pet-Head($p) {
     $p.petCnt++; $p.petCntAt = $App.tick
     if ($p.petCnt -ge 4 -and $rng.NextDouble() -lt 0.5 -and (F $p.kind 'front_angry')) {
       $p.petCnt = 0
-      Enter-FaceCam $p 'annoyed' 'front_angry' 55
+      Enter-FaceCam $p 'annoyed' (Pick-Face $p @('front_angry','side_sulk','side_growl')) 55
       return
     }
     Enter-FaceCam $p 'pet' (Pick-Face $p @('front_happy','front_laugh','front_wink','front_tongue')) 60
@@ -786,8 +820,8 @@ function On-Grab($p) {
 }
 function On-Release($p) {
   if ($p.state -ne 'drag') { return }
-  # 톡 건드리기: 0.25초 미만 + 거의 안 움직임 → 던지기 대신 놀람→회복 반응
-  if (($App.tick - $p.grabAt) -lt 8 -and (F $p.kind 'front_tap1')) {
+  # 톡 건드리기: 0.25초 미만 + 거의 안 움직임 → 던지기 대신 제자리 (에셋 있으면 놀람 반응)
+  if (($App.tick - $p.grabAt) -lt 8) {
     $moved = 0
     if ($p.trail.Count -ge 2) {
       $f0 = $p.trail[0]; $l0 = $p.trail[$p.trail.Count - 1]
@@ -799,8 +833,10 @@ function On-Release($p) {
         $w9 = Find-Plat $p.grabPlat.id
         if ($null -ne $w9) { $p.platform = $w9; $p.platLeft = $w9.left }
       }
-      $p.camframe = 'front_stare'; $p.faceReason = 'tap'
-      Start-Seq $p @('front_tap1','front_tap2','front_tap3','front_tap4') 4 'facecam' 25
+      if (F $p.kind 'front_tap1') {
+        $p.camframe = 'front_stare'; $p.faceReason = 'tap'
+        Start-Seq $p @('front_tap1','front_tap2','front_tap3','front_tap4') 4 'facecam' 25
+      } else { $p.state = 'idle'; $p.timer = 30 }
       ELog ("톡건드리기: " + $p.name)
       return
     }
@@ -809,9 +845,9 @@ function On-Release($p) {
   if ($p.trail.Count -ge 2) {
     $first = $p.trail[0]; $last = $p.trail[$p.trail.Count - 1]
     $n = $p.trail.Count - 1
-    # 스프링 추종 지연 보정(×1.6) + 상한 대폭 상향 — 세게 던지면 진짜 빠르고 높게 날아간다
-    $tvx = (($last[0] - $first[0]) / $n) * 1.6
-    $tvy = (($last[1] - $first[1]) / $n) * 1.6
+    # 커서 실속도 기반 (v30) — 보정 배율 축소
+    $tvx = (($last[0] - $first[0]) / $n) * 1.15
+    $tvy = (($last[1] - $first[1]) / $n) * 1.15
     $p.vx = [Math]::Max(-45, [Math]::Min(45, $tvx))
     $p.vy = [Math]::Max(-60, [Math]::Min(24, $tvy))
   } else { $p.vx = 0; $p.vy = 0 }
@@ -824,7 +860,7 @@ function Drag-Frame($p) {
   $tx = $cur.X - $p.dragOff[0]; $ty = $cur.Y - $p.dragOff[1]
   $p.x += ($tx - $p.x) * 0.28
   $p.y += ($ty - $p.y) * 0.34
-  [void]$p.trail.Add(@($p.x, $p.y))          # 틱별 위치 (던지기 속도용)
+  [void]$p.trail.Add(@([double]$cur.X, [double]$cur.Y))   # 커서 궤적 (던지기 속도 = 실제 손 속도)
   while ($p.trail.Count -gt 6) { $p.trail.RemoveAt(0) }
   $dx = $tx - $p.x
   $ratio = [Math]::Abs($dx) / ($SPR * 0.6)
@@ -850,7 +886,7 @@ function Drag-Frame($p) {
 # ---------------------------------------------------------------- 행동 결정
 function Decide($p) {
   $p.state = 'idle'   # 타이머 만료 직후의 잔여 상태가 Interruptible 검사를 오탐하던 버그 수정 (v29)
-  $p.yawnHold = 0     # 이전 앉기에서 남은 하품 카운터 정리
+  $p.yawnHold = 0; $p.oneShotHold = 0   # 이전 상태에서 남은 일회성 연출 카운터 정리
   # 자동 정면 스케줄러 — 확률이 아니라 25~55초 간격 예약제 (지상·행동 사이에서만 호출됨)
   if ($CFG_FrontReaction -and $App.tick -ge $p.nextFaceAt) {
     $p.nextFaceAt = $App.tick + [int]((833 + $rng.Next(0, 1000)) * $ADV_MUL)
@@ -983,7 +1019,12 @@ function Decide($p) {
   elseif ($r -lt 0.77) { $p.state='idle'; $p.timer=$rng.Next(50,150) }   # 정면은 스케줄러 전담 (무작위 슬롯 제거)
   elseif ($r -lt 0.80) { $p.state='excited'; $p.timer=$rng.Next(60,110)
     if ($rng.NextDouble() -lt 0.5) { Say-Emotion $p 'side_excited' } }
-  elseif ($r -lt 0.90) { Start-Seq $p @('side_sitdown3','side_sitdown1','side_sitdown4','side_sitdown5','side_sitdown2','side_sitdown6') 4 'sit' ($rng.Next(120,280)) }
+  elseif ($r -lt $(
+      $sg2 = 0.90
+      if ($App.hour -ge 12 -and $App.hour -lt 14) { $sg2 = 0.84 }        # 점심 낮잠
+      elseif ($App.hour -ge 23 -or $App.hour -lt 6) { $sg2 = 0.80 }      # 심야
+      $sg2
+    )) { Start-Seq $p @('side_sitdown3','side_sitdown1','side_sitdown4','side_sitdown5','side_sitdown2','side_sitdown6') 4 'sit' ($rng.Next(120,280)) }
   else {
     # 잠들기 직전 1.3초 졸린 정면 → (facecam 종료 시) 엎드리기→눕기 시퀀스로 이어짐
     if ($CFG_FrontReaction -and (F $p.kind 'front_sleepy')) {
@@ -1072,6 +1113,7 @@ function Hop-Off($p) {
 
 function Land-On($p, $plat) {
   if ($plat -is [string]) { $plat = $null }
+  $p.impactVy = $p.vy   # 착지 직전 수직 속도 (강한 낙하 → 놀람 반응용)
   $p.platform = $plat
   $p.vx = 0; $p.vy = 0
   $p.state = 'landing'; $p.timer = 9; $p.seq = 0
@@ -1087,7 +1129,7 @@ function Land-On($p, $plat) {
 
 # 일회성 전이 시퀀스 재생 (프레임 없으면 목적 상태로 직행 — 안전 폴백)
 function Start-Seq($p, $frames, $per, $next, $nextTimer) {
-  $p.afterSeq = ''   # 이전 시퀀스의 예약 체인 무효화 (호출자는 호출 직후 재설정)
+  $p.afterSeq = ''; $p.afterFace = ''   # 이전 예약 체인 무효화 (호출자는 호출 직후 재설정)
   $avail = @($frames | Where-Object { F $p.kind $_ })
   if ($avail.Count -eq 0) {
     $p.state = $next; $p.timer = $nextTimer
@@ -1268,12 +1310,32 @@ function Update-Pet($p) {
                   $cyc = $script:RunCyc[$p.kind]
                   $rp = if ($cyc.Count -ge 6) { 2 } else { 4 }
                   $frame = $cyc[([int]([Math]::Floor($p.anim / $rp))) % $cyc.Count] }
-      'sniff'   { $speed=$WALK_SPEED*0.4;  $frame = AF $p 'side_sniff' 7 }
-      'sneak'   { $speed=$WALK_SPEED*0.45; $frame = AF $p 'side_sneak' 7 }
+      'sniff'   { # 걷다가 멈춰 킁킁 — 40틱 주기 (걷기 24 + 정지 16), 활주 제거 (v30)
+                  $ph2 = $p.anim % 40
+                  if ($ph2 -lt 24) {
+                    $speed = $WALK_SPEED * 0.55
+                    $cyc = $script:WalkCyc[$p.kind]
+                    $per = if ($cyc.Count -ge 6) { 4 } elseif ($cyc.Count -ge 3) { 6 } else { 9 }
+                    $frame = $cyc[([int]([Math]::Floor($p.anim / $per))) % $cyc.Count]
+                  } else {
+                    $speed = 0
+                    $frame = AF $p 'side_sniff' 7
+                  } }
+      'sneak'   { # 살금살금 — 까치발(tiptoe)과 교차로 발 움직임 표현 (v30, 죽은 에셋 배선)
+                  $speed=$WALK_SPEED*0.45
+                  if (F $p.kind 'side_tiptoe') {
+                    $frame = @('side_sneak','side_tiptoe')[([int]([Math]::Floor($p.anim / 7))) % 2]
+                  } else {
+                    $frame = AF $p 'side_sneak' 7
+                  } }
     }
     if ($st -eq 'zoomies') {
-      if ($p.skid -gt 0) { $p.skid--; $frame='side_skid'; $speed=$speed*0.3 }
-      elseif ($rng.NextDouble() -lt 0.05) { $p.facing = -$p.facing; $p.skid = 7 }
+      if ($p.skid -gt 0) { $p.skid--; $frame=$p.skidFrame; $speed=$speed*0.3 }
+      elseif ($rng.NextDouble() -lt 0.05) {
+        $p.facing = -$p.facing; $p.skid = 7
+        $p.skidFrame = 'side_skid'
+        if ((F $p.kind 'side_slide') -and $rng.NextDouble() -lt 0.4) { $p.skidFrame = 'side_slide' }
+      }
     }
     if ($st -eq 'chase' -and $null -ne $p.partner) {
       $p.facing = Sign1 ($p.partner.x -gt $p.x)
@@ -1298,7 +1360,7 @@ function Update-Pet($p) {
         $p.x = $prevX; $p.facing = -$p.facing
       }
     }
-    if ($p.x -le $leftLim -or $p.x -ge $rightLim) {
+    if ($speed -gt 0 -and ($p.x -le $leftLim -or $p.x -ge $rightLim)) {
       $atRight = $p.x -ge $rightLim
       $p.x = [Math]::Max($leftLim, [Math]::Min($rightLim, $p.x))
       if ($null -ne $p.platform -and (@('run','chase','flee','zoomies') -contains $st) -and $rng.NextDouble() -lt 0.5) { Hop-Off $p; return }
@@ -1379,6 +1441,10 @@ function Update-Pet($p) {
       }
       elseif ($CFG_FrontReaction -and $lk -eq 'falllost' -and $rng.NextDouble() -lt 0.6) {
         Enter-FaceCam $p 'fear' (Pick-Face $p @('front_scared','front_sad')) 55
+      }
+      elseif ($CFG_FrontReaction -and $p.impactVy -gt ($MAX_FALL * 0.8) -and $rng.NextDouble() -lt 0.4 -and (F $p.kind 'front_startle')) {
+        # 세게 떨어진 뒤 어리둥절 (죽은 에셋 front_startle 부활)
+        Enter-FaceCam $p 'startled' 'front_startle' 35
       }
       elseif ($rng.NextDouble() -lt 0.3) { $p.state='shakeoff'; $p.timer=26 }
       else { $p.state='idle'; $p.timer=$rng.Next(25,70) }
@@ -1470,7 +1536,8 @@ function Update-Pet($p) {
     $p.frame = AF $p 'side_windowknock' 4   # 두드리기 1→2→3→4 루프
   }
   elseif ($st -eq 'exhausted') {
-    $p.frame = AF $p 'side_tired' 10
+    if (F $p.kind 'side_wobble') { $p.frame = @('side_tired','side_wobble')[([int]([Math]::Floor($p.anim / 25))) % 2] }
+    else { $p.frame = AF $p 'side_tired' 10 }
   }
   elseif ($st -eq 'sit') {
     if ($p.yawnHold -gt 0) {
@@ -1490,9 +1557,17 @@ function Update-Pet($p) {
       if ($zt) { Say $p $zt 45 }
     }
   }
-  else { # idle — 서기 변주
-    $opts = @('side_stand','side_proud','side_pawup')
-    $p.frame = AF $p ($opts[([int]([Math]::Floor($p.anim/45))) % $opts.Count]) 10
+  else { # idle — 서기 변주 + 희귀 재채기
+    if ($p.oneShotHold -gt 0) {
+      $p.oneShotHold--
+      $p.frame = $p.oneShot
+    } else {
+      $opts = @('side_stand','side_proud','side_pawup')
+      $p.frame = AF $p ($opts[([int]([Math]::Floor($p.anim/45))) % $opts.Count]) 10
+      if ((F $p.kind 'side_sneeze') -and $rng.NextDouble() -lt 0.0015) {
+        $p.oneShot = 'side_sneeze'; $p.oneShotHold = 20; $p.frame = 'side_sneeze'
+      }
+    }
   }
 
   # 프레임 확정 후 y 재계산 — 프레임 간 발높이(FootPad) 차이로 인한 떨림 방지
@@ -1513,7 +1588,7 @@ function Update-Pet($p) {
       Start-Seq $p @('side_prone4','side_prone1','side_prone5','side_prone2','side_prone6','side_prone3','side_liedown4','side_liedown1','side_liedown5','side_liedown2','side_liedown6','side_liedown3') 4 'sleep' (Sleep-Ticks)
       return
     }
-    if ($st -eq 'facecam') {
+    if ($st -eq 'facecam' -and $p.camframe -like 'front_*') {
       # 정면 종료 → 역방향 카메라 전환으로 옆모습 복귀
       $ct2 = @()
       foreach ($n in 4,3,2,1) {
@@ -1524,7 +1599,7 @@ function Update-Pet($p) {
     }
     if ($st -eq 'sleep') {
       # 깨어나기: 눕기 역순 → 일어나기 → 잠깐 서기 (프레임 없으면 바로 idle)
-      Start-Seq $p @('side_liedown3','side_liedown6','side_liedown2','side_liedown5','side_liedown1','side_liedown4','side_rise3','side_rise1','side_rise4','side_rise5','side_rise2','side_rise6') 4 'idle' ($rng.Next(40,90))
+      Start-Seq $p @('side_liedown3','side_liedown6','side_liedown2','side_liedown5','side_liedown1','side_liedown4','side_rise3','side_rise1','side_rise4','side_rise5','side_rise2','side_rise6','side_standup') 4 'idle' ($rng.Next(40,90))
       return
     }
     Decide $p
@@ -1556,7 +1631,7 @@ function New-Pet($id, $name, $kind, $x) {
           leanCoolAt=($rng.Next(1200,2600)); leanX=0.0; leanId=[long]0; leanFace=1; snuggle=$false;
           afterSeq=''; grabAt=0; grabPlat=$null; dismissed=$false;
           lastDrawKey=''; lastDrawX=-999999; lastDrawY=-999999;
-          socialCoolAt=0; yawnHold=0;
+          socialCoolAt=0; yawnHold=0; oneShot=''; oneShotHold=0; skidFrame='side_skid'; impactVy=0.0;
           dragStage=3; dragHold=0; dragWant=3;
           lastKey=''; lastBmp=$null; fadeFrom=$null; fade=0; scratch=$null; scratchG=$null }
   $p.y = [double](Ground-Y $p)
@@ -1570,8 +1645,18 @@ function New-Pet($id, $name, $kind, $x) {
     $q = $s.Owner.Tag
     if (-not (@('drag','jump','jumpprep','fall','ride') -contains $q.state)) { Enter-FaceCam $q 'menu' 'front_stare' (70 + $rng.Next(0,60)) } })
   $mi = $menu.Items.Add("앉아!"); $mi.add_Click({ param($s,$e) Force-State $s.Owner.Tag 'sit' 200 })
-  $mi = $menu.Items.Add("코~ 자자"); $mi.add_Click({ param($s,$e) Force-State $s.Owner.Tag 'sleep' 600 })
-  $mi = $menu.Items.Add("일어나!"); $mi.add_Click({ param($s,$e) Force-State $s.Owner.Tag 'idle' 30 })
+  $mi = $menu.Items.Add("코~ 자자"); $mi.add_Click({ param($s,$e)
+    $q = $s.Owner.Tag
+    if (@('drag','jump','jumpprep','fall','ride') -contains $q.state) { return }
+    Detach-Social $q; $q.vx = 0
+    Start-Seq $q @('side_prone4','side_prone1','side_prone5','side_prone2','side_prone6','side_prone3','side_liedown4','side_liedown1','side_liedown5','side_liedown2','side_liedown6','side_liedown3') 4 'sleep' 600
+    $q.zseq = 0 })
+  $mi = $menu.Items.Add("일어나!"); $mi.add_Click({ param($s,$e)
+    $q = $s.Owner.Tag
+    if (@('drag','jump','jumpprep','fall','ride') -contains $q.state) { return }
+    if ($q.state -eq 'sleep') {
+      Start-Seq $q @('side_liedown3','side_liedown6','side_liedown2','side_liedown5','side_liedown1','side_liedown4','side_rise3','side_rise1','side_rise4','side_rise5','side_rise2','side_rise6','side_standup') 4 'idle' 30
+    } else { Force-State $q 'idle' 30 } })
   [void]$menu.Items.Add((New-Object System.Windows.Forms.ToolStripSeparator))
   $mi = $menu.Items.Add("크기: 작게"); $mi.add_Click({ Set-PetSize 190 })
   $mi = $menu.Items.Add("크기: 보통"); $mi.add_Click({ Set-PetSize 250 })
@@ -1796,6 +1881,21 @@ function Start-App {
         if ($idleMs -lt 2000) { $s = 1.0 }
         $App.busy = 0.9 * $App.busy + 0.1 * $s
         $App.away = ($idleMs -gt 45000)
+        $App.hour = (Get-Date).Hour
+        if ($App.hour -eq 5) { $App.greetDone = $false; $App.eveDone = $false; $App.nightDone = $false }   # 매일 리셋
+        # 시간대 한 마디 (하루 1회씩): 아침 인사 / 저녁 응원 / 심야 걱정 (v30)
+        if (-not $App.greetDone -and $App.hour -ge 7 -and $App.hour -lt 10 -and $App.tick -gt 300) {
+          $App.greetDone = $true
+          foreach ($pg2 in $App.pets) { if (-not $pg2.dismissed -and (Interruptible $pg2)) { Say $pg2 '좋은 아침!'; break } }
+        }
+        if (-not $App.eveDone -and $App.hour -ge 18 -and $App.hour -lt 20 -and $App.tick -gt 300) {
+          $App.eveDone = $true
+          foreach ($pg3 in $App.pets) { if (-not $pg3.dismissed -and (Interruptible $pg3)) { Say $pg3 '오늘도 수고했어요!'; break } }
+        }
+        if (-not $App.nightDone -and ($App.hour -ge 23 -or $App.hour -lt 4) -and $App.tick -gt 300) {
+          $App.nightDone = $true
+          foreach ($pg4 in $App.pets) { if (-not $pg4.dismissed -and (Interruptible $pg4)) { Say $pg4 '늦었어요... 이제 주무세요'; break } }
+        }
         # 절전: 5분 이상 부재면 틱을 120ms로 늦춰 CPU 최소화, 복귀 즉시 원복 (v28)
         if ($idleMs -gt 300000) {
           if ($script:Timer.Interval -ne 120) { $script:Timer.Interval = 120; ELog "절전 틱 진입 (5분 부재)" }
