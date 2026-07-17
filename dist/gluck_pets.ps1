@@ -418,7 +418,11 @@ function Other-Pet($p) { foreach ($q in $App.pets) { if ($q.id -ne $p.id -and -n
 function Dismiss-Pet($p) {
   $alive = 0
   foreach ($q in $App.pets) { if (-not $q.dismissed) { $alive++ } }
-  if ($alive -le 1) { [System.Windows.Forms.Application]::Exit(); return }
+  if ($alive -le 1) {
+    $ans2 = [System.Windows.Forms.MessageBox]::Show("마지막 아이예요 — 내보내면 앱이 종료됩니다. 종료할까요?", "나나모모", 'YesNo', 'Question')
+    if ($ans2 -eq [System.Windows.Forms.DialogResult]::Yes) { [System.Windows.Forms.Application]::Exit() }
+    return
+  }
   Detach-Social $p
   $p.dismissed = $true
   $p.form.Hide()
@@ -497,6 +501,7 @@ function Render-Pet($p) {
     $of = $p.lastKey.Substring($p.lastKey.LastIndexOf('|') + 1)
     $nf2 = $key.Substring($key.LastIndexOf('|') + 1)
     $fadeOk = ($of -ne $nf2)
+    if ($p.frame -like 'front_*' -or $p.lastKey -like '*|front_*') { $fadeOk = $false }   # 정면 강제 fc=1 대비 가짜 반전 페이드 제거
     if ($p.state -eq 'drag') {
       $ob = $p.lastKey -replace '[1-9]\|', '|'
       $nb = $key -replace '[1-9]\|', '|'
@@ -537,7 +542,12 @@ function Render-Pet($p) {
     }
     $ok = $false
     try { $ok = [GPLayer]::Draw($p.form.Handle, $draw, $ix, $iy) } catch {}
-    if ($ok) { $p.lastDrawKey = $key; $p.lastDrawX = $ix; $p.lastDrawY = $iy; return }
+    if ($ok) {
+      # 블렌드 프레임을 그린 틱은 캐시하지 않음 — 다음 틱에 100% 프레임을 반드시 다시 그린다 (잔상 고착 방지)
+      if ($draw -eq $bmp) { $p.lastDrawKey = $key } else { $p.lastDrawKey = '' }
+      $p.lastDrawX = $ix; $p.lastDrawY = $iy
+      return
+    }
     $script:UseULW = $false
     ELog "ULW 실패(FALSE/예외) → 크로마 폴백 전환"
   }
@@ -709,17 +719,24 @@ function Restart-Pets {
   if (Test-Path $vbs) { Start-Process wscript.exe ('"' + $vbs + '"') }
   [System.Windows.Forms.Application]::Exit()
 }
-function Set-PetSize($h) {
+function Save-Settings {
+  # 설정 전체를 항상 함께 저장 — 부분 덮어쓰기로 다른 설정이 소실되던 버그 수정 (v28)
   try {
-    @{ pet_h = $h } | ConvertTo-Json | Set-Content -Path (Join-Path $HomeDir 'settings.json') -Encoding UTF8
+    @{ pet_h = $PET_H; window_jump = [bool]$CFG_WindowJump; monitor_jump = [bool]$CFG_MonitorJump;
+       front_reaction = [bool]$CFG_FrontReaction; adventure = [int]$CFG_Adventure } |
+      ConvertTo-Json | Set-Content -Path (Join-Path $HomeDir 'settings.json') -Encoding UTF8
   } catch {}
+}
+function Set-PetSize($h) {
+  $script:PET_H = [int]$h
+  Save-Settings
   Restart-Pets
 }
 
 function Force-State($p,$state,$ticks) {
   if (@('drag','jump','fall','ride') -contains $p.state) { return }   # 공중 상태에서 강제 전이 시 순간이동 방지
   Detach-Social $p; $p.state=$state; $p.timer=$ticks; $p.vx=0; $p.seq=0
-  $p.afterFace = ''; $p.afterSeq = ''
+  $p.afterFace = ''; $p.afterSeq = ''; $p.yawnHold = 0
 }
 function Pet-Head($p) {
   if (@('drag','fall','jump','jumpprep','ride') -contains $p.state) { return }
@@ -756,6 +773,7 @@ function Pet-Head($p) {
 
 # ---------------------------------------------------------------- 드래그 (4단계 시선)
 function On-Grab($p) {
+  if ($script:Timer -and $script:Timer.Interval -ne $TICK_MS) { $script:Timer.Interval = $TICK_MS }   # 절전 즉시 해제
   $p.grabPlat = $p.platform   # 톡 건드리기 시 제자리 복원용
   Detach-Social $p; $p.state='drag'; $p.platform=$null; $p.jump=$null
   $p.landKind = ''   # 이전 추락 사유가 던지기 착지에 오염되지 않게
@@ -831,6 +849,8 @@ function Drag-Frame($p) {
 
 # ---------------------------------------------------------------- 행동 결정
 function Decide($p) {
+  $p.state = 'idle'   # 타이머 만료 직후의 잔여 상태가 Interruptible 검사를 오탐하던 버그 수정 (v29)
+  $p.yawnHold = 0     # 이전 앉기에서 남은 하품 카운터 정리
   # 자동 정면 스케줄러 — 확률이 아니라 25~55초 간격 예약제 (지상·행동 사이에서만 호출됨)
   if ($CFG_FrontReaction -and $App.tick -ge $p.nextFaceAt) {
     $p.nextFaceAt = $App.tick + [int]((833 + $rng.Next(0, 1000)) * $ADV_MUL)
@@ -864,7 +884,8 @@ function Decide($p) {
     } else { $p.snuggle = $false }
   }
   # 사용자 작업 창에 앞발 기대보기 (드묾 — 60~150초 쿨다운, 전경 창이 바닥까지 있을 때)
-  if ($null -eq $p.platform -and $App.tick -ge $p.leanCoolAt -and $rng.NextDouble() -lt 0.3) {
+  # 단, 타이핑 중(busy)에는 금지 — 작업 중인 바로 그 창을 두드리는 최악의 방해 차단 (v28)
+  if ((-not $busy) -and $null -eq $p.platform -and $App.tick -ge $p.leanCoolAt -and $rng.NextDouble() -lt 0.3) {
     $p.leanCoolAt = $App.tick + [int]((2000 + $rng.Next(0, 3000)) * $ADV_MUL)
     $bxw = $BboxX["$($p.kind)|side_wallstand"]
     $fg = 0
@@ -890,8 +911,8 @@ function Decide($p) {
   if ($null -ne $o -and (Interruptible $o) -and (Interruptible $p)) {
     $bothGround = ($null -eq $p.platform -and $null -eq $o.platform)
     $dxo = [Math]::Abs((Cx $p) - (Cx $o))
-    # 인사/코비비기: 가까이 있을 때 마주보며 (히든연출 — 반대편은 좌우반전으로 마주봄)
-    if ($bothGround -and $dxo -lt ($SPR*1.6) -and $r -lt 0.14 -and (F $p.kind 'side_greeting1') -and (F $o.kind 'side_greeting1')) {
+    # 인사/코비비기 — 독립 주사위 + 쿨다운(같은 연출 반복 방지)
+    if ($bothGround -and $dxo -lt ($SPR*1.6) -and $App.tick -ge $p.socialCoolAt -and $rng.NextDouble() -lt 0.14 -and (F $p.kind 'side_greeting1') -and (F $o.kind 'side_greeting1')) {
       $sg = 'greeting'
       if ((F $p.kind 'side_nuzzle1') -and (F $o.kind 'side_nuzzle1') -and $rng.NextDouble() -lt 0.5) { $sg = 'nuzzle' }
       $p.facing = Sign1 ((Cx $o) -gt (Cx $p))
@@ -900,13 +921,15 @@ function Decide($p) {
       Detach-Social $o
       Start-Seq $p $fg1 5 'idle' 50
       Start-Seq $o $fg1 5 'idle' 50
+      $coolS = $App.tick + [int]((2000 + $rng.Next(0, 2000)) * $ADV_MUL)   # 60~120초
+      $p.socialCoolAt = $coolS; $o.socialCoolAt = $coolS
       ELog ("히든연출: " + $sg)
       return
     }
     $cchance = 0.10
     if ($busy) { $cchance = 0.04 }   # 바쁠 땐 줄이되 끄지 않음 (지켜볼 때 안 노는 역설 방지)
-    if ($bothGround -and $r -lt $cchance) {
-      # 놀자 초대 → 추격 (초대 컷 있으면 절반 확률)
+    if ($bothGround -and $rng.NextDouble() -lt $cchance) {
+      # 놀자 초대 → 추격 (초대 컷 있으면 절반 확률) — 독립 주사위 (근접 시 추격 0% 버그 수정)
       if ((F $p.kind 'side_playinvite1') -and $rng.NextDouble() -lt 0.5) {
         $p.facing = Sign1 ((Cx $o) -gt (Cx $p))
         $fp1 = @(); foreach ($n6 in 1..5) { $fp1 += ('side_playinvite' + $n6) }
@@ -917,11 +940,17 @@ function Decide($p) {
       }
       Start-Chase $p $o; return
     }
-    if ((On-GroundLevel $p) -and (On-GroundLevel $o) -and $dxo -lt ($SPR*1.3) -and $r -lt 0.17) { Start-Ride $p $o; return }
-    # 다가가기: 멀리 떨어져 있으면 친구 쪽으로 걸어감 → 근접 상호작용(인사·등타기)이 자연히 늘어남
-    if ($bothGround -and $dxo -gt ($SPR*2.2) -and $r -lt 0.30) {
+    # 등타기 — 딱 붙었을 때만 (325px 순간이동 제거), 독립 주사위
+    if ((On-GroundLevel $p) -and (On-GroundLevel $o) -and $dxo -lt ($SPR*0.5) -and $rng.NextDouble() -lt 0.35) { Start-Ride $p $o; return }
+    # 다가가기: 원거리(30%)는 성큼성큼, 중거리(10%)는 등타기·인사 준비 접근
+    if ($bothGround -and $dxo -gt ($SPR*2.2) -and $rng.NextDouble() -lt 0.30) {
       $p.state = 'walk'; $p.facing = Sign1 ((Cx $o) -gt (Cx $p))
       $p.timer = [int]([Math]::Min(260, [Math]::Max(30, ($dxo - $SPR*1.2) / $WALK_SPEED)))
+      return
+    }
+    elseif ($bothGround -and $dxo -ge ($SPR*0.5) -and $dxo -le ($SPR*2.2) -and $rng.NextDouble() -lt 0.10) {
+      $p.state = 'walk'; $p.facing = Sign1 ((Cx $o) -gt (Cx $p))
+      $p.timer = [int]([Math]::Max(15, ($dxo - $SPR*0.3) / $WALK_SPEED))
       return
     }
   }
@@ -1444,8 +1473,13 @@ function Update-Pet($p) {
     $p.frame = AF $p 'side_tired' 10
   }
   elseif ($st -eq 'sit') {
-    $p.frame = AF $p 'side_sit' 20
-    if ($rng.NextDouble() -lt 0.004) { $p.frame = AF $p 'side_yawn' 6 }
+    if ($p.yawnHold -gt 0) {
+      $p.yawnHold--
+      $p.frame = AF $p 'side_yawn' 6
+    } else {
+      $p.frame = AF $p 'side_sit' 20
+      if ($rng.NextDouble() -lt 0.004) { $p.yawnHold = 24 + $rng.Next(0, 10); $p.frame = AF $p 'side_yawn' 6 }
+    }
   }
   elseif ($st -eq 'sleep') {
     $p.frame = AF $p 'side_sleep' (CycPer $p 'side_sleep' 22 12)
@@ -1522,6 +1556,7 @@ function New-Pet($id, $name, $kind, $x) {
           leanCoolAt=($rng.Next(1200,2600)); leanX=0.0; leanId=[long]0; leanFace=1; snuggle=$false;
           afterSeq=''; grabAt=0; grabPlat=$null; dismissed=$false;
           lastDrawKey=''; lastDrawX=-999999; lastDrawY=-999999;
+          socialCoolAt=0; yawnHold=0;
           dragStage=3; dragHold=0; dragWant=3;
           lastKey=''; lastBmp=$null; fadeFrom=$null; fade=0; scratch=$null; scratchG=$null }
   $p.y = [double](Ground-Y $p)
@@ -1543,6 +1578,23 @@ function New-Pet($id, $name, $kind, $x) {
   $mi = $menu.Items.Add("크기: 크게"); $mi.add_Click({ Set-PetSize 310 })
   $mi = $menu.Items.Add("크기: 아주 크게"); $mi.add_Click({ Set-PetSize 380 })
   [void]$menu.Items.Add((New-Object System.Windows.Forms.ToolStripSeparator))
+  [void]$menu.Items.Add((New-Object System.Windows.Forms.ToolStripSeparator))
+  $sub = New-Object System.Windows.Forms.ToolStripMenuItem('활발함')
+  foreach ($lvl in @(@('차분',1), @('보통',2), @('활발',3))) {
+    $si = $sub.DropDownItems.Add([string]$lvl[0])
+    $si.Tag = [int]$lvl[1]
+    $si.add_Click({ param($s4,$e4)
+      $script:CFG_Adventure = [int]$s4.Tag
+      $script:ADV_MUL = @(1.6, 1.0, 0.55)[$script:CFG_Adventure - 1]
+      Save-Settings })
+  }
+  [void]$menu.Items.Add($sub)
+  $mi = $menu.Items.Add("창 올라타기")
+  $mi.Name = 'jumpToggle'
+  $mi.add_Click({
+    $script:CFG_WindowJump = -not $script:CFG_WindowJump
+    $script:CFG_MonitorJump = $script:CFG_WindowJump
+    Save-Settings })
   foreach ($def2 in $PETS) {
     $mi = $menu.Items.Add($def2.name + " 내보내기")
     $mi.Tag = $def2.kind
@@ -1556,6 +1608,11 @@ function New-Pet($id, $name, $kind, $x) {
   }
   $menu.add_Opening({ param($s3,$e3)
     foreach ($it in $s3.Items) {
+      if ($it.Name -eq 'jumpToggle') { $it.Checked = [bool]$script:CFG_WindowJump; continue }
+      if ($it.Text -eq '활발함') {
+        foreach ($ci in $it.DropDownItems) { $ci.Checked = ([int]$ci.Tag -eq [int]$script:CFG_Adventure) }
+        continue
+      }
       if ($null -eq $it.Tag -or $it.Tag -isnot [string]) { continue }
       foreach ($q in $App.pets) {
         if ($q.kind -eq $it.Tag) {
@@ -1564,7 +1621,10 @@ function New-Pet($id, $name, $kind, $x) {
         }
       }
     } })
-  $mi = $menu.Items.Add("펫 모두 종료"); $mi.add_Click({ [System.Windows.Forms.Application]::Exit() })
+  [void]$menu.Items.Add((New-Object System.Windows.Forms.ToolStripSeparator))
+  $mi = $menu.Items.Add("펫 모두 종료"); $mi.add_Click({
+    $ans = [System.Windows.Forms.MessageBox]::Show("나나모모를 모두 종료할까요?", "나나모모", 'YesNo', 'Question')
+    if ($ans -eq [System.Windows.Forms.DialogResult]::Yes) { [System.Windows.Forms.Application]::Exit() } })
   $f.ContextMenuStrip = $menu
   if ($null -ne $pb) { $pb.ContextMenuStrip = $menu; $pb.Tag = $p }
   $f.Tag = $p
@@ -1736,7 +1796,15 @@ function Start-App {
         if ($idleMs -lt 2000) { $s = 1.0 }
         $App.busy = 0.9 * $App.busy + 0.1 * $s
         $App.away = ($idleMs -gt 45000)
-        if ($App.away -and -not $App.awayPrev) {
+        # 절전: 5분 이상 부재면 틱을 120ms로 늦춰 CPU 최소화, 복귀 즉시 원복 (v28)
+        if ($idleMs -gt 300000) {
+          if ($script:Timer.Interval -ne 120) { $script:Timer.Interval = 120; ELog "절전 틱 진입 (5분 부재)" }
+        } elseif ($script:Timer.Interval -ne $TICK_MS) {
+          $script:Timer.Interval = $TICK_MS; ELog "절전 틱 해제"
+        }
+        $wasAway = $App.awayPrev
+        $App.awayPrev = $App.away   # 전이 처리 전에 먼저 기록 — 예외가 나도 같은 전이가 반복 발화하지 않게
+        if ($App.away -and -not $wasAway) {
           # 주인이 자리를 뜸 → 한 마리가 아쉬운 배웅 (옆→대각→정면)
           foreach ($pp in $App.pets) {
             if ($pp.dismissed -or -not (Interruptible $pp)) { continue }
@@ -1748,7 +1816,20 @@ function Start-App {
             if ($fw.Count -ge 2) { Start-Seq $pp $fw 8 'idle' 60; ELog ("히든연출: 배웅 " + $pp.name); break }
           }
         }
-        $App.awayPrev = $App.away
+        if ((-not $App.away) -and $wasAway) {
+          # 주인이 돌아옴 → 앞발 들어 반기기 + 신남 (부재 45초 이상 후 복귀 시 1회)
+          foreach ($pp in $App.pets) {
+            if ($pp.dismissed -or -not (Interruptible $pp)) { continue }
+            $pg = @()
+            foreach ($n8 in 1..5) { if (F $pp.kind ("side_pawgreet$n8")) { $pg += ("side_pawgreet$n8") } }
+            if ($pg.Count -ge 2) {
+              Start-Seq $pp $pg 5 'excited' 60
+              Say $pp "왔다왔다!!"
+              ELog ("히든연출: 복귀 인사 " + $pp.name)
+              break
+            }
+          }
+        }
       } catch {}
     }
     foreach ($p in $App.pets) { if (-not $p.dismissed) { Update-Pet $p } }
