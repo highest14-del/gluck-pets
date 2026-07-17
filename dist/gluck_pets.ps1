@@ -1616,12 +1616,12 @@ function Start-App {
   if ($null -ne $SplashForm) { try { $SplashForm.Close() } catch {} }
 
   # 바로가기를 '나나모모'로 갱신 + 새 아이콘 (기존 설치 자동 마이그레이션)
-  # icon2.ico = 나나·모모 얼굴 클로즈업 (새 파일명 → 윈도우 아이콘 캐시 우회)
+  # icon3.ico = 모모 얼굴 단독 + 투명 배경 (새 파일명 → 윈도우 아이콘 캐시 우회)
   try {
     $script:IconWC = New-Object System.Net.WebClient
     $script:IconWC.DownloadFileAsync(
-      (New-Object Uri('https://raw.githubusercontent.com/highest14-del/gluck-pets/AI%EA%B4%80%EC%A0%9C/dist/icon2.ico')),
-      (Join-Path $HomeDir 'icon2.ico'))
+      (New-Object Uri('https://raw.githubusercontent.com/highest14-del/gluck-pets/AI%EA%B4%80%EC%A0%9C/dist/icon3.ico')),
+      (Join-Path $HomeDir 'icon3.ico'))
   } catch {}
   try {
     $vbsPath = Join-Path $HomeDir '글룩펫_실행.vbs'
@@ -1633,8 +1633,10 @@ function Start-App {
       $lnkObj.TargetPath = 'wscript.exe'
       $lnkObj.Arguments = '"' + $vbsPath + '"'
       $lnkObj.WorkingDirectory = $HomeDir
+      $ic3 = Join-Path $HomeDir 'icon3.ico'
       $ic2 = Join-Path $HomeDir 'icon2.ico'
-      if (Test-Path $ic2) { $lnkObj.IconLocation = $ic2 }
+      if (Test-Path $ic3) { $lnkObj.IconLocation = $ic3 }
+      elseif (Test-Path $ic2) { $lnkObj.IconLocation = $ic2 }
       else { $lnkObj.IconLocation = (Join-Path $HomeDir 'icon.ico') }
       $lnkObj.Description = '나나와 모모 - 실사 데스크톱 펫'
       $lnkObj.WindowStyle = 7
