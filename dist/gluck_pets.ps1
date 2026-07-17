@@ -52,6 +52,7 @@ public class GPWin {
   [DllImport("user32.dll")] static extern IntPtr WindowFromPoint(PT p);
   [DllImport("user32.dll")] static extern IntPtr GetAncestor(IntPtr h, int flags);
   [DllImport("gdi32.dll")] public static extern IntPtr CreateRoundRectRgn(int a, int b, int c, int d, int e, int f);
+  [DllImport("gdi32.dll", EntryPoint="DeleteObject")] public static extern bool DeleteGdiObject(IntPtr h);
   [DllImport("gdi32.dll")] static extern uint GetPixel(IntPtr hdc, int x, int y);
   [DllImport("user32.dll")] static extern IntPtr GetDC(IntPtr h);
   [DllImport("user32.dll")] static extern int ReleaseDC(IntPtr h, IntPtr dc);
@@ -510,6 +511,9 @@ function Render-Pet($p) {
     $p.lastKey = $key; $p.lastBmp = $bmp
   }
   if ($script:UseULW) {
+    # dirty check (v27): 프레임·위치·페이드가 그대로면 재그리기 생략 — 유휴 CPU의 주범 제거
+    $ix = [int]$p.x; $iy = [int]$p.y
+    if ($p.fade -le 0 -and $key -eq $p.lastDrawKey -and $ix -eq $p.lastDrawX -and $iy -eq $p.lastDrawY) { return }
     $draw = $bmp
     if ($p.fade -gt 0 -and $null -ne $p.fadeFrom) {
       # 이전/새 프레임 알파 블렌드 (스크래치 비트맵 재사용)
@@ -532,8 +536,8 @@ function Render-Pet($p) {
       $draw = $p.scratch
     }
     $ok = $false
-    try { $ok = [GPLayer]::Draw($p.form.Handle, $draw, [int]$p.x, [int]$p.y) } catch {}
-    if ($ok) { return }
+    try { $ok = [GPLayer]::Draw($p.form.Handle, $draw, $ix, $iy) } catch {}
+    if ($ok) { $p.lastDrawKey = $key; $p.lastDrawX = $ix; $p.lastDrawY = $iy; return }
     $script:UseULW = $false
     ELog "ULW 실패(FALSE/예외) → 크로마 폴백 전환"
   }
@@ -590,11 +594,17 @@ function Position-Speech($sp) {
   $sp.form.Top = [int]($p.y + (($CANVAS - 1) * $SC * 0.08) - $sp.form.Height - 2)
 }
 
+$script:FontBubble = New-Object System.Drawing.Font('Malgun Gothic', 10, [System.Drawing.FontStyle]::Bold)
+$script:FontHeart = New-Object System.Drawing.Font('Segoe UI Emoji', 14)
+
 function Style-Bubble($form) {
-  # 라운드 코너 — 크기 바뀔 때마다 다시 적용
+  # 라운드 코너 — FromHrgn은 복사만 하므로 HRGN은 즉시 해제해야 GDI 핸들 누수가 없다 (v27)
   try {
     $r = [GPWin]::CreateRoundRectRgn(0, 0, $form.Width + 1, $form.Height + 1, 18, 18)
+    $old = $form.Region
     $form.Region = [System.Drawing.Region]::FromHrgn($r)
+    [void][GPWin]::DeleteGdiObject($r)
+    if ($null -ne $old) { try { $old.Dispose() } catch {} }
   } catch {}
 }
 
@@ -614,7 +624,7 @@ function Say($p, $text, $life=95) {
   $bf.BackColor = $bg
   $lbl = New-Object System.Windows.Forms.Label
   $lbl.AutoSize=$true; $lbl.Text=$text
-  $lbl.Font=New-Object System.Drawing.Font('Malgun Gothic', 10, [System.Drawing.FontStyle]::Bold)
+  $lbl.Font=$script:FontBubble
   $lbl.BackColor=$bg
   $lbl.ForeColor=$fg
   $lbl.BorderStyle='None'
@@ -676,7 +686,7 @@ function Spawn-Hearts($x, $y, $n) {
     $hf.FormBorderStyle='None'; $hf.ShowInTaskbar=$false; $hf.TopMost=$true; $hf.StartPosition='Manual'
     $lbl = New-Object System.Windows.Forms.Label
     $lbl.AutoSize=$true; $lbl.Text=[string][char]0x2764
-    $lbl.Font=New-Object System.Drawing.Font('Segoe UI Emoji', 14)
+    $lbl.Font=$script:FontHeart
     $lbl.ForeColor=[System.Drawing.Color]::FromArgb(255,239,109,138)
     $lbl.BackColor=$CHROMA
     $hf.BackColor=$CHROMA; $hf.TransparencyKey=$CHROMA
@@ -1511,6 +1521,7 @@ function New-Pet($id, $name, $kind, $x) {
           jumpCoolAt=0; monJumpCoolAt=($rng.Next(800,1600)); visited=(New-Object System.Collections.ArrayList);
           leanCoolAt=($rng.Next(1200,2600)); leanX=0.0; leanId=[long]0; leanFace=1; snuggle=$false;
           afterSeq=''; grabAt=0; grabPlat=$null; dismissed=$false;
+          lastDrawKey=''; lastDrawX=-999999; lastDrawY=-999999;
           dragStage=3; dragHold=0; dragWant=3;
           lastKey=''; lastBmp=$null; fadeFrom=$null; fade=0; scratch=$null; scratchG=$null }
   $p.y = [double](Ground-Y $p)
