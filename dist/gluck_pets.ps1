@@ -411,7 +411,28 @@ function Stand-Y($p, $plat) { return $plat.top - $SPR + (Foot $p) }
 function Find-Plat($id) { foreach ($w in $App.plat.windows) { if ($w.id -eq $id) { return $w } } return $null }
 function Feet($p) { return $p.y + $SPR - (Foot $p) }
 function Cx($p) { return $p.x + $SPR / 2 }
-function Other-Pet($p) { foreach ($q in $App.pets) { if ($q.id -ne $p.id) { return $q } } return $null }
+function Other-Pet($p) { foreach ($q in $App.pets) { if ($q.id -ne $p.id -and -not $q.dismissed) { return $q } } return $null }
+
+# 개별 내보내기/부르기 — 마지막 한 마리까지 내보내면 앱 종료 (조작할 창이 없어지므로)
+function Dismiss-Pet($p) {
+  $alive = 0
+  foreach ($q in $App.pets) { if (-not $q.dismissed) { $alive++ } }
+  if ($alive -le 1) { [System.Windows.Forms.Application]::Exit(); return }
+  Detach-Social $p
+  $p.dismissed = $true
+  $p.form.Hide()
+  $del = @()
+  foreach ($sp in $App.speeches) { if ($sp.pet.id -eq $p.id) { $del += $sp } }
+  foreach ($sp in $del) { try { $sp.form.Close() } catch {}; $App.speeches.Remove($sp) }
+  ELog ($p.name + " 내보냄")
+}
+function Summon-Pet($p) {
+  $p.dismissed = $false
+  $p.state = 'idle'; $p.timer = 40; $p.platform = $null
+  $p.y = [double](Ground-Y $p)
+  $p.form.Show()
+  ELog ($p.name + " 다시 부름")
+}
 
 function Plat-Visible($plat, $cx) {
   # 창 상단이 다른 창에 가려졌는지 — 펫 좌우 바깥 두 지점에서 최상위 창을 조회
@@ -1489,7 +1510,7 @@ function New-Pet($id, $name, $kind, $x) {
           dwell=0; dwellCoolAt=0; petCnt=0; petCntAt=0; landKind='';
           jumpCoolAt=0; monJumpCoolAt=($rng.Next(800,1600)); visited=(New-Object System.Collections.ArrayList);
           leanCoolAt=($rng.Next(1200,2600)); leanX=0.0; leanId=[long]0; leanFace=1; snuggle=$false;
-          afterSeq=''; grabAt=0; grabPlat=$null;
+          afterSeq=''; grabAt=0; grabPlat=$null; dismissed=$false;
           dragStage=3; dragHold=0; dragWant=3;
           lastKey=''; lastBmp=$null; fadeFrom=$null; fade=0; scratch=$null; scratchG=$null }
   $p.y = [double](Ground-Y $p)
@@ -1511,6 +1532,27 @@ function New-Pet($id, $name, $kind, $x) {
   $mi = $menu.Items.Add("크기: 크게"); $mi.add_Click({ Set-PetSize 310 })
   $mi = $menu.Items.Add("크기: 아주 크게"); $mi.add_Click({ Set-PetSize 380 })
   [void]$menu.Items.Add((New-Object System.Windows.Forms.ToolStripSeparator))
+  foreach ($def2 in $PETS) {
+    $mi = $menu.Items.Add($def2.name + " 내보내기")
+    $mi.Tag = $def2.kind
+    $mi.add_Click({ param($s2,$e2)
+      foreach ($q in $App.pets) {
+        if ($q.kind -eq $s2.Tag) {
+          if ($q.dismissed) { Summon-Pet $q } else { Dismiss-Pet $q }
+          break
+        }
+      } })
+  }
+  $menu.add_Opening({ param($s3,$e3)
+    foreach ($it in $s3.Items) {
+      if ($null -eq $it.Tag -or $it.Tag -isnot [string]) { continue }
+      foreach ($q in $App.pets) {
+        if ($q.kind -eq $it.Tag) {
+          if ($q.dismissed) { $it.Text = $q.name + " 다시 부르기" } else { $it.Text = $q.name + " 내보내기" }
+          break
+        }
+      }
+    } })
   $mi = $menu.Items.Add("펫 모두 종료"); $mi.add_Click({ [System.Windows.Forms.Application]::Exit() })
   $f.ContextMenuStrip = $menu
   if ($null -ne $pb) { $pb.ContextMenuStrip = $menu; $pb.Tag = $p }
@@ -1616,12 +1658,12 @@ function Start-App {
   if ($null -ne $SplashForm) { try { $SplashForm.Close() } catch {} }
 
   # 바로가기를 '나나모모'로 갱신 + 새 아이콘 (기존 설치 자동 마이그레이션)
-  # icon3.ico = 모모 얼굴 단독 + 투명 배경 (새 파일명 → 윈도우 아이콘 캐시 우회)
+  # icon4.ico = 모모 갸웃 얼굴 + 투명 배경 (새 파일명 → 윈도우 아이콘 캐시 우회)
   try {
     $script:IconWC = New-Object System.Net.WebClient
     $script:IconWC.DownloadFileAsync(
-      (New-Object Uri('https://raw.githubusercontent.com/highest14-del/gluck-pets/AI%EA%B4%80%EC%A0%9C/dist/icon3.ico')),
-      (Join-Path $HomeDir 'icon3.ico'))
+      (New-Object Uri('https://raw.githubusercontent.com/highest14-del/gluck-pets/AI%EA%B4%80%EC%A0%9C/dist/icon4.ico')),
+      (Join-Path $HomeDir 'icon4.ico'))
   } catch {}
   try {
     $vbsPath = Join-Path $HomeDir '글룩펫_실행.vbs'
@@ -1633,10 +1675,10 @@ function Start-App {
       $lnkObj.TargetPath = 'wscript.exe'
       $lnkObj.Arguments = '"' + $vbsPath + '"'
       $lnkObj.WorkingDirectory = $HomeDir
+      $ic4 = Join-Path $HomeDir 'icon4.ico'
       $ic3 = Join-Path $HomeDir 'icon3.ico'
-      $ic2 = Join-Path $HomeDir 'icon2.ico'
-      if (Test-Path $ic3) { $lnkObj.IconLocation = $ic3 }
-      elseif (Test-Path $ic2) { $lnkObj.IconLocation = $ic2 }
+      if (Test-Path $ic4) { $lnkObj.IconLocation = $ic4 }
+      elseif (Test-Path $ic3) { $lnkObj.IconLocation = $ic3 }
       else { $lnkObj.IconLocation = (Join-Path $HomeDir 'icon.ico') }
       $lnkObj.Description = '나나와 모모 - 실사 데스크톱 펫'
       $lnkObj.WindowStyle = 7
@@ -1686,7 +1728,7 @@ function Start-App {
         if ($App.away -and -not $App.awayPrev) {
           # 주인이 자리를 뜸 → 한 마리가 아쉬운 배웅 (옆→대각→정면)
           foreach ($pp in $App.pets) {
-            if (-not (Interruptible $pp)) { continue }
+            if ($pp.dismissed -or -not (Interruptible $pp)) { continue }
             $fw = @()
             foreach ($n7 in 1..4) {
               $c7 = FirstF $pp.kind @("side_farewell$n7", "diag60_farewell$n7", "diag30_farewell$n7", "front_farewell$n7")
@@ -1698,7 +1740,7 @@ function Start-App {
         $App.awayPrev = $App.away
       } catch {}
     }
-    foreach ($p in $App.pets) { Update-Pet $p }
+    foreach ($p in $App.pets) { if (-not $p.dismissed) { Update-Pet $p } }
     $dead = New-Object System.Collections.ArrayList
     foreach ($h in $App.hearts) {
       $h.y -= 3; $h.life--
@@ -1711,7 +1753,7 @@ function Start-App {
       if ($s.life -le 0) { [void]$deadSp.Add($s) } else { Position-Speech $s }
     }
     foreach ($s in $deadSp) { $s.form.Close(); $App.speeches.Remove($s) }
-    foreach ($p in $App.pets) { Render-Pet $p }
+    foreach ($p in $App.pets) { if (-not $p.dismissed) { Render-Pet $p } }
   })
   $script:Timer.Start()
   $ctx = New-Object System.Windows.Forms.ApplicationContext
