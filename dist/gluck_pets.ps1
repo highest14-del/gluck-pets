@@ -812,6 +812,7 @@ function On-Grab($p) {
   Detach-Social $p; $p.state='drag'; $p.platform=$null; $p.jump=$null
   $p.landKind = ''   # 이전 추락 사유가 던지기 착지에 오염되지 않게
   $p.afterSeq = ''; $p.afterFace = ''
+  $p.climbing = $false
   $p.grabAt = $App.tick
   # 커서가 목덜미(상단 중앙)를 잡은 것처럼 — 클릭 지점과 무관
   $p.dragOff = @(($SPR * 0.5), ($SPR * 0.10))
@@ -887,6 +888,53 @@ function Drag-Frame($p) {
 function Decide($p) {
   $p.state = 'idle'   # 타이머 만료 직후의 잔여 상태가 Interruptible 검사를 오탐하던 버그 수정 (v29)
   $p.yawnHold = 0; $p.oneShotHold = 0   # 이전 상태에서 남은 일회성 연출 카운터 정리
+  # 등반 원정 진행 중이면 다음 홉이 최우선 (쿨다운·visited 무시) — v31
+  if ($p.climbing -and -not $CFG_WindowJump) { $p.climbing = $false }   # 토글 끄면 원정도 종료
+  if ($p.climbing) {
+    $tw2 = Find-Plat $p.climbTarget
+    if ($null -eq $tw2 -or $null -eq $p.platform) { $p.climbing = $false }
+    else {
+      $riseC = (Feet $p) - $tw2.top
+      if ($riseC -lt 40 -or $riseC -gt 1150 -or -not (Plat-Visible $tw2 (($tw2.left + $tw2.right) / 2))) {
+        $p.climbing = $false   # 도달함/불가능해짐 → 원정 종료
+      } else {
+        ELog ("등반 홉: " + $p.name + " rise=" + [int]$riseC)
+        Plan-HopTo $p $tw2 ($riseC -gt 860)
+        return
+      }
+    }
+  }
+  # 등반 원정 트리거: 한 번에 못 가는 높은 창 + 단차 860 이내 중간 창 (3~6분 쿨다운) — v31
+  if ($CFG_WindowJump -and -not $p.climbing -and $null -eq $p.platform -and $App.tick -ge $p.climbCoolAt -and $rng.NextDouble() -lt 0.03 -and (-not ($App.busy -gt 0.7))) {
+    $p.climbCoolAt = $App.tick + 6000 + $rng.Next(0, 6000)
+    $myFeet3 = Feet $p
+    $summit = $null; $midW = $null
+    foreach ($w3 in $App.plat.windows) {
+      $rise3 = $myFeet3 - $w3.top
+      if ($rise3 -le 1150) { continue }
+      if (($w3.right - $w3.left) -lt ($SPR * 1.6)) { continue }
+      if (-not (Plat-Visible $w3 (($w3.left + $w3.right) / 2))) { continue }
+      foreach ($m3 in $App.plat.windows) {
+        if ($m3.id -eq $w3.id) { continue }
+        $riseM = $myFeet3 - $m3.top
+        if ($riseM -lt 60 -or $riseM -gt 860) { continue }
+        if (($m3.right - $m3.left) -lt ($SPR * 1.6)) { continue }
+        $step2 = $m3.top - $w3.top
+        if ($step2 -lt 60 -or $step2 -gt 860) { continue }
+        if ([Math]::Abs((($m3.left + $m3.right) / 2) - (($w3.left + $w3.right) / 2)) -gt 760) { continue }
+        if ([Math]::Abs((($m3.left + $m3.right) / 2) - (Cx $p)) -gt 760) { continue }   # 첫 홉도 일반 점프 사거리 안
+        if (-not (Plat-Visible $m3 (($m3.left + $m3.right) / 2))) { continue }
+        $summit = $w3; $midW = $m3; break
+      }
+      if ($null -ne $summit) { break }
+    }
+    if ($null -ne $summit) {
+      $p.climbing = $true; $p.climbTarget = $summit.id
+      ELog ("등반 원정 시작: " + $p.name + " 정상=" + $summit.id + " 경유=" + $midW.id)
+      Plan-HopTo $p $midW $false
+      return
+    }
+  }
   # 자동 정면 스케줄러 — 확률이 아니라 25~55초 간격 예약제 (지상·행동 사이에서만 호출됨)
   if ($CFG_FrontReaction -and $App.tick -ge $p.nextFaceAt) {
     $p.nextFaceAt = $App.tick + [int]((833 + $rng.Next(0, 1000)) * $ADV_MUL)
@@ -991,13 +1039,24 @@ function Decide($p) {
     }
   }
   $jchance = 0.13
-  if ($busy) { $jchance = 0.04 } elseif ($App.away) { $jchance = 0.2 }
+  if ($busy) { $jchance = 0.10 } elseif ($App.away) { $jchance = 0.2 }   # busy에도 창 구경은 옴 (v31)
   if ($r -lt $jchance -and (Plan-Jump $p)) { return }
   if ($null -ne $p.platform -and $r -lt 0.2) { Hop-Off $p; return }
   $r = $rng.NextDouble()
   # 사용자가 바쁘면 뛰기/우다다 슬롯을 조용한 행동으로 돌리고, 자리를 비우면 심심해서 활발
   if ($busy) {
-    if ($r -ge 0.16 -and $r -lt 0.31) { $r = @(0.05, 0.85, 0.62)[$rng.Next(3)] }   # run/zoomies → walk/sit/lookaround
+    if ($null -ne $p.platform -and $r -ge 0.16 -and $r -lt 0.44) {
+      # 창 위에선 구경 무드: 앉기/둘러보기/낮잠 (앉기는 시간대 게이트 우회 — 직접 진입)
+      $pk3 = $rng.Next(3)
+      if ($pk3 -eq 0) { Start-Seq $p @('side_sitdown3','side_sitdown1','side_sitdown4','side_sitdown5','side_sitdown2','side_sitdown6') 4 'sit' ($rng.Next(120,280)); return }
+      $r = @(0.62, 0.95)[$pk3 - 1]
+    }
+    elseif ($r -ge 0.16 -and $r -lt 0.31) {
+      # run/zoomies → 걷기/앉기/둘러보기
+      $pk4 = $rng.Next(3)
+      if ($pk4 -eq 1) { Start-Seq $p @('side_sitdown3','side_sitdown1','side_sitdown4','side_sitdown5','side_sitdown2','side_sitdown6') 4 'sit' ($rng.Next(120,280)); return }
+      if ($pk4 -eq 0) { $r = 0.05 } else { $r = 0.62 }
+    }
   } elseif ($App.away) {
     if ($r -ge 0.70 -and $r -lt 0.77) { $r = 0.27 }   # idle → zoomies
   }
@@ -1040,11 +1099,16 @@ function Plan-Jump($p) {
   $myFeet = Feet $p
   $options = New-Object System.Collections.ArrayList
   # 창 대상: 위(rise>40)뿐 아니라 옆·아래(rise -300~40)도 후보
+  $busyJ = ($App.busy -gt 0.7)
+  $fgw = [long]0
+  try { $fgw = [GPWin]::Foreground() } catch {}
   if ($CFG_WindowJump -and $App.tick -ge $p.jumpCoolAt) {
     foreach ($w in $App.plat.windows) {
       if ($null -ne $p.platform -and $w.id -eq $p.platform.id) { continue }
       $rise = $myFeet - $w.top
-      if ($rise -lt -300 -or $rise -gt 860) { continue }
+      $riseMax = 1150
+      if ($busyJ) { $riseMax = 860 }   # 바쁠 땐 로켓 같은 큰 점프는 자제
+      if ($rise -lt -300 -or $rise -gt $riseMax) { continue }
       if (($w.right - $w.left) -lt ($SPR*1.6)) { continue }
       $lx = [Math]::Max($w.left + $SPR*0.6, [Math]::Min($w.right - $SPR*1.6, $p.x))
       if ([Math]::Abs($lx - $p.x) -gt 760) { continue }
@@ -1078,6 +1142,8 @@ function Plan-Jump($p) {
     if ($p.visited -contains $w.id) { $score -= 60 }
     $score += [Math]::Min(30, (($w.right - $w.left) - $SPR) / 20.0)
     if ($o[2] -eq 'monitor') { $score += 15 }
+    if ($o[2] -eq 'window' -and ($myFeet - $w.top) -gt 860) { $score -= 10 }   # 큰 점프는 일반 창 우선
+    if ($o[2] -eq 'window' -and $w.id -eq $fgw) { $score += 18 }               # 작업 중인 창 선호 (v31)
     $score += $rng.Next(0, 30)
     if ($score -gt $bs) { $bs = $score; $best = $o }
   }
@@ -1085,23 +1151,37 @@ function Plan-Jump($p) {
   $t = [Math]::Max(16, [Math]::Min(34, [int]([Math]::Abs($ty - $p.y)/14 + [Math]::Abs($lx - $p.x)/24)))
   $srcId = 0
   if ($null -ne $p.platform) { $srcId = $p.platform.id }
-  $p.jump = @{ plat=$w; t=$t; tick=0; lx=$lx; ty=$ty; kind=$kind; srcId=$srcId; vx=(($lx - $p.x)/$t); vy=((($ty - $p.y) - 0.5*$GRAVITY*$t*$t)/$t) }
+  $bigJ = ($kind -eq 'window' -and ($myFeet - $w.top) -gt 860)
+  $p.jump = @{ plat=$w; t=$t; tick=0; lx=$lx; ty=$ty; kind=$kind; srcId=$srcId; big=$bigJ; vx=(($lx - $p.x)/$t); vy=((($ty - $p.y) - 0.5*$GRAVITY*$t*$t)/$t) }
   $p.jumpCoolAt = $App.tick + [int]((666 + $rng.Next(0, 1334)) * $ADV_MUL)          # 일반 점프 20~60초
   if ($kind -eq 'monitor') { $p.monJumpCoolAt = $App.tick + [int]((1500 + $rng.Next(0, 2500)) * $ADV_MUL) }  # 모니터 45~120초
   ELog ("점프계획: " + $p.name + " kind=" + $kind + " src=" + $srcId + " target=(" + [int]$lx + "," + [int]$ty + ") score=" + [int]$bs)
   $p.facing = Sign1 ($lx -ge $p.x)
   if ($kind -eq 'window' -and $srcId -eq 0 -and $ty -lt $p.y -and (F $p.kind 'side_windowpeek1') -and $rng.NextDouble() -lt 0.5) {
     # 창가 올라보기(앞발 들고 기웃) → 도약 준비 → 점프
-    Start-Seq $p @('side_windowpeek1','side_windowpeek2','side_windowpeek3','side_windowpeek4','side_windowpeek5','side_windowpeek6') 4 'jumpprep' 5
+    Start-Seq $p @('side_windowpeek1','side_windowpeek2','side_windowpeek3','side_windowpeek4','side_windowpeek5','side_windowpeek6') 4 'jumpprep' $(if ($bigJ) { 9 } else { 5 })
     return $true
   }
   if (F $p.kind 'side_jump1') {
-    # 도약 준비 웅크림 — 발사 시점에 속도 재계산 (플랫폼은 발사 때까지 유지)
-    $p.state = 'jumpprep'; $p.timer = 5
+    # 도약 준비 웅크림 — 큰 점프는 길게 모았다가 발사 (v31)
+    $p.state = 'jumpprep'; $p.timer = $(if ($bigJ) { 9 } else { 5 })
   } else {
     $p.state = 'jump'; $p.platform = $null
   }
   return $true
+}
+
+# 등반 원정용: 특정 창으로의 직접 홉 (쿨다운·visited 무시)
+function Plan-HopTo($p, $w, $big) {
+  $lx = [Math]::Max($w.left + $SPR*0.6, [Math]::Min($w.right - $SPR*1.6, $p.x))
+  $ty = $w.top - $SPR + 6
+  $t = [Math]::Max(16, [Math]::Min(34, [int]([Math]::Abs($ty - $p.y)/14 + [Math]::Abs($lx - $p.x)/24)))
+  $srcId = 0
+  if ($null -ne $p.platform) { $srcId = $p.platform.id }
+  $p.jump = @{ plat=$w; t=$t; tick=0; lx=$lx; ty=$ty; kind='window'; srcId=$srcId; big=$big; vx=(($lx - $p.x)/$t); vy=((($ty - $p.y) - 0.5*$GRAVITY*$t*$t)/$t) }
+  $p.facing = Sign1 ($lx -ge $p.x)
+  if (F $p.kind 'side_jump1') { $p.state = 'jumpprep'; $p.timer = $(if ($big) { 9 } else { 5 }) }
+  else { $p.state = 'jump'; $p.platform = $null }
 }
 
 function Hop-Off($p) {
@@ -1431,7 +1511,22 @@ function Update-Pet($p) {
     else { $p.frame = AF $p 'side_land' 4 }
     if ($p.timer -le 0) {
       $lk = $p.landKind; $p.landKind = ''
-      if ($CFG_FrontReaction -and $lk -eq 'jump' -and $rng.NextDouble() -lt 0.25) {
+      if ($p.climbing) {
+        if ($null -ne $p.platform -and $p.platform.id -eq $p.climbTarget) {
+          # 정상 도착! 당당함 + 둘러보기 + 말풍선 (v31 등반 원정 피날레)
+          $p.climbing = $false
+          $p.oneShot = 'side_proud'; $p.oneShotHold = 80
+          $p.state = 'idle'; $p.timer = 150
+          Say $p "정상이다!!"
+          ELog ("등반 정상 도착: " + $p.name)
+        } elseif ($null -ne $p.platform) {
+          $p.state = 'idle'; $p.timer = $rng.Next(60, 130)   # 경유 창 — 다음 홉 전 숨 고르기
+        } else {
+          $p.climbing = $false   # 지면으로 떨어짐 → 원정 종료
+          $p.state = 'idle'; $p.timer = $rng.Next(30, 80)
+        }
+      }
+      elseif ($CFG_FrontReaction -and $lk -eq 'jump' -and $rng.NextDouble() -lt 0.25) {
         if ((F $p.kind 'front_praise1') -and $rng.NextDouble() -lt 0.5) {
           $p.camframe = 'front_laugh'; $p.faceReason = 'praise'
           Start-Seq $p @('front_praise1','front_praise2','front_praise3','front_praise4') 4 'facecam' 35
@@ -1632,6 +1727,7 @@ function New-Pet($id, $name, $kind, $x) {
           afterSeq=''; grabAt=0; grabPlat=$null; dismissed=$false;
           lastDrawKey=''; lastDrawX=-999999; lastDrawY=-999999;
           socialCoolAt=0; yawnHold=0; oneShot=''; oneShotHold=0; skidFrame='side_skid'; impactVy=0.0;
+          climbing=$false; climbTarget=[long]0; climbCoolAt=($rng.Next(2000,5000));
           dragStage=3; dragHold=0; dragWant=3;
           lastKey=''; lastBmp=$null; fadeFrom=$null; fade=0; scratch=$null; scratchG=$null }
   $p.y = [double](Ground-Y $p)
